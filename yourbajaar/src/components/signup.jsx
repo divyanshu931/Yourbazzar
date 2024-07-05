@@ -25,7 +25,7 @@ function SignUp({ toggleSidebar }) {
       });
 
       if (response.status === 201) {
-        navigate("/verification");
+        navigate(`/verification/${email}`);
       }
     } catch (err) {
       if (err.response && err.response.status === 400) {

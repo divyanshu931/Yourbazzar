@@ -19,77 +19,93 @@ const jwtSecret = 'your_jwt_secret';
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'test_divyanshu@gmail.com',
-    pass: 'your_email_password'
+    user: 'testdivyanshu2@gmail.com',
+    pass: 'lxgxjziqpgavtgaj'
   }
 });
 
-// Generate OTP
+// Temporary storage for user details and OTP
+const tempStorage = new Map();
+
+// Generate 4-digit OTP
 const generateOTP = () => {
   return speakeasy.totp({
     secret: speakeasy.generateSecret({ length: 20 }).base32,
-    digits: 6,
+    digits: 4, // Set to 4 digits
     step: 300 // OTP valid for 5 minutes
   });
 };
 
-// Map to store email and OTP temporarily (In real-world scenario, you might use a database)
-const otpMap = new Map();
 
-// Endpoint to send OTP via email
-app.post("/sendOTP", async (req, res) => {
-  const { email } = req.body;
-  
-  // Generate OTP
-  const otp = generateOTP();
-  
-  // Save OTP with email in temporary map
-  otpMap.set(email, otp);
-  
-  // Email content
-  const mailOptions = {
-    from: 'your_email@gmail.com',
-    to: email,
-    subject: 'OTP for Email Verification',
-    text: `Your OTP for email verification is: ${otp}`
-  };
-  
-  // Send email
-  try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: "OTP sent successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to send OTP" });
-  }
+// Endpoint to send OTP via email after first page submission
+app.post("/signup", async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        
+        // Store user details temporarily
+        tempStorage.set(email, { name, email, password });
+        
+        // Send OTP via email
+        const otp = generateOTP();
+        const mailOptions = {
+          from: 'your_email@gmail.com',
+          to: email,
+          subject: 'OTP for Email Verification',
+          text: `Your OTP for email verification is: ${otp}`
+        };
+        
+        await transporter.sendMail(mailOptions);
+        
+        res.status(200).json({ message: "OTP sent successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error occurred" });
+    }
 });
 
-// Endpoint to verify OTP
-app.post("/verifyOTP", async (req, res) => {
-  const { email, otp } = req.body;
-  
-  // Get saved OTP from map
-  const savedOTP = otpMap.get(email);
-  
-  if (!savedOTP) {
-    return res.status(400).json({ message: "OTP expired or not found. Please resend OTP." });
-  }
-  
-  // Verify OTP
-  const verified = speakeasy.totp.verify({
-    secret: savedOTP.secret,
-    encoding: 'base32',
-    token: otp
-  });
-  
-  if (verified) {
-    // OTP verified successfully
-    // You can now mark the user as verified in your database or perform other actions
-    otpMap.delete(email); // Delete OTP from map after verification
-    res.status(200).json({ message: "OTP verified successfully" });
-  } else {
-    res.status(400).json({ message: "Invalid OTP. Please try again." });
-  }
+// Endpoint to verify OTP and register user
+app.post("/verifyAndRegister", async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        
+        // Get user details from temporary storage
+        const userDetails = tempStorage.get(email);
+        if (!userDetails) {
+          return res.status(404).json({ message: "User details not found. Please sign up again." });
+        }
+        
+        // Verify OTP
+        const savedOTP = otpMap.get(email);
+        const verified = speakeasy.totp.verify({
+          secret: savedOTP.secret,
+          encoding: 'base32',
+          token: otp
+        });
+        
+        if (!verified) {
+          return res.status(400).json({ message: "Invalid OTP. Please try again." });
+        }
+        
+        // Hash password
+        const hashedPassword = await bcrypt.hash(userDetails.password, 10);
+        
+        // Create new user in database
+        const newUser = new User({
+          name: userDetails.name,
+          email: userDetails.email,
+          password: hashedPassword
+        });
+        
+        await newUser.save();
+        
+        // Clear temporary storage
+        tempStorage.delete(email);
+        
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error occurred" });
+    }
 });
 
 // Connect to MongoDB
@@ -104,41 +120,6 @@ mongoose.connect('mongodb://localhost:27017/Yourbazzar', {
 
 app.use(cors());
 app.use(express.json());
-
-// Signup endpoint
-app.post("/signup", async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
-            return res.status(400).json({ message: "Email already exists" });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
-
-        await newUser.save();
-
-        // Send OTP via email after successful signup
-        const otp = generateOTP();
-        otpMap.set(email, otp); // Save OTP with email in temporary map
-        
-        const mailOptions = {
-          from: 'your_email@gmail.com',
-          to: email,
-          subject: 'OTP for Email Verification',
-          text: `Your OTP for email verification is: ${otp}`
-        };
-        
-        await transporter.sendMail(mailOptions);
-        
-        res.status(201).json({ message: "User created successfully" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Error occurred" });
-    }
-});
 
 // Start the server
 app.listen(port, () => {
