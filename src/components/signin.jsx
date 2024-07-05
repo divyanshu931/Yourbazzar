@@ -1,7 +1,37 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function SignIn() {
+  const [name, setName] = useState("");
+ 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3001/login", {
+        name,
+        email,
+        password,
+      });
+
+      if (response.data.token) {
+        // Save the token in local storage or a state management library
+        localStorage.setItem("token", response.data.token);
+        // Redirect to a protected route
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
@@ -22,20 +52,23 @@ function SignIn() {
 
       {/* Body */}
       <div className="p-4">
-        <form>
+        <form onSubmit={handleSignIn}>
           <div className="mb-4">
-            <label className="form-label text-muted small mb-1">Mobile</label>
+            <label className="form-label text-muted small mb-1">Name</label>
             <div className="input-group input-group-lg bg-white shadow-sm rounded overflow-hidden">
               <span className="input-group-text bg-white">
-                <i className="bi bi-phone text-muted"></i>
+                <i className="bi bi-person text-muted"></i>
               </span>
               <input
                 type="text"
                 className="form-control"
-                placeholder="+91 74191 98787"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
           </div>
+         
           <div className="mb-4">
             <label className="form-label text-muted small mb-1">Your Email</label>
             <div className="input-group input-group-lg bg-white shadow-sm rounded overflow-hidden">
@@ -46,6 +79,8 @@ function SignIn() {
                 type="text"
                 className="form-control"
                 placeholder="yourbajaar@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -59,9 +94,15 @@ function SignIn() {
                 type="password"
                 className="form-control"
                 placeholder="***********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
+          {error && <p className="text-danger">{error}</p>}
+          <button type="submit" className="btn btn-success btn-lg w-100 shadow">
+            SIGN IN
+          </button>
         </form>
       </div>
 
@@ -73,11 +114,8 @@ function SignIn() {
             Terms & Conditions
           </Link>
         </p>
-        <Link to="/verification" className="btn btn-success btn-lg w-100 shadow">
-          SIGN IN
-        </Link>
         <Link to="/signup" className="btn btn-outline-success btn-lg w-100 shadow mt-3">
-          Not a member ? SIGN UP
+          Not a member? SIGN UP
         </Link>
       </div>
     </>

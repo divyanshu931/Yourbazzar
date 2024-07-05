@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import Home from './Pages.jsx/home.jsx';
 import Landing_2 from './components/Landing_2.jsx';
 import Landing from './components/Landing';
 import GetStart from './components/getStarted';
@@ -23,6 +23,8 @@ function App() {
             <Route exact path="/signin" element={<SignIn />} />
             <Route exact path='/verification' element={<Verification/>}/>
             <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/home" element={< Home/>} />
+          
           </Routes>
         </div>
       </div>

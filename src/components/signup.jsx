@@ -1,27 +1,80 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function SignUp({ toggleSidebar }) {
-    return (
-      <>
-        <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
-          <div className="font-weight-normal mb-0 d-flex align-items-center">
-            <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
-              <Link to="/getStarted" className="text-dark me-3 fs-4">
-                <i className="bi bi-chevron-left"></i>
-              </Link>
-              Sign Up
-            </h6>
-            <div className="ms-auto d-flex align-items-center">
-              <a className="toggle osahan-toggle fs-4 text-dark ms-auto" href="#" onClick={toggleSidebar}>
-                <i className="bi bi-list"></i>
-              </a>
-            </div>
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:3001/signup", {
+        name,
+        email,
+        password,
+      });
+
+      if (response.status === 201) {
+        navigate("/verification");
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        setError(err.response.data.message);
+      } else {
+        setError("Error creating account. Please try again.");
+      }
+    }
+  };
+
+  return (
+    <>
+      <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
+        <div className="font-weight-normal mb-0 d-flex align-items-center">
+          <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
+            <Link to="/getStarted" className="text-dark me-3 fs-4">
+              <i className="bi bi-chevron-left"></i>
+            </Link>
+            Sign Up
+          </h6>
+          <div className="ms-auto d-flex align-items-center">
+            <a
+              className="toggle osahan-toggle fs-4 text-dark ms-auto"
+              href="#"
+              onClick={toggleSidebar}
+            >
+              <i className="bi bi-list"></i>
+            </a>
           </div>
         </div>
+      </div>
       {/* Body */}
       <div className="p-4">
-        <form>
+        <form onSubmit={handleSignUp}>
+          <div className="mb-4">
+            <label className="form-label text-muted small mb-1">Name</label>
+            <div className="input-group input-group-lg bg-white shadow-sm rounded overflow-hidden">
+              <span className="input-group-text bg-white">
+                <i className="bi bi-person text-muted"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+          </div>
           <div className="mb-4">
             <label className="form-label text-muted small mb-1">Your Email</label>
             <div className="input-group input-group-lg bg-white shadow-sm rounded overflow-hidden">
@@ -29,9 +82,11 @@ function SignUp({ toggleSidebar }) {
                 <i className="bi bi-envelope-open text-muted"></i>
               </span>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 placeholder="example@mail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -45,6 +100,8 @@ function SignUp({ toggleSidebar }) {
                 type="password"
                 className="form-control"
                 placeholder="***********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
@@ -58,9 +115,15 @@ function SignUp({ toggleSidebar }) {
                 type="password"
                 className="form-control"
                 placeholder="***********"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           </div>
+          {error && <p className="text-danger">{error}</p>}
+          <button type="submit" className="btn btn-success btn-lg w-100 shadow">
+            CREATE AN ACCOUNT
+          </button>
         </form>
       </div>
 
@@ -72,12 +135,7 @@ function SignUp({ toggleSidebar }) {
             Privacy Policy and Terms.
           </Link>
         </p>
-        <Link to="/verification" className="btn btn-success btn-lg w-100 shadow">
-          CREATE AN ACCOUNT
-        </Link>
       </div>
-    
-    
     </>
   );
 }

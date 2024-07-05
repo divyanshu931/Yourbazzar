@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 function Verification() {
   return (
     <>
@@ -44,7 +44,7 @@ function Verification() {
 
       {/* Fixed Bottom */}
       <div className="osahan-footer fixed-bottom p-3">
-        <a href="home.html" className="btn btn-success btn-lg w-100 shadow">Verify</a>
+        <Link to="/home" className="btn btn-success btn-lg w-100 shadow">Verify</Link>
       </div>
     </>
   );
