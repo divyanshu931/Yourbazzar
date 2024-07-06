@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// ---------------------------------------------SCHEMA for user---------------------------------------//
 const userSchema = mongoose.Schema({
     name: {
         type: String,
@@ -22,9 +21,8 @@ const userSchema = mongoose.Schema({
         type: Date,
         default: () => new Date(),
     }
-},
-{
+}, {
     versionKey: false // remove version form object
 });
 
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model("User", userSchema);
