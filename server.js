@@ -10,7 +10,7 @@ app.use(express.json())
 
 
 //calling Database function
-require('./config/db').connect()
+require('./config/database').connect()
 
 //route importing and mounting
 const user = require('./routes/user')

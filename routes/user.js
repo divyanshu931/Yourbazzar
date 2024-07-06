@@ -18,7 +18,7 @@ router.get("/test",auth, (req,res)=>{
     })
 })
 //protected routes
-router.get('/student', auth, isStudent, (req,res)=>{
+router.get('/customer', auth, isStudent, (req,res)=>{
     res.json({
         success: true,
         message: "You are a valid Student 🧑‍🎓"
