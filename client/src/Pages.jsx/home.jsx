@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom";
-
+import BestSellingProducts from "../components/bestproducts";
 function Home() { 
     return(
         <>
@@ -92,44 +92,7 @@ function Home() {
     </div>
   </div>
 </div>
-<div className="p-3 bg-light">
-      <h6 className="mb-3 text-black fw-bold">Best selling products</h6>
-      <div className="single-item selling-box">
-        <div className="home-product">
-          <div className="card border shadow-sm rounded-3">
-            <img src="img/listing/1.jpeg" className="card-img-top rounded-3 p-3" alt="..." />
-            <div className="card-body p-2 border-top">
-              <p className="card-text m-0 d-flex align-items-center">Atta & Flour <i className="bi bi-arrow-right ms-auto"></i></p>
-            </div>
-          </div>
-        </div>
-        <div className="home-product">
-          <div className="card border shadow-sm rounded-3">
-            <img src="img/listing/2.jpeg" className="card-img-top rounded-3 p-3" alt="..." />
-            <div className="card-body p-2 border-top">
-              <p className="card-text m-0 d-flex align-items-center">Tea Bags <i className="bi bi-arrow-right ms-auto"></i></p>
-            </div>
-          </div>
-        </div>
-        <div className="home-product">
-          <div className="card border shadow-sm rounded-3">
-            <img src="img/listing/3.jpeg" className="card-img-top rounded-3 p-3" alt="..." />
-            <div className="card-body p-2 border-top">
-              <p className="card-text m-0 d-flex align-items-center">Rice <i className="bi bi-arrow-right ms-auto"></i></p>
-            </div>
-          </div>
-        </div>
-        <div className="home-product">
-          <div className="card border shadow-sm rounded-3">
-            <img src="img/listing/4.jpeg" className="card-img-top rounded-3 p-3" alt="..." />
-            <div className="card-body p-2 border-top">
-              <p className="card-text m-0 d-flex align-items-center">Bread <i className="bi bi-arrow-right ms-auto"></i></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+<BestSellingProducts />
     <div>
       <div className="border-bottom border-top px-3 d-flex align-items-center justify-content-between">
         <ul className="nav home-tabs" id="pills-tab" role="tablist">

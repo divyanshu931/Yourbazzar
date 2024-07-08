@@ -22,6 +22,10 @@ const productSchema = new mongoose.Schema({
   bestProduct: {
     type: Boolean,
     default: false
+  },
+  image: {
+    type: String, // assuming you will store the URL of the image
+    required: true
   }
   // Add other fields as needed
 });
