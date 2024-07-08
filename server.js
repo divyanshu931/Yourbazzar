@@ -5,6 +5,8 @@ const otpRoutes = require("./routes/otpRoutes");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const publicRoutes = require("./routes/publicRoutes");
+const offerRoutes = require('./routes/offerRoutes');
+require('./cron/expireOffers'); 
 const cors = require("cors");
 
 
@@ -39,6 +41,7 @@ app.use("/api/otp", otpRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/public", publicRoutes);
+app.use('/api/offers', offerRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
