@@ -1,6 +1,8 @@
 import React from "react"
 import { Link } from "react-router-dom";
 import BestSellingProducts from "../components/bestproducts";
+import TodayOffers from "../components/offer";
+
 function Home() { 
     return(
         <>
@@ -33,32 +35,7 @@ function Home() {
   </div>
 </div>
 
-<div className="py-3">
-  <div className="px-3 d-flex justify-content-between">
-    <h6 className="mb-2 text-black fw-bold">Today Offer's</h6>
-    <a href="listing.html" className="text-success text-decoration-none">SEE ALL <i className="bi bi-arrow-right-circle-fill"></i></a>
-  </div>
-  <div className="home-cate">
-    <div className="home-productc">
-      <a href="listing.html"><img src="img/1.png" className="img-fluid" alt="Product 1" /></a>
-    </div>
-    <div className="home-productc">
-      <a href="listing.html"><img src="img/2.png" className="img-fluid" alt="Product 2" /></a>
-    </div>
-    <div className="home-productc">
-      <a href="listing.html"><img src="img/3.png" className="img-fluid" alt="Product 3" /></a>
-    </div>
-    <div className="home-productc">
-      <a href="listing.html"><img src="img/4.png" className="img-fluid" alt="Product 4" /></a>
-    </div>
-    <div className="home-productc">
-      <a href="listing.html"><img src="img/5.png" className="img-fluid" alt="Product 5" /></a>
-    </div>
-    <div className="home-productc">
-      <a href="listing.html"><img src="img/6.png" className="img-fluid" alt="Product 6" /></a>
-    </div>
-  </div>
-</div>
+<TodayOffers/>
 
 <div className="p-3 bg-light2">
   <div className="pb-1 d-flex justify-content-between">

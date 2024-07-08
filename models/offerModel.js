@@ -1,6 +1,5 @@
 // models/offerModel.js
 const mongoose = require('mongoose');
-
 const offerSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -21,6 +20,15 @@ const offerSchema = new mongoose.Schema({
     // TTL index for automatic deletion after expiryDate
     expires: 0 // set to 0 to delete documents exactly at `expiryDate`
   },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product', // Reference to Product model if applicable
+    required: true
+  },
+  imageUrl: {
+    type: String,
+    required: true
+  }
   // Add other fields as needed
 });
 

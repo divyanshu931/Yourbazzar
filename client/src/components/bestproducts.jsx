@@ -28,9 +28,11 @@ const BestSellingProducts = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 10000,
     slidesToShow: 3, // Adjust number of products shown per slide as needed
-    slidesToScroll: 1,
+    slidesToScroll: 2,
+    autoplay: true, // Enable autoplay
+    autoplaySpeed: 1, // Set autoplay speed in milliseconds (3 seconds here)
   };
 
   if (loading) {
@@ -46,7 +48,7 @@ const BestSellingProducts = () => {
       <h6 className="mb-3 text-black fw-bold">Best selling products</h6>
       <Slider {...settings} className="single-item selling-box">
         {products.map(product => (
-          <div key={product._id} className="home-product"> {/* Ensure key is unique */}
+          <div key={product._id} className="home-product">
             <div className="card border shadow-sm rounded-3">
               <img src={product.image} className="card-img-top rounded-3 p-3" alt={product.name} />
               <div className="card-body p-2 border-top">
