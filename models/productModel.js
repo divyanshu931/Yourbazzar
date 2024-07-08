@@ -1,4 +1,3 @@
-// models/productModel.js
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
@@ -23,7 +22,7 @@ const productSchema = new mongoose.Schema({
   bestProduct: {
     type: Boolean,
     default: false
-  },
+  }
   // Add other fields as needed
 });
 
