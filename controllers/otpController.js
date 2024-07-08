@@ -22,7 +22,7 @@ exports.sendOTP = async (req, res) => {
     });
     let result = await OTP.findOne({ otp: otp });
     while (result) {
-      otp = otpGenerator.generate(6, {
+      otp = otpGenerator.generate(4, {
         upperCaseAlphabets: false,
       });
       result = await OTP.findOne({ otp: otp });

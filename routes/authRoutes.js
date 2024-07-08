@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
+// Only Admin and Seller can access this route
 router.get('/protected-route', protect, authorize('Admin', 'Seller'), (req, res) => {
   res.status(200).json({
     success: true,
