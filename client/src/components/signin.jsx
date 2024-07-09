@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../api/axiosInstance";
+import axiosInstance from "../apis/axiosInstance";
 import TopNavbar from "./topnavbar";
 function SignIn() {
   const [name, setName] = useState("");

@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { axiosWithAuth } from '../apis/axiosWithAuth'; // Import axiosWithAuth for authenticated requests
 
 const TodayOffers = () => {
-  const [products, setProducts] = useState([]);
+  const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchOffers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/public/products/offers'); // Adjust URL as per your backend API endpoint
-        setProducts(response.data);
+        const response = await axiosWithAuth({
+          method: 'get',
+          url: '/api/offers'
+        });
+        setOffers(response.data.offers);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        setError('Failed to fetch products. Please try again later.');
+        console.error('Error fetching offers:', error);
+        setError('Failed to fetch offers. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchOffers();
   }, []);
 
   if (loading) {
@@ -33,13 +36,23 @@ const TodayOffers = () => {
   return (
     <div className="py-3">
       <div className="px-3 d-flex justify-content-between">
-        <h6 className="mb-2 text-black fw-bold">Today Offers</h6>
-        <a href="listing.html" className="text-success text-decoration-none">SEE ALL <i className="bi bi-arrow-right-circle-fill"></i></a>
+        <h6 className="mb-2 text-black fw-bold">Today's Offers</h6>
+        <a href="listing.html" className="text-success text-decoration-none">
+          SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
+        </a>
       </div>
       <div className="home-cate">
-        {products.map(product => (
-          <div key={product._id} className="home-productc">
-            <a href="listing.html"><img src={product.image} className="img-fluid" alt={product.name} /></a>
+        {offers.map(offer => (
+          <div key={offer._id} className="home-productc">
+            <a href="listing.html">
+              <img src={offer.imageUrl} className="img-fluid" alt={offer.title} />
+            </a>
+            <div className="offer-details">
+              <h5>{offer.title}</h5>
+              <p>{offer.description}</p>
+              <p>Discount: {offer.discount}%</p>
+              <p>Expiry Date: {new Date(offer.expiryDate).toLocaleDateString()}</p>
+            </div>
           </div>
         ))}
       </div>

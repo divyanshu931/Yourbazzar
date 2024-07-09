@@ -1,44 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="img/brand.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="img/brand.png" />
-   
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-      <!-- Icofont Icon-->
-      <link href="vendor/icons/icofont.min.css" rel="stylesheet" type="text/css">
-      <!-- Bootstraps icon -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-      <!-- Slick Slider -->
-      <link rel="stylesheet" type="text/css" href="vendor/slick/slick.min.css"/>
-      <link rel="stylesheet" type="text/css" href="vendor/slick/slick-theme.min.css"/>
-      <!-- Custom styles for this template -->
-      <link href="css/style.css" rel="stylesheet">
-      <!-- Sidebar CSS -->
-      <link href="vendor/sidebar/demo.css" rel="stylesheet">
-    <title>Your bajaar</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-   
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="img/brand.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="img/brand.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-      <script src="vendor/jquery/jquery.min.js"></script>
-      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <!-- slick Slider JS-->
-      <script type="text/javascript" src="vendor/slick/slick.min.js"></script>
-      <!-- Sidebar JS-->
-      <script type="text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
-      <!-- Custom scripts for all pages-->
-       
-      <script src="js/custom.js"></script>
-  </body>
+  <!-- Bootstrap CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icofont Icon -->
+  <link href="vendor/icons/icofont.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+  <!-- Slick Slider -->
+  <link rel="stylesheet" type="text/css" href="vendor/slick/slick.min.css"/>
+  <link rel="stylesheet" type="text/css" href="vendor/slick/slick-theme.min.css"/>
+
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- Sidebar CSS -->
+  <link href="vendor/sidebar/demo.css" rel="stylesheet">
+
+  <title>Your Bajaar</title>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+  <!-- jQuery -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Slick Slider JS -->
+  <script type="text/javascript" src="vendor/slick/slick.min.js"></script>
+
+  <!-- Sidebar JS -->
+  <script type="text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
+
+  <!-- Custom scripts for all pages -->
+  <script src="js/custom.js"></script>
+
+  <!-- Inline script to check jQuery and tooltip -->
+  <script>
+    $(document).ready(function() {
+      console.log('jQuery version:', $.fn.jquery); // Should log the jQuery version
+      console.log('Tooltip function:', $.fn.tooltip); // Should not be undefined
+
+      if (typeof $.fn.tooltip === 'undefined') {
+        console.error('Bootstrap Tooltip is not available.');
+      } else {
+        // Initialize tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+      }
+    });
+  </script>
+</body>
 </html>

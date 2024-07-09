@@ -1,6 +1,7 @@
 // controllers/offerController.js
 const Offer = require('../models/offerModel');
 
+// Create Offer
 exports.createOffer = async (req, res) => {
   try {
     const { title, description, discount, expiryDate, imageUrl } = req.body;
@@ -28,6 +29,7 @@ exports.createOffer = async (req, res) => {
   }
 };
 
+// Update Offer
 exports.updateOffer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -61,6 +63,7 @@ exports.updateOffer = async (req, res) => {
   }
 };
 
+// Delete Offer
 exports.deleteOffer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -83,6 +86,25 @@ exports.deleteOffer = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to delete offer',
+      error: error.message
+    });
+  }
+};
+
+// Fetch All Offers
+exports.getAllOffers = async (req, res) => {
+  try {
+    const offers = await Offer.find();
+
+    res.status(200).json({
+      success: true,
+      offers
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch offers',
       error: error.message
     });
   }
