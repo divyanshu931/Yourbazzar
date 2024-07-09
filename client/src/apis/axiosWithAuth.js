@@ -1,8 +1,9 @@
 import axiosInstance from "./axiosInstance";
 
-const addAuthToken = (config) => {
+const addAuthToken = (config = {}) => {
   const token = localStorage.getItem("token");
   if (token) {
+    config.headers = config.headers || {}; // Ensure headers object exists
     config.headers["Authorization"] = `Bearer ${token}`;
     console.log("Token added to headers:", token); // Log the token
   } else {
@@ -11,6 +12,6 @@ const addAuthToken = (config) => {
   return config;
 };
 
-export const axiosWithAuth = (config) => {
+export const axiosWithAuth = (config = {}) => {
   return axiosInstance(addAuthToken(config));
 };
