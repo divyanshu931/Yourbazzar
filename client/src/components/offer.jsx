@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import axiosInstance from '../apis/axiosInstance';
+import { Link } from 'react-router-dom'; // Assuming you have React Router set up
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -71,9 +72,9 @@ const TodayOffers = () => {
     <div style={{ padding: '1rem 0' }}>
       <div style={{ padding: '0 1rem', display: 'flex', justifyContent: 'space-between' }}>
         <h6 style={{ marginBottom: '0.5rem', color: 'black', fontWeight: 'bold' }}>Today's Offers</h6>
-        <a href="listing.html" style={{ color: 'green', textDecoration: 'none' }}>
+        <Link to="/all-offers" style={{ color: 'green', textDecoration: 'none' }}>
           SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
-        </a>
+        </Link>
       </div>
       <Slider {...settings} className="home-cate">
         {offers.map(offer => (
@@ -89,9 +90,9 @@ const TodayOffers = () => {
               onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
               onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
             >
-              <a href="listing.html" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', overflow: 'hidden' }}>
+              <Link to={`/offer-details/${offer._id}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', overflow: 'hidden' }}>
                 <img src={offer.imageUrl} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} alt={offer.title} />
-              </a>
+              </Link>
               <div style={{ padding: '1rem', textAlign: 'center' }}>
                 <h5 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0.5rem 0' }}>{offer.title}</h5>
                 <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#666' }}>{offer.description}</p>

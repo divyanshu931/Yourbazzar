@@ -1,8 +1,10 @@
 import React from "react"
-import { Link } from "react-router-dom";
+
 import BestSellingProducts from "../components/bestproducts";
 import TodayOffers from "../components/offer";
 import TopNavbar from "../components/topnavbar";
+import CategoryList from "../components/CategoryList";
+import Footer from "../components/footer";
 
 function Home() { 
     return(
@@ -26,39 +28,10 @@ function Home() {
 
 <TodayOffers/>
 
-<div className="p-3 bg-light2">
-  <div className="pb-1 d-flex justify-content-between">
-    <h6 className="mb-2 text-black fw-bold">Shop by category</h6>
-    <a className="text-success text-decoration-none" href="listing.html">SEE ALL <i className="bi bi-arrow-right-circle-fill"></i></a>
-  </div>
-  <div className="single-item selling-box">
-    <div className="home-product">
-      <a href="listing.html">
-        <img src="img/cate/1.jpg" className="img-fluid rounded-3 mb-1" alt="..." />
-        <img src="img/cate/2.jpg" className="img-fluid rounded-3" alt="..." />
-      </a>
-    </div>
-    <div className="home-product">
-      <a href="listing.html">
-        <img src="img/cate/3.jpg" className="img-fluid rounded-3 mb-1" alt="..." />
-        <img src="img/cate/4.jpg" className="img-fluid rounded-3" alt="..." />
-      </a>
-    </div>
-    <div className="home-product">
-      <a href="listing.html">
-        <img src="img/cate/5.jpg" className="img-fluid rounded-3 mb-1" alt="..." />
-        <img src="img/cate/6.jpg" className="img-fluid rounded-3" alt="..." />
-      </a>
-    </div>
-    <div className="home-product">
-      <a href="listing.html">
-        <img src="img/cate/7.jpg" className="img-fluid rounded-3 mb-1" alt="..." />
-        <img src="img/cate/8.jpg" className="img-fluid rounded-3" alt="..." />
-      </a>
-    </div>
-  </div>
-</div>
+
+<CategoryList/>
 <BestSellingProducts />
+
     <div>
       <div className="border-bottom border-top px-3 d-flex align-items-center justify-content-between">
         <ul className="nav home-tabs" id="pills-tab" role="tablist">
@@ -118,6 +91,7 @@ function Home() {
           
           {/* Other Tabs (Rice, Detergents) */}
           {/* Add similar tab-pane structures as needed */}
+          <Footer/>
           
         </div>
       </div>

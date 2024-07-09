@@ -56,7 +56,6 @@ exports.signup = async (req, res) => {
   }
 };
 
-
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -92,10 +91,13 @@ exports.login = async (req, res) => {
       expiresIn: '1h',
     });
 
+    // Return name, email, and token in response
     return res.status(200).json({
       success: true,
       message: 'Logged in successfully',
       token,
+      name: user.name,
+      email: user.email,
     });
   } catch (error) {
     console.log(error.message);

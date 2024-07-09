@@ -7,6 +7,7 @@ import GetStart from './components/getStarted';
 import SignIn from './components/signin';
 import SignUp from './components/signup';
 import Verification from './components/verification.jsx';
+import OfferDetails from './components/offer_details'; // Import the OfferDetails component
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
             <Route exact path="/signup" element={<SignUp />} />
             <Route exact path="/home" element={<Home />} />
             <Route exact path="/verification/:email" element={<Verification />} />
+            
+            {/* Add the route for OfferDetails */}
+            <Route path="/offer-details/:id" element={<OfferDetails />} />
           </Routes>
         </div>
       </div>

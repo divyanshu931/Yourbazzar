@@ -128,6 +128,9 @@ body {
     border-color: #ffc107 !important;
     border: 2px solid #ffc107 !important;
 }
+.btn-color{
+    background-color: #ffc107;
+}
 
 .quantity-btn {
     width: 68px;

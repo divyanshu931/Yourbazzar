@@ -109,3 +109,22 @@ exports.getAllOffers = async (req, res) => {
     });
   }
 };
+
+//single offer
+exports.getOfferById = async (req, res) => {
+  try {
+    const offer = await Offer.findById(req.params.id);
+
+    if (!offer) {
+      return res.status(404).json({ success: false, message: 'Offer not found' });
+    }
+
+    // Optionally, you can check authorization here if needed
+    // For example, ensure the logged-in user has permission to view this offer
+
+    res.status(200).json({ success: true, offer });
+  } catch (error) {
+    console.error('Error fetching offer:', error.message);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+};
