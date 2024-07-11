@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../apis/axiosWithAuth";
 
 function SignUp({ toggleSidebar }) {
   const [name, setName] = useState("");
@@ -18,16 +18,20 @@ function SignUp({ toggleSidebar }) {
       return;
     }
     try {
-      const response = await axios.post("api/auth/signup", {
-        name,
-        email,
-        password,
+      const response = await axiosInstance.post("api/otp/send-otp", {
+        email
       });
 
-      if (response.status === 201) {
-        navigate(`/verification/${email}`);
+      console.log("API Response:", response); // Log the response
+
+      if (response.status === 200) {
+        // Pass name, password, and email to the next page
+        navigate(`/verification/${email}`, { state: { name, password, email } });
+      } else {
+        setError("Error creating account. Please try again.");
       }
     } catch (err) {
+      console.error("API Error:", err); // Log the error
       if (err.response && err.response.status === 400) {
         setError(err.response.data.message);
       } else {

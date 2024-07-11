@@ -55,6 +55,8 @@ function Verification() {
       const response = await axios.post('http://localhost:3001/verifyAndRegister', {
         email: email,
         otp: enteredOtp,
+        name: localStorage.getItem('name'), // Get stored name from localStorage
+        password: localStorage.getItem('password'), // Get stored password from localStorage
       });
 
       if (response.status === 201) {

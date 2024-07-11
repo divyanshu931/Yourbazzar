@@ -1,5 +1,3 @@
-// axiosWithAuth.js
-
 import axiosInstance from "./axiosInstance";
 
 const addAuthToken = (config) => {
@@ -23,8 +21,8 @@ const addAuthToken = (config) => {
   return config;
 };
 
-export const axiosWithAuth = (config = {}) => {
-  return axiosInstance.interceptors.request.use(addAuthToken(config), (error) => {
-    return Promise.reject(error);
-  });
-};
+axiosInstance.interceptors.request.use(addAuthToken, (error) => {
+  return Promise.reject(error);
+});
+
+export default axiosInstance;

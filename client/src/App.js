@@ -15,14 +15,13 @@ function App() {
       <div className="App">
         <div className="content">
           <Routes>
-            <Route exact path="/" element={<Landing />} />
-            <Route exact path="/Landing_2" element={<Landing_2 />} />
-            <Route exact path="/getStarted" element={<GetStart />} />
-            <Route exact path="/signin" element={<SignIn />} />
-            <Route exact path="/signup" element={<SignUp />} />
-            <Route exact path="/home" element={<Home />} />
-            <Route exact path="/verification/:email" element={<Verification />} />
-            
+            <Route path="/" element={<Landing />} />
+            <Route path="/Landing_2" element={<Landing_2 />} />
+            <Route path="/getStarted" element={<GetStart />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/verification/:email" element={<Verification />} />
             {/* Add the route for OfferDetails */}
             <Route path="/offer-details/:id" element={<OfferDetails />} />
           </Routes>
