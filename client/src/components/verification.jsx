@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../apis/axiosInstance'; // Adjust import path as needed
 
 function Verification() {
   const { email } = useParams();
@@ -30,7 +30,7 @@ function Verification() {
 
   const handleResend = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/sendOTP', {
+      const response = await axiosInstance.post('/sendOTP', {
         email: email,
       });
 
@@ -52,7 +52,7 @@ function Verification() {
     const enteredOtp = otp1 + otp2 + otp3 + otp4; // Concatenate OTP fields
 
     try {
-      const response = await axios.post('http://localhost:3001/verifyAndRegister', {
+      const response = await axiosInstance.post('/verifyAndRegister', {
         email: email,
         otp: enteredOtp,
         name: localStorage.getItem('name'), // Get stored name from localStorage
@@ -76,7 +76,7 @@ function Verification() {
       <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
-            <a href="#" className="text-dark me-3 fs-4">
+            <a href="#" className="text-dark me-3 fs-4" onClick={() => navigate('/home')}>
               <i className="bi bi-chevron-left"></i>
             </a>
             Verification
@@ -93,7 +93,7 @@ function Verification() {
       <div className="p-5">
         <div className="text-center">
           <h4 className="fw-bold">Verifying your Email</h4>
-          <p className="text-muted">We have sent 4 digit code on<br />{email}</p>
+          <p className="text-muted">We have sent a 4-digit code to<br />{email}</p>
         </div>
         <form onSubmit={handleVerify} className="my-5">
           <div className="d-flex justify-content-center gap-3">
@@ -142,7 +142,8 @@ function Verification() {
               />
             </div>
           </div>
-          {error && <p className="text-danger">{error}</p>}<br/>
+          {error && <p className="text-danger">{error}</p>}
+          <br />
           <button type="submit" className="btn btn-success btn-lg w-100 shadow">
             Verify
           </button>
