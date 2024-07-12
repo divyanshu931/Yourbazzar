@@ -3,7 +3,7 @@ import axiosInstance from '../apis/axiosInstance';
 import { useParams } from 'react-router-dom';
 import BestSellingProducts from '../components/bestproducts';
 import TodayOffers from '../components/offer'; 
-
+import Footer from '../components/footer';
 
 function OfferDetails() {
   const { id } = useParams();
@@ -60,6 +60,7 @@ function OfferDetails() {
       </div>
       <TodayOffers/>
       <BestSellingProducts/>
+      <Footer/>
     </>
   );
 }

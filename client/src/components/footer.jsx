@@ -48,7 +48,7 @@ const Footer = () => {
           </div>
 
           <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
-            <h5 className="text-uppercase">Social Media</h5>
+            <h5 className="text-uppercase">    Social Media</h5>
             <ul className="list-unstyled mb-0 d-flex justify-content-center">
               <li className="mx-2">
                 <a href="#!" className="text-dark"><FaFacebook size={24} /></a>
