@@ -142,7 +142,7 @@ function Verification() {
               />
             </div>
           </div>
-          {error && <p className="text-danger">{error}</p>}
+          {error && <p className="text-danger">{error}</p>}<br/>
           <button type="submit" className="btn btn-success btn-lg w-100 shadow">
             Verify
           </button>

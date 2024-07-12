@@ -34,34 +34,12 @@
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
 
-  <!-- jQuery -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-
   <!-- Bootstrap JS Bundle -->
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Slick Slider JS -->
-  <script type="text/javascript" src="vendor/slick/slick.min.js"></script>
+  
 
-  <!-- Sidebar JS -->
-  <script type="text/javascript" src="vendor/sidebar/hc-offcanvas-nav.js"></script>
-
-  <!-- Custom scripts for all pages -->
-  <script src="js/custom.js"></script>
-
-  <!-- Inline script to check jQuery and tooltip -->
-  <script>
-    $(document).ready(function() {
-      console.log('jQuery version:', $.fn.jquery); // Should log the jQuery version
-      console.log('Tooltip function:', $.fn.tooltip); // Should not be undefined
-
-      if (typeof $.fn.tooltip === 'undefined') {
-        console.error('Bootstrap Tooltip is not available.');
-      } else {
-        // Initialize tooltips
-        $('[data-toggle="tooltip"]').tooltip();
-      }
-    });
-  </script>
+  <!-- Your React app entry point script -->
+  <script src="/static/js/bundle.js"></script>
 </body>
 </html>

@@ -1,153 +1,108 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const location = useLocation();
 
-function Sidebar({ }) {
-  
+  // State to manage visibility of Authentication submenu
+  const [authSubMenuOpen, setAuthSubMenuOpen] = useState(false);
+
+  // Function to toggle Authentication submenu
+  const toggleAuthSubMenu = () => {
+    setAuthSubMenuOpen(!authSubMenuOpen);
+  };
+
+  // Close sidebar when a link is clicked
+  const handleLinkClick = () => {
+    if (isOpen) {
+      toggleSidebar();
+    }
+  };
+
   return (
-    <nav >
-      <ul className="second-nav">
+    <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <div className="sidebar-header">
+        <h3>Your Bajaar</h3>
+        <button className="close-btn" onClick={toggleSidebar}>
+          <i className="bi bi-x"></i>
+        </button>
+      </div>
+      <ul className="sidebar-menu">
         <li>
-          <a href="#" className="bg-success sidebar-user d-flex align-items-center py-4 px-3 border-0 mb-0">
-            <img src="img/profile.jpg" className="img-fluid rounded-pill me-3" alt="Profile" />
-            <div className="text-white">
-              <h6 className="mb-0">Admin</h6>
-              <small>+91 7419198787</small>
-              <br />
-              <span className="f-10 text-white-50">Version 1.32</span>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a href="index.html">
+          <Link to="/index.html" onClick={handleLinkClick}>
             <i className="bi bi-code-square me-2"></i> Splash
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="landing.html">
+          <Link to="/landing.html" onClick={handleLinkClick}>
             <i className="bi bi-file-break me-2"></i> Landing
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="get-started.html">
+          <Link to="/get-started.html" onClick={handleLinkClick}>
             <i className="bi bi-ui-checks-grid me-2"></i> Get Started
-          </a>
+          </Link>
         </li>
-        <li>
-          <a href="#">
+        <li className={authSubMenuOpen ? 'active' : ''}>
+          <a href="#!" onClick={(e) => { e.preventDefault(); toggleAuthSubMenu(); }}>
             <i className="bi bi-lock me-2"></i> Authentication
           </a>
-          <ul>
-            <li><a href="signin.html">Sign In</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
-            <li><a href="change-password.html">Change Password</a></li>
-            <li><a href="verification.html">Verification</a></li>
+          <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
+            <li><Link to="/signin.html" onClick={handleLinkClick}>Sign In</Link></li>
+            <li><Link to="/signup.html" onClick={handleLinkClick}>Sign Up</Link></li>
+            <li><Link to="/change-password.html" onClick={handleLinkClick}>Change Password</Link></li>
+            <li><Link to="/verification.html" onClick={handleLinkClick}>Verification</Link></li>
           </ul>
         </li>
         <li>
-          <a href="home.html">
-            <i className="bi bi-house me-2"></i> Homepage
-          </a>
+          <Link to="/home.html" onClick={handleLinkClick}><i className="bi bi-house me-2"></i> Homepage</Link>
         </li>
         <li>
-          <a href="gift-card.html">
-            <i className="bi bi-award me-2"></i> Offers
-          </a>
+          <Link to="/gift-card.html" onClick={handleLinkClick}><i className="bi bi-award me-2"></i> Offers</Link>
         </li>
         <li>
-          <a href="listing.html">
-            <i className="bi bi-list-task me-2"></i> Listing
-          </a>
+          <Link to="/listing.html" onClick={handleLinkClick}><i className="bi bi-list-task me-2"></i> Listing</Link>
         </li>
         <li>
-          <a href="bag.html">
-            <i className="bi bi-bag me-2"></i> Bag
-          </a>
+          <Link to="/bag.html" onClick={handleLinkClick}><i className="bi bi-bag me-2"></i> Bag</Link>
         </li>
-        <li>
-          <a href="#">
-            <i className="bi bi-person me-2"></i> Profile Pages
-          </a>
+        <li onClick={handleLinkClick}>
+          <Link to="/profile"><i className="bi bi-person me-2"></i> Profile Pages</Link>
           <ul>
-            <li><a href="my-order.html">My Order</a></li>
-            <li><a href="order-confirm.html">Order Confirm</a></li>
-            <li><a href="order-detail.html">Order Detail</a></li>
-            <li><a href="add-address.html">Add Address</a></li>
+            <li><Link to="/my-order.html" onClick={handleLinkClick}>My Order</Link></li>
+            <li><Link to="/order-confirm.html" onClick={handleLinkClick}>Order Confirm</Link></li>
+            <li><Link to="/order-detail.html" onClick={handleLinkClick}>Order Detail</Link></li>
+            <li><Link to="/add-address.html" onClick={handleLinkClick}>Add Address</Link></li>
           </ul>
         </li>
-        <li>
-          <a href="#">
-            <i className="bi bi-clipboard me-2"></i> Extra Pages
-          </a>
+        <li onClick={handleLinkClick}>
+          <Link to="/extra-pages"><i className="bi bi-clipboard me-2"></i> Extra Pages</Link>
           <ul>
-            <li><a href="support.html">Support</a></li>
-            <li><a href="notification.html">Notification</a></li>
-            <li><a href="empty.html">Empty Cart</a></li>
+            <li><Link to="/support.html" onClick={handleLinkClick}>Support</Link></li>
+            <li><Link to="/notification.html" onClick={handleLinkClick}>Notification</Link></li>
+            <li><Link to="/empty.html" onClick={handleLinkClick}>Empty Cart</Link></li>
           </ul>
         </li>
-        <li>
-          <a href="#">
-            <i className="bi bi-link-45deg me-2"></i> Navigation Link Example
-          </a>
-          <ul>
-            <li>
-              <a href="#">Link Example 1</a>
-              <ul>
-                <li>
-                  <a href="#">Link Example 1.1</a>
-                  <ul>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Link Example 1.2</a>
-                  <ul>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#">Link Example 2</a></li>
-            <li><a href="#">Link Example 3</a></li>
-            <li><a href="#">Link Example 4</a></li>
-            <li data-nav-custom-content>
-              <div className="custom-message">
-                You can add any custom content to your navigation items. This text is just an example.
-              </div>
-            </li>
-          </ul>
-        </li>
+      
       </ul>
       <ul className="bottom-nav">
         <li className="email">
-          <a className="text-success nav-item text-center" href="home.html" tabIndex="0" role="menuitem">
-            <p className="h5 m-0">
-              <i className="icofont-ui-home text-success"></i>
-            </p>
+          <Link className={`nav-item text-center ${location.pathname === '/home.html' ? 'active' : ''}`} to="/home.html" tabIndex="0" role="menuitem">
+            <p className="h5 m-0"><i className="icofont-ui-home"></i></p>
             Home
-          </a>
+          </Link>
         </li>
         <li className="github">
-          <a href="gift-card.html" className="nav-item text-center" tabIndex="0" role="menuitem">
-            <p className="h5 m-0">
-              <i className="icofont-sale-discount"></i>
-            </p>
-            Offer
-          </a>
+          <Link className={`nav-item text-center ${location.pathname === '/gift-card.html' ? 'active' : ''}`} to="/gift-card.html" tabIndex="0" role="menuitem">
+            <p className="h5 m-0"><i className="icofont-sale-discount"></i></p>
+            Offers
+          </Link>
         </li>
         <li className="ko-fi">
-          <a href="support.html" className="nav-item text-center" tabIndex="0" role="menuitem">
-            <p className="h5 m-0">
-              <i className="icofont-support-faq"></i>
-            </p>
+          <Link className={`nav-item text-center ${location.pathname === '/support.html' ? 'active' : ''}`} to="/support.html" tabIndex="0" role="menuitem">
+            <p className="h5 m-0"><i className="icofont-support-faq"></i></p>
             Help
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

@@ -33,25 +33,26 @@ function AdminHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/api/admin/dashboard");
-        setData(response.data.chartData);
+        const response = await axiosInstance.get("/api/dashboard/counts");
+        const { productCount, categoryCount, adminCount, customerCount, offerCount } = response.data;
+
         setStats({
-          products: response.data.products,
-          categories: response.data.categories,
-          customers: response.data.customers,
-          admins: response.data.admins,
-          offers: response.data.offers,
+          products: productCount,
+          categories: categoryCount,
+          customers: customerCount,
+          admins: adminCount,
+          offers: offerCount,
         });
+
+        // Assuming response.data.chartData is properly formatted for recharts
+        setData(response.data.chartData);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     };
 
-   
     fetchData();
-
-    }
-  , []);
+  }, []);
 
   return (
     <main className="main-container">
@@ -90,7 +91,7 @@ function AdminHome() {
         </div>
         <div className="cardd">
           <div className="cardd-inner">
-            <h3>offer</h3>
+            <h3>Offers</h3>
             <BsFillBellFill className="cardd_icon" />
           </div>
           <h1>{stats.offers}</h1>
@@ -98,17 +99,10 @@ function AdminHome() {
       </div>
 
       <div className="charts">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={300}>
           <BarChart
-            width={500}
-            height={300}
             data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -120,17 +114,10 @@ function AdminHome() {
           </BarChart>
         </ResponsiveContainer>
 
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={300}>
           <LineChart
-            width={500}
-            height={300}
             data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />

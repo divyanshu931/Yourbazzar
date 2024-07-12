@@ -7,8 +7,9 @@ import GetStart from './components/getStarted';
 import SignIn from './components/signin';
 import SignUp from './components/signup';
 import Verification from './components/verification.jsx';
-import OfferDetails from './components/offer_details'; 
-import AdminDashboard from './Pages.jsx/admin.jsx';// Import the OfferDetails component
+import OfferDetails from './Pages.jsx/offer_details.jsx';
+import AdminDashboard from './Pages.jsx/admin.jsx';
+import ShoppingCart from './Pages.jsx/shopingcart.jsx';// Import the OfferDetails component
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             {/* Add the route for OfferDetails */}
             <Route  path="/offer-details/:id" element={<OfferDetails />} />
             <Route  path="/dashboard/admin" element={<AdminDashboard />} />
+            <Route  path="/bag" element={<ShoppingCart />} />
             {/* the route for admin */}
           </Routes>
         </div>

@@ -2,6 +2,7 @@ const express = require('express');
 const { getAllCategories, createCategory, getCategoryById, updateCategory, deleteCategory } = require('../controllers/categoryController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
+
 const router = express.Router();
 
 router.get('/', getAllCategories); // Public route to get all categories

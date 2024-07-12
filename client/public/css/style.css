@@ -289,3 +289,203 @@ body {
 .footer-menu a {
     padding: 12px 12px !important;
 }
+
+.offer-details-container {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .offer-details {
+    margin-top: 20px;
+    color:black
+  }
+  
+  .offer-title {
+    color: var(--theme);
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .offer-description {
+    margin-top: 10px;
+  }
+  
+  .offer-discount {
+    margin-top: 10px;
+  }
+  
+  .offer-expiry {
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .loading-message {
+    color: gray;
+  }
+  .footer {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: #f8f9fa; /* Example background color, adjust as needed */
+  }
+  
+  .footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer h5 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer p, .footer a {
+    font-size: 1rem;
+  }
+  
+  .footer .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .footer .list-unstyled {
+    padding-left: 0;
+    list-style: none;
+  }
+  
+  .footer .list-unstyled li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer .list-unstyled li a {
+    text-decoration: none;
+  }
+  
+  .footer .social-media-icons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .footer .social-media-icons li {
+    margin: 0 0.5rem;
+  }
+  
+  .footer .text-center {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (max-width: 767px) {
+    .footer .col-lg-3 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  }
+  .sidebar {
+    position: fixed;
+    left: -10%; /* Start off-screen */
+    top: 0;
+    height: 100%;
+    width: 10%;
+    background-color: #fff;
+    z-index: 1000; /* Ensure sidebar is above main content */
+    transition: left 0.3s ease;
+    overflow-y: auto; /* Enable vertical scroll if content exceeds sidebar height */
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  } .sidebar.open {
+    left: 0; /* Slide in when open */
+  }
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 80%; /* Example width for smaller screens */
+      left: -80%; /* Off-screen initially for slide-in effect */
+    }
+    .sidebar.open {
+      left: 0; /* Slide in when open */
+    }
+  }
+  
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 15px;
+  }
+  
+  .sidebar ul li a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar ul li a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .sidebar .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-top-right-radius: 20px;
+  }
+  
+  .sidebar .sidebar-header h3 {
+    margin: 0;
+  }
+  
+  .sidebar .close-btn {
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .sidebar-menu ul {
+    padding-left: 20px;
+    margin-top: 5px;
+    border-top: 1px solid #ddd;
+  }
+  
+  .sidebar-menu ul li {
+    padding: 8px 15px;
+  }
+  
+  .sidebar-menu ul li a {
+    color: #555;
+  }
+  
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-bottom-right-radius: 20px;
+  }
+  .osahan-home-header {
+    margin-top: 0px; /* Adjust as needed */
+    padding-top: 20px; /* Adjust padding if necessary */
+    z-index: 999; /* Lower than sidebar z-index */
+    position: sticky;
+    top: 0;
+    background-color: #ffc107;
+  }
+  

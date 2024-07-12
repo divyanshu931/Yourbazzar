@@ -3,6 +3,7 @@ import axiosInstance from '../apis/axiosInstance';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from 'react-router-dom';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -115,9 +116,9 @@ const CategoryList = () => {
     <div style={containerStyle}>
       <div style={{ padding: '1px' }}><h6 style={{ marginBottom: '0.5rem', color: 'black', fontWeight: 'bold' }}>Today's Offers</h6>
 
-        <a href="listing.html" style={linkStyle}>
+        < Link to="listing.html" style={linkStyle}>
           SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
-        </a>
+        </Link>
         </div>
 
 
@@ -147,7 +148,7 @@ const CategoryList = () => {
         {categories2.map(category => (
           <div style={{ backgroundColor: '#fff', marginBottom: '20px', padding: '15px' }}>
             <div key={category._id} style={{ ...itemStyle, width: '200px', height: '250px' }}>
-              <a href="listing.html" style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
+              <Link href="listing.html" style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
                 <img
                   src={category.image}
                   alt={category.name}
@@ -159,7 +160,7 @@ const CategoryList = () => {
                 />
                 <p style={{ ...nameStyle, marginBottom: '0', height: '30%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{category.name}</p>
                 <i className="bi bi-arrow-right ms-auto"></i>
-              </a>
+              </Link>
             </div>
           </div>
         ))}

@@ -1,0 +1,29 @@
+const Product = require('../models/productModel');
+const Category = require('../models/categoryModel');
+const User = require('../models/userModel'); // Adjust path to your User model
+const Offer = require('../models/offerModel');
+
+exports.getCounts = async (req, res) => {
+  try {
+    const productCount = await Product.countDocuments();
+    const categoryCount = await Category.countDocuments();
+    
+    // Count users based on roles
+    const adminCount = await User.countDocuments({ role: 'admin' });
+    const customerCount = await User.countDocuments({ role: 'customer' });
+
+    const offerCount = await Offer.countDocuments();
+
+
+    res.json({
+      productCount,
+      categoryCount,
+      adminCount,
+      customerCount,
+      offerCount,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
