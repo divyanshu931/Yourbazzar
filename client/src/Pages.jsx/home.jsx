@@ -1,64 +1,26 @@
 import React, { useState } from "react";
 import BestSellingProducts from "../components/bestproducts";
 import TodayOffers from "../components/offer";
-import TopNavbar from "../components/topnavbar";
+
 import CategoryList from "../components/CategoryList";
-import Footer from "../components/footer";
+
 import ProductListing from "./offer_details";
-import Sidebar from "../components/Sidebar"; // Import the Sidebar component
-import { Link } from "react-router-dom";
+
+import Layout from "../components/layout/layout_";
 
 function Home() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   return (
     <>
-      <TopNavbar />
-
-      <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <div className="font-weight-normal mb-0 d-flex align-items-center">
-          <h4 className="m-0 fw-bold text-black">
-            Your<span className="text-success">Bajaar</span>
-          </h4>
-          <div className="ms-auto d-flex align-items-center">
-            <Link to="/signin" className="me-3 text-dark fs-5">
-              <i className="bi bi-person-circle"></i>
-            </Link>
-            <Link to="/bag" className="me-3 text-dark fs-5">
-              <i className="bi bi-basket"></i>
-            </Link>
-            <Link
-              className="toggle osahan-toggle fs-4 text-dark ms-auto"
-              onClick={toggleSidebar}
-            >
-              <i className="bi bi-list"></i>
-            </Link>
-          </div>
-        </div>
-        <div className="input-group input-group-lg bg-white border-0 shadow-sm rounded overflow-hidden mt-3">
-          <span className="input-group-text bg-white border-0">
-            <i className="bi bi-search text-muted"></i>
-          </span>
-          <input
-            type="text"
-            className="form-control border-0 ps-0"
-            placeholder="Search for Products.."
-          />
-        </div>
-      </div>
-
-      {/* Sidebar component */}
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
+      
+<Layout>
       <TodayOffers />
       <CategoryList />
       <BestSellingProducts />
       <ProductListing />
-      <Footer />
+     
+      </Layout >
     </>
   );
 }

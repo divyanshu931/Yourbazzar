@@ -3,8 +3,8 @@ import axiosInstance from '../apis/axiosInstance';
 import { useParams } from 'react-router-dom';
 import BestSellingProducts from '../components/bestproducts';
 import TodayOffers from '../components/offer'; 
-import Footer from '../components/footer';
 
+import Layout from '../components/layout/layout_';
 function OfferDetails() {
   const { id } = useParams();
   const [offer, setOffer] = useState(null);
@@ -30,20 +30,7 @@ function OfferDetails() {
 
   return (
     <>
-      <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top">
-        <div className="font-weight-normal mb-0 d-flex align-items-center">
-          <h4 className="m-0 fw-bold text-black">Your<span className="text-success">Bajaar</span></h4>
-          <div className="ms-auto d-flex align-items-center">
-            <a href="signin.html" className="me-3 text-dark fs-5"><i className="bi bi-person-circle"></i></a>
-            <a href="bag.html" className="me-3 text-dark fs-5"><i className="bi bi-basket"></i></a>
-            <a href="#" className="toggle osahan-toggle fs-4 text-dark ms-auto"><i className="bi bi-list"></i></a>
-          </div>
-        </div>
-        <div className="input-group input-group-lg bg-white border-0 shadow-sm rounded overflow-hidden mt-3">
-          <span className="input-group-text bg-white border-0"><i className="bi bi-search text-muted"></i></span>
-          <input type="text" className="form-control border-0 ps-0" placeholder="Search for Products.." />
-        </div>
-      </div>
+   <Layout>
       <div className="offer-details-container d-flex justify-content-center align-items-center">
         {offer ? (
           <div className="offer-details text-center">
@@ -60,7 +47,8 @@ function OfferDetails() {
       </div>
       <TodayOffers/>
       <BestSellingProducts/>
-      <Footer/>
+   
+      </Layout>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
-import TopNavbar from "./topnavbar";
+
 
 function SignIn() {
   const [name, setName] = useState("");
@@ -35,7 +35,7 @@ function SignIn() {
 
   return (
     <>
-      <TopNavbar />
+     
       <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
@@ -44,11 +44,7 @@ function SignIn() {
             </Link>
             Sign In
           </h6>
-          <div className="ms-auto d-flex align-items-center">
-            <a className="toggle osahan-toggle fs-4 text-dark ms-auto" href="#">
-              <i className="bi bi-list"></i>
-            </a>
-          </div>
+        
         </div>
       </div>
 

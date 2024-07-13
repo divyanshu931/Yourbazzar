@@ -6,28 +6,21 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from 'react-router-dom';
 
 const CategoryList = () => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axiosInstance.get('/api/categories');
-        setCategories(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  if (loading) {
-    return <p>Loading categories...</p>;
-  }
-
+  
+    const [categories, setCategories] = useState([]);
+  
+    useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await axiosInstance.get('/api/categories');
+          setCategories(response.data); // Assuming your API response returns an array of categories
+        } catch (error) {
+          console.error('Error fetching categories:', error);
+        }
+      };
+  
+      fetchCategories();
+    }, []); // Emp
   // Split categories into two arrays
   const splitIndex = Math.ceil(categories.length / 2);
   const categories1 = categories.slice(0, splitIndex);

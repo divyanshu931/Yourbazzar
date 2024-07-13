@@ -328,158 +328,135 @@ body {
     color: gray;
   }
   .footer {
-    width: 100%;
-    padding: 2rem 0;
-    background-color: #f8f9fa; /* Example background color, adjust as needed */
+    background-color: #23272b;
+    color: #fff;
+    padding-top: 1rem;
+  }
+  
+  .footer .text-uppercase {
+    color: #ffc107;
+  }
+  
+  .footer a {
+    color: #ffc107;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .footer .social-icons a {
+    color: #fff;
+    transition: color 0.3s ease;
+  }
+  
+  .footer .social-icons a:hover {
+    color: #ffc107;
   }
   
   .footer .container {
     max-width: 1200px;
-    margin: 0 auto;
   }
   
-  .footer h5 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+  .footer .container .row {
+    justify-content: space-between;
   }
   
-  .footer p, .footer a {
-    font-size: 1rem;
-  }
-  
-  .footer .row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .footer .list-unstyled {
-    padding-left: 0;
-    list-style: none;
-  }
-  
-  .footer .list-unstyled li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .footer .list-unstyled li a {
-    text-decoration: none;
-  }
-  
-  .footer .social-media-icons {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .footer .social-media-icons li {
-    margin: 0 0.5rem;
+  .footer .container .col-lg-3, .footer .container .col-lg-2 {
+    text-align: left;
   }
   
   .footer .text-center {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: #1d2124;
+    padding: 1rem 0;
   }
   
-  @media (max-width: 767px) {
-    .footer .col-lg-3 {
-      flex: 0 0 100%;
-      max-width: 100%;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-  }
-  .sidebar {
-    position: fixed;
-    left: -10%; /* Start off-screen */
-    top: 0;
-    height: 100%;
-    width: 10%;
-    background-color: #fff;
-    z-index: 1000; /* Ensure sidebar is above main content */
-    transition: left 0.3s ease;
-    overflow-y: auto; /* Enable vertical scroll if content exceeds sidebar height */
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  } .sidebar.open {
-    left: 0; /* Slide in when open */
-  }
-  @media (max-width: 768px) {
-    .sidebar {
-      width: 80%; /* Example width for smaller screens */
-      left: -80%; /* Off-screen initially for slide-in effect */
-    }
-    .sidebar.open {
-      left: 0; /* Slide in when open */
-    }
-  }
+  /* Sidebar.css */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #343a40;
+  color: #fff;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #212529;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-menu li {
+  padding: 1rem;
+  position: relative;
+}
+
+.sidebar-menu a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-menu a:hover {
+  background-color: #495057;
+}
+
+.sub-menu {
+  list-style: none;
+  padding: 0;
+  padding-left: 1rem;
+  display: none;
+}
+
+.sub-menu.open {
+  display: block;
+}
+
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #23272b;
+}
+
+.bottom-nav li {
+  display: inline-block;
+  width: 33.33%;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.bottom-nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
   
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .sidebar ul li {
-    padding: 10px 15px;
-  }
-  
-  .sidebar ul li a {
-    color: #333;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sidebar ul li a:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .sidebar .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border-top-right-radius: 20px;
-  }
-  
-  .sidebar .sidebar-header h3 {
-    margin: 0;
-  }
-  
-  .sidebar .close-btn {
-    background: none;
-    border: none;
-    color: #333;
-    cursor: pointer;
-  }
-  
-  .sidebar-menu ul {
-    padding-left: 20px;
-    margin-top: 5px;
-    border-top: 1px solid #ddd;
-  }
-  
-  .sidebar-menu ul li {
-    padding: 8px 15px;
-  }
-  
-  .sidebar-menu ul li a {
-    color: #555;
-  }
-  
-  .bottom-nav {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #ddd;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border-bottom-right-radius: 20px;
-  }
   .osahan-home-header {
     margin-top: 0px; /* Adjust as needed */
     padding-top: 20px; /* Adjust padding if necessary */

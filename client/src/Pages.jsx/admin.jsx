@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Sidebar from "../componentsAdmin/slideBar";
-import Header from "../componentsAdmin/header";
+
 import AdminHome from "../componentsAdmin/AdminHome";
 import AdminLayout from "../componentsAdmin/layout/Layout";
 
