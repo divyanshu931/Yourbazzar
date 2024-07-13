@@ -19,7 +19,7 @@ function SignUp({ toggleSidebar }) {
     }
     try {
       const response = await axiosInstance.post("api/otp/send-otp", {
-        email
+        email,
       });
 
       console.log("API Response:", response); // Log the response
