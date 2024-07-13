@@ -2,29 +2,22 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
 
-
 function SignIn() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
 
   const handleSignIn = async (event) => {
     event.preventDefault();
     try {
       const response = await axiosInstance.post("/api/auth/login", {
-        name,
         email,
         password,
       });
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("name", response.data.name); // Save name
-        localStorage.setItem("email", response.data.email); // Save email
-  
         navigate("/home");
       }
     } catch (err) {
@@ -35,7 +28,6 @@ function SignIn() {
 
   return (
     <>
-     
       <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
@@ -44,28 +36,12 @@ function SignIn() {
             </Link>
             Sign In
           </h6>
-        
         </div>
       </div>
 
       {/* Body */}
       <div className="p-4">
         <form onSubmit={handleSignIn}>
-          <div className="mb-4">
-            <label className="form-label text-muted small mb-1">Name</label>
-            <div className="input-group input-group-lg bg-white shadow-sm rounded overflow-hidden">
-              <span className="input-group-text bg-white">
-                <i className="bi bi-person text-muted"></i>
-              </span>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-          </div>
           <div className="mb-4">
             <label className="form-label text-muted small mb-1">Your Email</label>
             <div className="input-group input-group-lg bg-white shadow-sm rounded overflow-hidden">
