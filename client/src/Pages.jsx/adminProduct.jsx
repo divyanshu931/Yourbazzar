@@ -5,7 +5,7 @@ import Header from "../componentsAdmin/header";
 import AdminHome from "../componentsAdmin/AdminHome";
 import AdminLayout from "../componentsAdmin/layout/Layout";
 
-function AdminDashboard() {
+function ProductDashboard() {
   const [hasToken, setHasToken] = useState(true);
 
   useEffect(() => {
@@ -48,10 +48,12 @@ function AdminDashboard() {
   return (
     <>
       <AdminLayout>
-        <AdminHome />
+        <div className="" style={{color: "black"}}>
+            this is product page
+        </div>
       </AdminLayout>
     </>
   );
 }
 
-export default AdminDashboard;
+export default ProductDashboard;

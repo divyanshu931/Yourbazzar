@@ -34,7 +34,13 @@ function AdminHome() {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("/api/dashboard/counts");
-        const { productCount, categoryCount, adminCount, customerCount, offerCount } = response.data;
+        const {
+          productCount,
+          categoryCount,
+          adminCount,
+          customerCount,
+          offerCount,
+        } = response.data;
 
         setStats({
           products: productCount,

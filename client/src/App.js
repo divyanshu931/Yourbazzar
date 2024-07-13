@@ -10,6 +10,7 @@ import Verification from './components/verification.jsx';
 import OfferDetails from './Pages.jsx/offer_details.jsx';
 import AdminDashboard from './Pages.jsx/admin.jsx';
 import ShoppingCart from './Pages.jsx/shopingcart.jsx';// Import the OfferDetails component
+import ProductDashboard from './Pages.jsx/adminProduct.jsx';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             {/* Add the route for OfferDetails */}
             <Route  path="/offer-details/:id" element={<OfferDetails />} />
             <Route  path="/dashboard/admin" element={<AdminDashboard />} />
+            <Route  path="/product-dashboard" element={<ProductDashboard />} />
             <Route  path="/bag" element={<ShoppingCart />} />
             {/* the route for admin */}
           </Routes>
