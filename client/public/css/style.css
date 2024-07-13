@@ -465,4 +465,31 @@ body {
     top: 0;
     background-color: #ffc107;
   }
-  
+  /* BestSellingProducts.css */
+/* BestSellingProducts.css */
+.home-product .image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px; /* Adjust as needed for different screen sizes */
+}
+
+.home-product .card-img-top {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .home-product .image-container {
+    height: 300px; /* Adjust for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .home-product .image-container {
+    height: 200px; /* Adjust for mobile screens */
+  }
+}
+
+

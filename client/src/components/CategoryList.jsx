@@ -25,19 +25,19 @@ const CategoryList = () => {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around', // Adjust as needed for spacing
+    gap: '30px', // Increased gap between items
+    justifyContent: 'space-between', // Adjust as needed for spacing
   };
 
   const itemStyle = {
     textAlign: 'center',
     borderRadius: '15px',
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor: '#d3d3d3', // Gray background for each category item
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    padding: '5px', // Reduced padding
-    margin: '5px', // Reduced margin
-    width: 'calc(25% - 30px)', // Adjust width to fit 4 per row (25% for 4 items)
-    minWidth: '150px', // Ensure a minimum width for consistent sizing
+    padding: '20px', // Increased padding
+    width: 'calc(18% - 150px)', // Adjust width to make the category items smaller
+    minWidth: '100px', // Ensure a minimum width for consistent sizing
   };
 
   const imageStyle = {
@@ -61,7 +61,7 @@ const CategoryList = () => {
     <div style={containerStyle}>
       {categories.map(category => (
         <div key={category._id} style={itemStyle}>
-          <Link to={`listing/${category._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to={`/category/${category.name}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <img
               src={category.image}
               alt={category.name}

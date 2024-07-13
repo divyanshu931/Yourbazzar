@@ -31,8 +31,30 @@ const BestSellingProducts = () => {
     speed: 1000,
     slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    autoplay: false, // Disable autoplay for manual control
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        }
+      }
+    ]
   };
 
   if (loading) {
@@ -50,20 +72,22 @@ const BestSellingProducts = () => {
         {products.map(product => (
           <div key={product._id} className="home-product">
             <div className="card border shadow-sm rounded-3">
-              <img
-                src={product.image}
-                className="card-img-top rounded-3 p-3"
-                alt={product.name}
-                style={{ 
-                  width: '100%', 
-                  height: '500px', 
-                  objectFit: 'cover' 
-                }}
-              />
+              <div className="image-container">
+                <img
+                  src={product.image}
+                  className="card-img-top p-3"
+                  alt={product.name}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover' 
+                  }}
+                />
+              </div>
               <div className="card-body p-2 border-top">
-                <p className="card-text m-0 d-flex align-items-center">
+                <p className="card-text m-0 d-flex align-items-center" style={{ color: 'black' }}>
                   {product.name}
-                  <i className="bi bi-arrow-right ms-auto"></i>
+                  <i className="bi bi-arrow-right ms-auto" style={{ color: 'black' }}></i>
                 </p>
               </div>
             </div>
