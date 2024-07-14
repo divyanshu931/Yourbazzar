@@ -9,13 +9,15 @@ import SignUp from './components/signup';
 import Verification from './components/verification.jsx';
 import OfferDetails from './Pages/offer_details.jsx';
 
+
 import ShoppingCart from './Pages/shopingcart.jsx';// Import the OfferDetails component
 
-import ProductDetailPage from './Pages/categorybyname.jsx';
-
+import  Productbycategory from './Pages/categorybyname.jsx';
+import ProductDetailPage from './Pages/product_details.jsx';
 import AdminDashboard from './Pages/Adminpages/admin.jsx';
 import ProductDashboard from './Pages/Adminpages/adminProduct.jsx';
 import AdminControl from './Pages/Adminpages/admincontrol.jsx';
+
 
 const NotFound = () => (
   <div style={{ textAlign: 'center', color: '#000' }}>
@@ -40,7 +42,8 @@ function App() {
             {/* Add the route for OfferDetails */}
             <Route  path="/offer-details/:id" element={<OfferDetails />} />
            
-            <Route path="/category/:categoryName" element={<ProductDetailPage />} />
+            <Route path="/category/:categoryName" element={<Productbycategory/>} />
+            <Route path="/product-detail/:productId" element={<ProductDetailPage />} />
             <Route  path="/bag" element={<ShoppingCart />} />
 
             <Route  path="/dashboard/admin" element={<AdminDashboard />} />

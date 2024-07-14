@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import Slider from 'react-slick';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
@@ -67,31 +68,33 @@ const BestSellingProducts = () => {
 
   return (
     <div className="p-3 bg-light">
-      <h6 className="mb-3 text-black fw-bold">Best selling products</h6>
+      <h6 className="mb-3 text-black fw-bold">Best Selling Products</h6>
       <Slider {...settings} className="single-item selling-box">
         {products.map(product => (
-          <div key={product._id} className="home-product">
-            <div className="card border shadow-sm rounded-3">
-              <div className="image-container">
-                <img
-                  src={product.image}
-                  className="card-img-top p-3"
-                  alt={product.name}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover' 
-                  }}
-                />
-              </div>
-              <div className="card-body p-2 border-top">
-                <p className="card-text m-0 d-flex align-items-center" style={{ color: 'black' }}>
-                  {product.name}
-                  <i className="bi bi-arrow-right ms-auto" style={{ color: 'black' }}></i>
-                </p>
+          <Link to={`/product-detail/${product._id}`} key={product._id} className="text-decoration-none">
+            <div className="home-product">
+              <div className="card border shadow-sm rounded-3">
+                <div className="image-container">
+                  <img
+                    src={product.image}
+                    className="card-img-top p-3"
+                    alt={product.name}
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover' 
+                    }}
+                  />
+                </div>
+                <div className="card-body p-2 border-top">
+                  <p className="card-text m-0 d-flex align-items-center" style={{ color: 'black' }}>
+                    {product.name}
+                    <i className="bi bi-arrow-right ms-auto" style={{ color: 'black' }}></i>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </Slider>
     </div>

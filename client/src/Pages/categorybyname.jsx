@@ -3,7 +3,7 @@ import axiosInstance from '../apis/axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 import FilterLayout from '../components/layout/filterLayout'; // Ensure correct import and casing
 
-const ProductDetailPage = () => {
+const Productbycategory = () => {
   const { categoryName } = useParams(); // Get the category name from route parameters
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,45 +40,39 @@ const ProductDetailPage = () => {
     return <p>{error}</p>;
   }
 
-  // Render products
+  // Render products or no products message
   return (
     <FilterLayout>
-      <div className="tab-content" id="pills-tabContent">
-        <div className="osahan-listing p-0 m-0 row">
-          {products.map((product) => (
-            <div className="text-dark col-6 px-0 border-bottom border-end position-relative" key={product.id}>
-              <div className="list_item_gird m-0 bg-white listing-item">
-                <span className="badge bg-warning text-dark m-3 position-absolute">10% OFF</span>
-                <div className="list-item-img p-4">
-                  <img src={product.image} className="img-fluid p-3" alt={product.name} />
+      <div className="container py-5">
+        <div className="tab-pane fade active show" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          {products.length === 0 ? (
+            <div className="no-products-message d-flex justify-content-center align-items-center">
+              <p className="text-center text-dark font-weight-bold">No products available in this category. Check back soon!</p>
+            </div>
+          ) : (
+            products.map((product) => (
+              <div className="d-flex bag-item position-relative p-3 border-bottom align-items-center fit-screen" key={product._id}>
+                <div className="bag-item-left me-3">
+                  <img src={product.image} className="img-fluid rounded-3 border" alt={product.name} />
                 </div>
-                <div className="tic-div px-3 pb-3">
-                  <p className="mb-1 text-black">{product.name}</p>
-                  <h6 className="card-title mt-2 mb-3 text-success fw-bold">
-                    ₹{product.price}.00{' '}
-                    <small className="text-decoration-line-through text-muted small fw-light">₹100.00</small>
-                  </h6>
-                  <div className="d-flex align-items-center justify-content-between gap-1">
-                    <div className="size-btn">
-                      <div className="input-group">
-                        {/* Add any additional elements as needed */}
-                      </div>
-                    </div>
-                    <div>
-                      <Link to="/bag" className="btn btn-success btn-sm d-flex border-0">
-                        <i className="bi bi-plus me-2"></i> ADD
-                      </Link>
-                    </div>
+                <div className="bag-item-right w-100">
+                  <div className="card-body pe-0 py-0">
+                    {product.name && <span className="badge bg-success">20% OFF</span>}
+                    <p className="card-text mb-0 mt-1 text-black">{product.name}</p>
+                    <small className="text-muted"><i className="bi bi-shop me-1"></i>  ₹{product.description}</small>
+                    <h5 className="card-title mt-2 mb-0 text-black fw-bold">
+                      ₹{product.price}.00 <small className="text-decoration-line-through text-muted fs-6 fw-light">₹100.00</small>
+                    </h5>
                   </div>
                 </div>
+                <Link className="stretched-link" to={`/product/${product._id}`}></Link>
               </div>
-              <Link className="stretched-link" to="/bag"></Link>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </FilterLayout>
   );
 };
 
-export default ProductDetailPage;
+export default Productbycategory;

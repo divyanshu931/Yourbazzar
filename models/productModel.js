@@ -4,19 +4,23 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    maxlength: 100 // Optional: Limit the length of the product name
   },
   description: {
     type: String,
-    required: true
+    required: true,
+    maxlength: 1000 // Optional: Limit the length of the description
   },
   price: {
     type: Number,
-    required: true
+    required: true,
+    min: 0 // Ensure the price is a positive number
   },
   category: {
     type: String,
-    required: true
+    required: true,
+    enum: ['Electronics', 'Clothing', 'Home', 'Books', 'Sports'], // Optional: Limit to specific categories
   },
   bestProduct: {
     type: Boolean,
@@ -24,9 +28,11 @@ const productSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true  // Assuming you store the URL of the image
+    required: true,
+   
   }
-  // You can add other fields as needed
+}, {
+  timestamps: true // Automatically add createdAt and updatedAt fields
 });
 
 module.exports = mongoose.model('Product', productSchema);

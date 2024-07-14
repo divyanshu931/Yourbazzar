@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const ProductListing = () => {
   const [activeCategory, setActiveCategory] = useState('dairy'); // Default active category
-  const [categories] = useState(['dairy','Cold drinks', 'Personal care', 'Home']); // Static top categories
+  const [categories] = useState(['dairy', 'Cold drinks', 'Personal care', 'Home']); // Static top categories
   const [products, setProducts] = useState([]); // State to store products
   const [loading, setLoading] = useState(true); // State to manage loading state
   const [error, setError] = useState(null); // State to manage errors
@@ -51,8 +51,8 @@ const ProductListing = () => {
     <div>
       <div className="border-bottom border-top px-3 d-flex align-items-center justify-content-between">
         <ul className="nav home-tabs" id="pills-tab" role="tablist">
-          {categories.map((category) => (
-            <li className="nav-item" role="presentation" key={category}>
+          {categories.map((category, index) => (
+            <li className="nav-item" role="presentation" key={index}>
               <button
                 className={`nav-link ${activeCategory === category ? 'active' : ''}`}
                 onClick={() => handleCategoryClick(category)}
@@ -67,14 +67,15 @@ const ProductListing = () => {
       <div className="tab-content" id="pills-tabContent">
         <div className="osahan-listing p-0 m-0 row">
           {products.map((product) => (
-            <div className="text-dark col-6 px-0 border-bottom border-end position-relative" key={product.id}>
+            <div className="text-dark col-3 px-0 border-bottom border-end position-relative" key={product._id}>
               <div className="list_item_gird m-0 bg-white listing-item">
                 <span className="badge bg-warning text-dark m-3 position-absolute">10% OFF</span>
                 <div className="list-item-img p-4">
-                  <img src={product.image} className="img-fluid p-3" alt={product.name} />
+                  <img src={product.image} className="img-fluid p-3" alt={product.name} style={{ height: '200px', objectFit: 'cover' }} />
                 </div>
                 <div className="tic-div px-3 pb-3">
                   <p className="mb-1 text-black">{product.name}</p>
+                  <p className="mb-2 text-muted">{product.description}</p> {/* Product description */}
                   <h6 className="card-title mt-2 mb-3 text-success fw-bold">
                     ₹{product.price}.00{' '}
                     <small className="text-decoration-line-through text-muted small fw-light">₹100.00</small>
@@ -82,7 +83,7 @@ const ProductListing = () => {
                   <div className="d-flex align-items-center justify-content-between gap-1">
                     <div className="size-btn">
                       <div className="input-group">
-                     
+                        {/* Size selection can go here */}
                       </div>
                     </div>
                     <div>

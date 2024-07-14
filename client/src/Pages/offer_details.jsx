@@ -5,6 +5,7 @@ import BestSellingProducts from '../components/bestproducts';
 import TodayOffers from '../components/offer'; 
 
 import Layout from '../components/layout/layout_';
+import ProductListing from '../components/productList';
 function OfferDetails() {
   const { id } = useParams();
   const [offer, setOffer] = useState(null);
@@ -45,7 +46,7 @@ function OfferDetails() {
           <p className="loading-message">Loading...</p>
         )}
       </div>
-      <TodayOffers/>
+    <ProductListing/>
       <BestSellingProducts/>
    
       </Layout>
