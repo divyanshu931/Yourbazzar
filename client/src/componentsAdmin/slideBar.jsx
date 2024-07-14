@@ -64,12 +64,12 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
         </li>
         <li className="sidebar-list-item">
           <Link to="/inventory">
-            <BsListCheck className="icon" /> Inventory
+            <BsListCheck className="icon" /> offer
           </Link>
         </li>
         <li className="sidebar-list-item">
-          <Link to="/reports">
-            <BsMenuButtonWideFill className="icon" /> Reports
+          <Link to="/Admin-control">
+            <BsMenuButtonWideFill className="icon" /> Admin Control
           </Link>
         </li>
         <li className="sidebar-list-item">

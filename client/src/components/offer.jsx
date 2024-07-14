@@ -72,7 +72,7 @@ const TodayOffers = () => {
     <div style={{ padding: '1rem 0' }}>
       <div style={{ padding: '0 1rem', display: 'flex', justifyContent: 'space-between' }}>
         <h6 style={{ marginBottom: '0.5rem', color: 'black', fontWeight: 'bold' }}>Today's Offers</h6>
-        <Link to="/offers" style={{ color: 'green', textDecoration: 'none' }}>
+        <Link to="/all-offers" style={{ color: 'green', textDecoration: 'none' }}>
           SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
         </Link>
       </div>

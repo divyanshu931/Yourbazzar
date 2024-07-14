@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../apis/axiosInstance'; // Import your Axios instance
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '../apis/axiosInstance';
+import { useParams, Link } from 'react-router-dom';
+import FilterLayout from '../components/layout/filterLayout'; // Ensure correct import and casing
 
-const ProductListing = () => {
-  const [activeCategory, setActiveCategory] = useState('dairy'); // Default active category
-  const [categories] = useState(['dairy','Cold drinks', 'Personal care', 'Home']); // Static top categories
-  const [products, setProducts] = useState([]); // State to store products
-  const [loading, setLoading] = useState(true); // State to manage loading state
-  const [error, setError] = useState(null); // State to manage errors
+const ProductDetailPage = () => {
+  const { categoryName } = useParams(); // Get the category name from route parameters
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch products based on active category
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axiosInstance.get('/api/public/products', {
-          params: { category: activeCategory }
-        });
+        // Fetch products based on category if categoryName exists
+        const endpoint = categoryName ? `/api/public/products?category=${categoryName}` : '/api/public/products';
+        const response = await axiosInstance.get(endpoint);
         console.log('Fetched products:', response.data);
         setProducts(response.data);
       } catch (error) {
@@ -29,12 +28,7 @@ const ProductListing = () => {
     };
 
     fetchProductsByCategory();
-  }, [activeCategory]);
-
-  // Handle category change
-  const handleCategoryClick = (category) => {
-    setActiveCategory(category);
-  };
+  }, [categoryName]);
 
   // Render loading state
   if (loading) {
@@ -48,22 +42,7 @@ const ProductListing = () => {
 
   // Render products
   return (
-    <div>
-      <div className="border-bottom border-top px-3 d-flex align-items-center justify-content-between">
-        <ul className="nav home-tabs" id="pills-tab" role="tablist">
-          {categories.map((category) => (
-            <li className="nav-item" role="presentation" key={category}>
-              <button
-                className={`nav-link ${activeCategory === category ? 'active' : ''}`}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {category}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
+    <FilterLayout>
       <div className="tab-content" id="pills-tabContent">
         <div className="osahan-listing p-0 m-0 row">
           {products.map((product) => (
@@ -82,7 +61,7 @@ const ProductListing = () => {
                   <div className="d-flex align-items-center justify-content-between gap-1">
                     <div className="size-btn">
                       <div className="input-group">
-                     
+                        {/* Add any additional elements as needed */}
                       </div>
                     </div>
                     <div>
@@ -98,8 +77,8 @@ const ProductListing = () => {
           ))}
         </div>
       </div>
-    </div>
+    </FilterLayout>
   );
 };
 
-export default ProductListing;
+export default ProductDetailPage;

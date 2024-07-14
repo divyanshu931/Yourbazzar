@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Sidebar from "../componentsAdmin/slideBar";
-import Header from "../componentsAdmin/header";
-import AdminHome from "../componentsAdmin/AdminHome";
-import AdminLayout from "../componentsAdmin/layout/Layout";
+import AdminHome from "../../componentsAdmin/AdminHome";
+import AdminLayout from "../../componentsAdmin/layout/AdminLayout";
 
-function ProductDashboard() {
+function AdminDashboard() {
   const [hasToken, setHasToken] = useState(true);
 
   useEffect(() => {
@@ -20,7 +18,7 @@ function ProductDashboard() {
     // Simulate redirection after 10 seconds using setTimeout
     setTimeout(() => {
       window.location.href = "/"; // Redirect to login page after 10 seconds
-    }, 2000); // 10 seconds delay
+    }, 10000); // 10 seconds delay
 
     return (
       <div
@@ -48,12 +46,10 @@ function ProductDashboard() {
   return (
     <>
       <AdminLayout>
-        <div className="" style={{color: "black"}}>
-            this is product page
-        </div>
+        <AdminHome />
       </AdminLayout>
     </>
   );
 }
 
-export default ProductDashboard;
+export default AdminDashboard;
