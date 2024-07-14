@@ -3,30 +3,43 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosWithAuth";
 
 function SignUp({ toggleSidebar }) {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [otpSent, setOtpSent] = useState(false); 
 
   const navigate = useNavigate();
 
   const handleSignUp = async (event) => {
     event.preventDefault();
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
+
+    const lastOtpTime = localStorage.getItem("lastOtpTime");
+    const currentTime = new Date().getTime();
+
+    if (lastOtpTime && currentTime - lastOtpTime < 5 * 60 * 1000) {
+      setError("OTP has already been sent. Please wait 5 minutes before trying again.");
+      return;
+    }
+
     try {
       const response = await axiosInstance.post("api/otp/send-otp", {
         email,
       });
 
-      console.log("API Response:", response); // Log the response
+      console.log("API Response:", response);
 
       if (response.status === 200) {
+        localStorage.setItem("lastOtpTime", currentTime); 
         // Pass name, password, and email to the next page
-        navigate(`/verification/${email}`, { state: { name, password, email } });
+        navigate(`/verification/${name}`, { state: { name, password, email } });
       } else {
         setError("Error creating account. Please try again.");
       }
@@ -125,8 +138,8 @@ function SignUp({ toggleSidebar }) {
             </div>
           </div>
           {error && <p className="text-danger">{error}</p>}
-          <button type="submit" className="btn btn-success btn-lg w-100 shadow">
-            CREATE AN ACCOUNT
+          <button type="submit" className="btn btn-success btn-lg w-100 shadow" disabled={otpSent}>
+            {otpSent ? "OTP SENT" : "CREATE AN ACCOUNT"}
           </button>
         </form>
       </div>

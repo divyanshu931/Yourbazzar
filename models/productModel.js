@@ -16,7 +16,6 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Electronics', 'Clothing', 'Books', 'Home', 'Sports', 'Other'],
     required: true
   },
   bestProduct: {
@@ -24,10 +23,10 @@ const productSchema = new mongoose.Schema({
     default: false
   },
   image: {
-    type: String, // assuming you will store the URL of the image
-    required: true
+    type: String,
+    required: true  // Assuming you store the URL of the image
   }
-  // Add other fields as needed
+  // You can add other fields as needed
 });
 
 module.exports = mongoose.model('Product', productSchema);

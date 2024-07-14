@@ -52,7 +52,7 @@ function Verification() {
     const enteredOtp = otp1 + otp2 + otp3 + otp4; // Concatenate OTP fields
 
     try {
-      const response = await axiosInstance.post('/verifyAndRegister', {
+      const response = await axiosInstance.post('/api/auth/login"', {
         email: email,
         otp: enteredOtp,
         name: localStorage.getItem('name'), // Get stored name from localStorage

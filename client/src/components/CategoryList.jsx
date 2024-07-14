@@ -36,7 +36,7 @@ const CategoryList = () => {
     backgroundColor: '#d3d3d3', // Gray background for each category item
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     padding: '20px', // Increased padding
-    width: 'calc(18% - 150px)', // Adjust width to make the category items smaller
+    width: 'calc(14% - 20px)', // Adjust width to make the category items smaller
     minWidth: '100px', // Ensure a minimum width for consistent sizing
   };
 
