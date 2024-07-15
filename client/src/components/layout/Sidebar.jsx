@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faHome, faGift, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
-
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
   const [authSubMenuOpen, setAuthSubMenuOpen] = useState(false);
@@ -73,7 +72,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <Link to="/listing." onClick={handleLinkClick}><i className="bi bi-list-task me-2"></i> Listing</Link>
         </li>
         <li>
-          <Link to="/bag" onClick={handleLinkClick}><i className="bi bi-bag me-2"></i> Bag</Link>
+        <Link to="/bag" onClick={handleLinkClick} style={{ display: 'block', padding: '10px', textDecoration: 'none', color: 'inherit' }}>
+  <i className="bi bi-bag me-2"></i> Bag
+</Link>
+
+
         </li>
         <li className={profileSubMenuOpen ? 'active' : ''}>
           <a href="#!" onClick={(e) => { e.preventDefault(); toggleProfileSubMenu(); }}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import { Link } from 'react-router-dom';
 
+
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
 
@@ -19,25 +20,30 @@ const CategoryList = () => {
   }, []); // Empty dependency array means this effect runs once on component mount
 
   const containerStyle = {
-    backgroundColor: '#fff8dc',
-    padding: '20px',
+    backgroundColor: '#fff3cd', // Adjusted background color
+    padding: '20px 20px 0', // Adjusted padding top to 20px, remove bottom padding
     borderRadius: '15px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     display: 'flex',
     flexWrap: 'wrap',
     gap: '30px', // Increased gap between items
     justifyContent: 'space-between', // Adjust as needed for spacing
+    marginTop: '0', // Adjusted margin top to 0
+    zIndex: 999, // Adjusted z-index
+    position: 'relative', // Changed to sticky position
+   
   };
 
   const itemStyle = {
     textAlign: 'center',
     borderRadius: '15px',
     overflow: 'hidden',
-    backgroundColor: '#d3d3d3', // Gray background for each category item
+    backgroundColor: '#d3d3d3',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     padding: '20px', // Increased padding
     width: 'calc(14% - 20px)', // Adjust width to make the category items smaller
     minWidth: '100px', // Ensure a minimum width for consistent sizing
+    margin: '10px', // Add margin for increased clickable area
   };
 
   const imageStyle = {

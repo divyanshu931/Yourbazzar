@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import { useState } from "react";
 import Footer from "./footer";
 
+
 const Layout = ({children}) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -26,8 +27,9 @@ const Layout = ({children}) => {
         <i className="bi bi-person-circle"></i>
       </Link>
       <Link to="/bag" className="me-3 text-dark fs-5">
-        <i className="bi bi-basket"></i>
-      </Link>
+  <i className="bi bi-basket"></i>
+</Link>
+
       <Link
         className="toggle osahan-toggle fs-4 text-dark ms-auto"
         onClick={toggleSidebar}

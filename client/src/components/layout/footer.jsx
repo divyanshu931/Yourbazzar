@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
+
 const Footer = () => {
   return (
     <footer className="footer text-center text-lg-start">
@@ -54,7 +55,7 @@ const Footer = () => {
               <a href="#!" className="mx-2" style={{ color: '#fff' }}><FaFacebook size={24} /></a>
               <a href="#!" className="mx-2" style={{ color: '#fff' }}><FaTwitter size={24} /></a>
               <a href="#!" className="mx-2" style={{ color: '#fff' }}><FaInstagram size={24} /></a>
-              <a href="#!" className="mx-2" style={{ color: '#fff' }}><FaLinkedin size={24} /></a>
+           
             </div>
           </div>
         </div>

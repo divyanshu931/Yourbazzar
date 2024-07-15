@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Footer from "./footer";
 
+
 const FilterLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

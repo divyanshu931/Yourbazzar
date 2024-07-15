@@ -377,7 +377,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px;
+  width: 230px;
   height: 100%;
   background-color: #343a40;
   color: #fff;
@@ -492,4 +492,5 @@ body {
   }
 }
 
-
+.z-index-fixed
+{z-index: 999;}

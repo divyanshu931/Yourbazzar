@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import BestSellingProducts from "../components/bestproducts";
 import TodayOffers from "../components/offer";
 
@@ -14,9 +14,10 @@ function Home() {
   return (
     <>
       
-<Layout>
-      <TodayOffers />
-      <CategoryList />
+  <Layout>
+  <TodayOffers />
+  <CategoryList />
+  
       <BestSellingProducts />
       <ProductListing />
      
