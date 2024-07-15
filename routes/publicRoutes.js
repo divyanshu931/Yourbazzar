@@ -21,17 +21,20 @@ router.get('/products', async (req, res) => {
   }
 });
 
-// Route for searching products
+
+// Route for searching products by name containing a specific substring
 router.get('/products/search', async (req, res) => {
   try {
-    // Extract search parameters from query string
-    const { name, category, description } = req.query;
+    // Extract search parameter from query string
+    const { name } = req.query;
 
-    // Construct query object based on provided parameters
-    const query = {};
-    if (name) query.name = { $regex: new RegExp(name, 'i') }; // Case-insensitive regex search for name
-    if (category) query.category = category; // Exact match for category
-    if (description) query.description = { $regex: new RegExp(description, 'i') }; // Case-insensitive regex search for description
+    // Validate if 'name' parameter is provided
+    if (!name) {
+      return res.status(400).json({ error: 'Missing search parameter: name' });
+    }
+
+    // Construct query to find products with name containing 'name' substring
+    const query = { name: { $regex: name, $options: 'i' } };
 
     // Fetch products based on the constructed query
     const products = await Product.find(query);
@@ -42,6 +45,8 @@ router.get('/products/search', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+ 
 // Route to get the best products
 router.get('/products/best', async (req, res) => {
   try {

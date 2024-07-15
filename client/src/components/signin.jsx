@@ -17,7 +17,15 @@ function SignIn() {
       });
 
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+        const token = response.data.token;
+        const expirationTime = new Date().getTime() + 3600 * 1000; // 1 hour from now in milliseconds
+        localStorage.setItem("token", token);
+        localStorage.setItem("expirationTime", expirationTime);
+        setTimeout(() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("expirationTime");
+        }, 3600 * 1000); // Remove token and expiration time after 1 hour
+
         navigate("/home");
       }
     } catch (err) {

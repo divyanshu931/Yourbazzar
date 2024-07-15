@@ -65,7 +65,7 @@ const Productbycategory = () => {
                     </h5>
                   </div>
                 </div>
-                <Link className="stretched-link" to={`/product/${product._id}`}></Link>
+                <Link className="stretched-link" to={`/product-detail/${product._id}`}></Link>
               </div>
             ))
           )}
