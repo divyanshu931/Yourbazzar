@@ -36,15 +36,13 @@ const ProductListing = () => {
   const addToCart = async (userId, productId) => {
     try {
       const response = await axiosInstance.post('/api/addToCart', {
-        userId: userId, // Replace with actual userId
+        userId: userId,
         productId: productId,
-        quantity: 1 // Example quantity, you can adjust this based on user input
+        quantity: 1
       });
       console.log('Added to cart:', response.data);
-      // Optionally, you can handle success messages or update UI after adding to cart
     } catch (error) {
       console.error('Error adding to cart:', error);
-      // Handle error scenarios if needed
     }
   };
 
@@ -57,11 +55,11 @@ const ProductListing = () => {
   }
 
   return (
-    <div>
+    <div  className=" p-3 bg-light ">
       <div className="border-bottom border-top px-3 d-flex align-items-center justify-content-between">
         <ul className="nav home-tabs" id="pills-tab" role="tablist">
           {categories.map((category, index) => (
-            <li className="nav-item" role="presentation" key={index}>
+            <li className="nav-item" role="presentation" key={index } style={{ position: 'relative', zIndex: 2 }}>
               <button
                 className={`nav-link ${activeCategory === category ? 'active' : ''}`}
                 onClick={() => handleCategoryClick(category)}
@@ -77,7 +75,7 @@ const ProductListing = () => {
         <div className="osahan-listing p-0 m-0 row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
           {products.map((product) => (
             <div className="text-dark col" key={product._id}>
-              <div className="list_item_gird bg-white listing-item">
+              <div className="list_item_gird bg-white listing-item" style={{ position: 'relative', zIndex: 2 }}>
                 <span className="badge bg-warning text-dark m-3 position-absolute">10% OFF</span>
                 <div className="list-item-img p-4">
                   <img
@@ -103,7 +101,7 @@ const ProductListing = () => {
                     <div>
                       <button
                         className="btn btn-success btn-sm d-flex border-0"
-                        onClick={() => addToCart('user123', product._id)} // Replace 'user123' with actual userId
+                        onClick={() => addToCart('user123', product._id)}
                       >
                         <i className="bi bi-plus me-2"></i> ADD
                       </button>

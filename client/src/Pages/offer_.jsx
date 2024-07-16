@@ -1,5 +1,4 @@
 import React from 'react';
-
 import BestSellingProducts from '../components/bestproducts';
 import ProductListing from '../components/productList';
 import OfferFetch from '../components/offer_fetch';

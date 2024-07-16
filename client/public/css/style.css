@@ -325,7 +325,7 @@ body {
   }
   
   .loading-message {
-    color: gray;
+    color: rgb(30, 26, 26);
   }
   .footer {
     background-color: #23272b;

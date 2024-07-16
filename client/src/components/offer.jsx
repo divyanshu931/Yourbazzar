@@ -38,8 +38,11 @@ const TodayOffers = () => {
     dots: true,
     infinite: true,
     speed: 500,
+    autoplay: true,
+    autoplaySpeed: 3000,
     slidesToShow: 3,
     slidesToScroll: 3,
+    cssEase: "linear",
     responsive: [
       {
         breakpoint: 1024,
@@ -68,45 +71,41 @@ const TodayOffers = () => {
     ]
   };
 
-  const handleOfferClick = (offerId) => {
-    // Navigate programmatically to offer details page
-    window.location.href = `/offer-details/${offerId}`;
-  };
-
   return (
-    <div style={{ padding: '1rem 0' , zIndex: '998',position:'relative' }}>
-      <div style={{ padding: '0 1rem', display: 'flex', justifyContent: 'space-between',}}>
+    <div style={{ padding: '1rem 0', zIndex: '998', position: 'relative' }}>
+      <div style={{ padding: '0 1rem', display: 'flex', justifyContent: 'space-between' }}>
         <h6 style={{ marginBottom: '0.5rem', color: 'black', fontWeight: 'bold' }}>Today's Offers</h6>
-        <Link to="/all-offers" style={{ color: 'green', textDecoration: 'none' }}>
+        <Link to="/offers" style={{ color: 'green', textDecoration: 'none' }}>
           SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
         </Link>
       </div>
-      <Slider {...settings} className="home-cate ">
+      <Slider {...settings} className="home-cate">
         {offers.map(offer => (
           <div key={offer._id} style={{ padding: '0 0.5rem' }}>
-            <div
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: '0.25rem',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                overflow: 'hidden',
-                transition: 'transform 0.2s ease-in-out',
-                height: '100%'
-              }}
-              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-              onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-              onClick={() => handleOfferClick(offer._id)} // Handle click directly
-            >
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', overflow: 'hidden' }}>
-                <img src={offer.imageUrl} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} alt={offer.title} />
+            <Link to={`/offer-details/${offer._id}`} style={{ textDecoration: 'none' }}>
+              <div
+                style={{
+                  backgroundColor: '#fff',
+                  borderRadius: '0.25rem',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  overflow: 'hidden',
+                  transition: 'transform 0.2s ease-in-out',
+                  height: '100%'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', overflow: 'hidden' }}>
+                  <img src={offer.imageUrl} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} alt={offer.title} />
+                </div>
+                <div style={{ padding: '1rem', textAlign: 'center' }}>
+                  <h5 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0.5rem 0' }}>{offer.title}</h5>
+                  <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#666' }}>{offer.description}</p>
+                  <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#ff0000', fontWeight: 'bold' }}>Discount: {offer.discount}%</p>
+                  <p style={{ fontSize: '0.875rem', color: '#888' }}>Expiry Date: {new Date(offer.expiryDate).toLocaleDateString()}</p>
+                </div>
               </div>
-              <div style={{ padding: '1rem', textAlign: 'center' }}>
-                <h5 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0.5rem 0' }}>{offer.title}</h5>
-                <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#666' }}>{offer.description}</p>
-                <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#ff0000', fontWeight: 'bold' }}>Discount: {offer.discount}%</p>
-                <p style={{ fontSize: '0.875rem', color: '#888' }}>Expiry Date: {new Date(offer.expiryDate).toLocaleDateString()}</p>
-              </div>
-            </div>
+            </Link>
           </div>
         ))}
       </Slider>

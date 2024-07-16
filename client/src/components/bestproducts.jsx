@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import Slider from 'react-slick';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link } from 'react-router-dom';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-
 
 const BestSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -33,7 +32,7 @@ const BestSellingProducts = () => {
     speed: 1000,
     slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: false, // Disable autoplay for manual control
+    autoplay: false,
     responsive: [
       {
         breakpoint: 1024,
@@ -60,15 +59,23 @@ const BestSellingProducts = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="loading-container text-center p-3">
+       
+        <div className="spinner-border text-black" role="status">
+          <span className="visually-hidden">Loading...</span>
+      
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="error-message">{error}</p>;
   }
 
   return (
-    <div className="p-3 bg-light">
+    <div className="p-3 bg-light " >
       <h6 className="mb-3 text-black fw-bold">Best Selling Products</h6>
       <Slider {...settings} className="single-item selling-box">
         {products.map(product => (

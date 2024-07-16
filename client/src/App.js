@@ -23,6 +23,7 @@ import  Productbycategory from './Pages/categorybyname.jsx';
 import AdminDashboard from './Pages/Adminpages/admin.jsx';
 import ProductDashboard from './Pages/Adminpages/adminProduct.jsx';
 import AdminControl from './Pages/Adminpages/admincontrol.jsx';
+import AllOffers from './Pages/all-offer.jsx';
 
 
 const NotFound = () => (
@@ -47,6 +48,8 @@ function App() {
             <Route path="/verification" element={<Verification />} />
             {/* Add the route for OfferDetails */}
             <Route  path="/offer-details/:id" element={<OfferDetails />} />
+            <Route  path="/offers" element={<AllOffers />} />
+           
            
             <Route path="/category/:categoryName" element={<Productbycategory/>} />
             <Route path="/product-detail/:productId" element={<ProductDetailPage />} />
