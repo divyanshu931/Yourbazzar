@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/layout/layout_';
+import BestSellingProducts from '../components/bestproducts';
 
 const ProductDetailPage = () => {
   const { productId } = useParams(); // Get the product ID from route parameters
@@ -103,28 +104,11 @@ const ProductDetailPage = () => {
                     </div>
                   </div>
                 </div>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#productImages"
-                  data-bs-slide="prev"
-                >
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#productImages"
-                  data-bs-slide="next"
-                >
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
+             
               </div>
             </div>
             <div className="col-md-6">
-              <h1 className="display-4 m-0 fw-bold text-black">{product.name}</h1>
+              <h1 className="display-4 m-0 fw-bold text-dark">{product.name}</h1>
               <p className="lead text-muted">{product.description}</p>
               <h3 className="text-success">₹{product.price}.00</h3>
               <div className="d-flex align-items-center mt-3">
@@ -135,21 +119,32 @@ const ProductDetailPage = () => {
                 <button className="btn btn-outline-secondary">Buy Now</button>
               </div>
               <div className="mt-4">
-                <h4 className="fw-bold text-black">Customer Reviews</h4>
+                <h4 className="fw-bold text-dark">Customer Reviews</h4>
                 {/* Render product reviews here */}
-                <h6 className="bold text-black">More then 10 reviews yet.</h6>
+                <h6 className="bold text-dark">More than 10 reviews yet.</h6>
+                <div className="mt-5">
+            <h3 className="fw-bold text-dark">Why shop from yourbajaar?</h3>
+            <ul className="text-dark">
+              <li>Express Delivery - Get your order delivered to your doorstep at the earliest.</li>
+              <li>Best Prices & Offers - Best price destination with offers directly from the manufacturers.</li>
+              <li>Wide Assortment - Choose from 500+ products across food, personal care, household & other categories.</li>
+            </ul>
+          </div>
               </div>
             </div>
           </div>
           <div className="mt-5">
-            <h3 className="fw-bold text-black">Related Products</h3>
-            <div className="row">
-              {/* Render related products here */}
+            <h3 className="fw-bold text-dark">Related Products</h3>
+            
+            <div className="row text-dark">
+              
+            No product found soon will added
             </div>
           </div>
+     
         </div>
       ) : (
-        <p>Product not found.</p>
+        <p className="text-dark">Product not found.</p>
       )}
     </Layout>
   );
