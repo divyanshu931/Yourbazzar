@@ -1,20 +1,25 @@
 import React from 'react';
 
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Pages/home.jsx';
+
 import Landing_2 from './components/Landing_2.jsx';
 import Landing from './components/Landing';
 import GetStart from './components/getStarted';
 import SignIn from './components/signin';
 import SignUp from './components/signup';
 import Verification from './components/verification.jsx';
-import OfferDetails from './Pages/offer_details.jsx';
 
 
-import ShoppingCart from './Pages/shopingcart.jsx';// Import the OfferDetails component
-
-import  Productbycategory from './Pages/categorybyname.jsx';
+import OfferDetails from './Pages/offer_.jsx';
+import Home from './Pages/home.jsx';
+import ShoppingCart from './Pages/shopingcart.jsx';
 import ProductDetailPage from './Pages/product_details.jsx';
+import  Productbycategory from './Pages/categorybyname.jsx';
+
+
+
+
 import AdminDashboard from './Pages/Adminpages/admin.jsx';
 import ProductDashboard from './Pages/Adminpages/adminProduct.jsx';
 import AdminControl from './Pages/Adminpages/admincontrol.jsx';

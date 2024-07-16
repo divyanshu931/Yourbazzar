@@ -42,12 +42,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </Link>
         </li>
         <li>
-          <Link to="/landing" onClick={handleLinkClick}>
+          <Link to="/" onClick={handleLinkClick}>
             <i className="bi bi-file-break me-2"></i> Landing
           </Link>
         </li>
         <li>
-          <Link to="/get-started.html" onClick={handleLinkClick}>
+          <Link to="/getStarted" onClick={handleLinkClick}>
             <i className="bi bi-ui-checks-grid me-2"></i> Get Started
           </Link>
         </li>

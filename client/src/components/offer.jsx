@@ -38,8 +38,8 @@ const TodayOffers = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 3,
+    slidesToScroll: 3,
     responsive: [
       {
         breakpoint: 1024,
@@ -74,7 +74,7 @@ const TodayOffers = () => {
   };
 
   return (
-    <div style={{ padding: '1rem 0' , zIndex: '999',position:'relative' }}>
+    <div style={{ padding: '1rem 0' , zIndex: '998',position:'relative' }}>
       <div style={{ padding: '0 1rem', display: 'flex', justifyContent: 'space-between',}}>
         <h6 style={{ marginBottom: '0.5rem', color: 'black', fontWeight: 'bold' }}>Today's Offers</h6>
         <Link to="/all-offers" style={{ color: 'green', textDecoration: 'none' }}>

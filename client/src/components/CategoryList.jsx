@@ -29,7 +29,7 @@ const CategoryList = () => {
     gap: '30px', // Increased gap between items
     justifyContent: 'space-between', // Adjust as needed for spacing
     marginTop: '0', // Adjusted margin top to 0
-    zIndex: 999, // Adjusted z-index
+    zIndex: 998, // Adjusted z-index
     position: 'relative', // Changed to sticky position
    
   };
