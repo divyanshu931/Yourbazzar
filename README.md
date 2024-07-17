@@ -3,13 +3,11 @@ Backend Server
 Installation
 To install and run the backend server locally, follow these steps:
 
-Clone the repository:
+
 bash
-C
-git clone <backend-repo-url>
-cd <backend-folder>
+
 Install dependencies:
-bas
+bash
 npm install
 Set up environment variables:
 
