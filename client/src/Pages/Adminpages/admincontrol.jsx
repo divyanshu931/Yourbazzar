@@ -81,7 +81,7 @@ function AdminControl() {
     // Simulate redirection after 10 seconds using setTimeout
     setTimeout(() => {
       window.location.href = "/"; // Redirect to login page after 10 seconds
-    }, 10000); // 10 seconds delay
+    }, 2000); // 10 seconds delay
 
     return (
       <div
