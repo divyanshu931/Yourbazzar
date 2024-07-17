@@ -9,12 +9,12 @@ import {
   BsPeopleFill,
   BsListCheck,
   BsMenuButtonWideFill,
-  BsFillGearFill,
+
 } from "react-icons/bs";
 import axiosInstance from "../apis/axiosInstance"; // Make sure this is the correct path to your axiosInstance file
 
 function Sidebar({ openSidebarToggle, OpenSidebar }) {
-  const [menuItems, setMenuItems] = useState([]);
+  const [ setMenuItems] = useState([]);
 
   useEffect(() => {
     // Fetch menu items or other data if needed
@@ -53,17 +53,17 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
           </Link>
         </li>
         <li className="sidebar-list-item">
-          <Link to="/categories">
+          <Link to="/category-dashboard">
             <BsFillGrid3X3GapFill className="icon" /> Categories
           </Link>
         </li>
         <li className="sidebar-list-item">
-          <Link to="/customers">
+          <Link to="/customer-dashboard">
             <BsPeopleFill className="icon" /> Customers
           </Link>
         </li>
         <li className="sidebar-list-item">
-          <Link to="/inventory">
+          <Link to="/offer-dashboard">
             <BsListCheck className="icon" /> offer
           </Link>
         </li>
@@ -72,11 +72,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
             <BsMenuButtonWideFill className="icon" /> Admin Control
           </Link>
         </li>
-        <li className="sidebar-list-item">
-          <Link to="/settings">
-            <BsFillGearFill className="icon" /> Settings
-          </Link>
-        </li>
+       
       </ul>
     </aside>
   );

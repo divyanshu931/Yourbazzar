@@ -26,7 +26,7 @@ function AdminHome() {
     products: 0,
     categories: 0,
     customers: 0,
-    admins: 0,
+    admins: 1,
     offers: 0,
   });
 

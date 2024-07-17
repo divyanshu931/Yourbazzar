@@ -24,6 +24,9 @@ import AdminDashboard from './Pages/Adminpages/admin.jsx';
 import ProductDashboard from './Pages/Adminpages/adminProduct.jsx';
 import AdminControl from './Pages/Adminpages/admincontrol.jsx';
 import AllOffers from './Pages/all-offer.jsx';
+import CategoryDashboard from './Pages/Adminpages/admincaterogy.jsx';
+import CustomerDashboard from './Pages/Adminpages/admincustomer.jsx';
+import OfferDashboard from './Pages/Adminpages/adminoffer.jsx';
 
 
 const NotFound = () => (
@@ -58,6 +61,9 @@ function App() {
             <Route  path="/dashboard/admin" element={<AdminDashboard />} />
             <Route  path="/product-dashboard" element={<ProductDashboard />} />
             <Route path="/admin-control" element={<AdminControl/>}/>
+            <Route path="/category-dashboard" element={<CategoryDashboard/>}/>
+            <Route path="/customer-dashboard" element={<CustomerDashboard/>}/>
+            <Route path="/offer-dashboard" element={<OfferDashboard/>}/>
        {/* Route for 404 Not Found */}
        <Route path="*" element={<NotFound />} />
           </Routes>
