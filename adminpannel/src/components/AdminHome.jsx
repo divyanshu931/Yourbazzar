@@ -26,14 +26,17 @@ function AdminHome() {
     products: 0,
     categories: 0,
     customers: 0,
-    admins: 1,
+    admins: 0,
     offers: 0,
   });
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("/api/dashboard/counts");
+        console.log("Response from backend:", response.data);
+
         const {
           productCount,
           categoryCount,
@@ -54,6 +57,7 @@ function AdminHome() {
         setData(response.data.chartData);
       } catch (error) {
         console.error("Error fetching data", error);
+        setError("Failed to fetch data. Please try again later.");
       }
     };
 
@@ -90,7 +94,7 @@ function AdminHome() {
         </div>
         <div className="cardd">
           <div className="cardd-inner">
-            <h3>Admin</h3>
+            <h3>Admins</h3>
             <BsFillBellFill className="cardd_icon" />
           </div>
           <h1>{stats.admins}</h1>
@@ -140,6 +144,8 @@ function AdminHome() {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      {error && <p className="text-danger">{error}</p>}
     </main>
   );
 }

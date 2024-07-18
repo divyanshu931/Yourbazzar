@@ -9,8 +9,8 @@ exports.getCounts = async (req, res) => {
     const categoryCount = await Category.countDocuments();
     
     // Count users based on roles
-    const adminCount = await User.countDocuments({ role: 'admin' });
-    const customerCount = await User.countDocuments({ role: 'customer' });
+    const adminCount = await User.countDocuments({ role: 'Admin' });
+    const customerCount = await User.countDocuments({ role: 'Customer' });
 
     const offerCount = await Offer.countDocuments();
 

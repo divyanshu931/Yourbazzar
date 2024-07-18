@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AdminLayout from "../../componentsAdmin/layout/AdminLayout";
+import AdminLayout from "../components/layout/AdminLayout";
+
 
 function OfferDashboard() {
   const [hasToken, setHasToken] = useState(true);

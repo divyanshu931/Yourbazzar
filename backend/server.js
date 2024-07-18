@@ -19,8 +19,9 @@ require("dotenv").config();
 const app = express();
 
 // Allow requests from specific origins
+// Cors configuration
 app.use(cors({
-  origin: ["http://localhost:3000", process.env.FRONTEND_URL], // Replace with your actual frontend URL
+  origin: ['http://localhost:3000', 'http://localhost:4000', process.env.FRONTEND_URL],
 }));
 
 // Middleware to parse JSON

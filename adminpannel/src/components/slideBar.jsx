@@ -9,12 +9,16 @@ import {
   BsPeopleFill,
   BsListCheck,
   BsMenuButtonWideFill,
+  BsCartCheckFill,
 
+  
 } from "react-icons/bs";
-import axiosInstance from "../apis/axiosInstance"; // Make sure this is the correct path to your axiosInstance file
+import { RiAdminFill } from "react-icons/ri";
+import axiosInstance from "../apis/axiosInstance";
 
 function Sidebar({ openSidebarToggle, OpenSidebar }) {
-  const [ setMenuItems] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [isSuperUserOpen, setSuperUserOpen] = useState(false);
 
   useEffect(() => {
     // Fetch menu items or other data if needed
@@ -26,6 +30,10 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
         console.error("Error fetching menu items:", error);
       });
   }, []);
+
+  const toggleSuperUser = () => {
+    setSuperUserOpen(!isSuperUserOpen);
+  };
 
   return (
     <aside
@@ -58,21 +66,38 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
           </Link>
         </li>
         <li className="sidebar-list-item">
+          <Link to="/offer-dashboard">
+            <BsListCheck className="icon" /> Offers
+          </Link>
+        </li>
+        <li className="sidebar-list-item">
+          <Link to="/Order-dashboard">
+            <BsCartCheckFill className="icon" /> order
+          </Link>
+        </li>
+
+        <li className="sidebar-list-item" onClick={toggleSuperUser}>
+          <span className="icon">
+            <RiAdminFill/> Owner Control
+          </span>
+        </li>
+        {isSuperUserOpen && (
+          <ul className="dropdown-list">
+            <li className="sidebar-list-item">
+              <Link to="/admin-control">
+                <BsMenuButtonWideFill className="icon" /> Admin Control
+              </Link>
+              
+            </li>
+
+            <li className="sidebar-list-item">
           <Link to="/customer-dashboard">
             <BsPeopleFill className="icon" /> Customers
           </Link>
         </li>
-        <li className="sidebar-list-item">
-          <Link to="/offer-dashboard">
-            <BsListCheck className="icon" /> offer
-          </Link>
-        </li>
-        <li className="sidebar-list-item">
-          <Link to="/Admin-control">
-            <BsMenuButtonWideFill className="icon" /> Admin Control
-          </Link>
-        </li>
-       
+            {/* Add more super user items here */}
+          </ul>
+        )}
       </ul>
     </aside>
   );

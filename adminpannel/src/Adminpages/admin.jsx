@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AdminHome from "../../componentsAdmin/AdminHome";
-import AdminLayout from "../../componentsAdmin/layout/AdminLayout";
+import AdminHome from "../components/AdminHome";
+import AdminLayout from "../components/layout/AdminLayout";
 
 function AdminDashboard() {
   const [hasToken, setHasToken] = useState(true);
