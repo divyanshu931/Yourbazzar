@@ -14,22 +14,12 @@ import {
   
 } from "react-icons/bs";
 import { RiAdminFill } from "react-icons/ri";
-import axiosInstance from "../apis/axiosInstance";
+
 
 function Sidebar({ openSidebarToggle, OpenSidebar }) {
-  const [menuItems, setMenuItems] = useState([]);
+
   const [isSuperUserOpen, setSuperUserOpen] = useState(false);
 
-  useEffect(() => {
-    // Fetch menu items or other data if needed
-    axiosInstance.get("/api/menu-items")
-      .then(response => {
-        setMenuItems(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching menu items:", error);
-      });
-  }, []);
 
   const toggleSuperUser = () => {
     setSuperUserOpen(!isSuperUserOpen);

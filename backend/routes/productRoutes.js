@@ -4,12 +4,12 @@ const { addProduct, deleteProduct, updateProduct } = require('../controllers/pro
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
 // Add a new product
-router.post('/add', protect, authorize('Admin'), addProduct);
+router.post('/add',  addProduct);
 
 // Delete a product
-router.delete('/:id', protect, authorize('Admin'), deleteProduct);
+router.delete('/:id',  deleteProduct);
 
 // Update product details
-router.patch('/:id', protect, authorize('Admin'), updateProduct);
+router.patch('/:id', updateProduct);
 
 module.exports = router;

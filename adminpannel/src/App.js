@@ -11,6 +11,7 @@ import OfferDashboard from './Adminpages/adminoffer';
 import AdminProduct from './Adminpages/adminProduct';
 import SignIn from './components/signin';
 import OrderPage from './Adminpages/adminorder';
+import AddProductForm from './components/addproduct';
 
 
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/customer-dashboard" element={<CustomerDashboard />} />
           <Route path="/offer-dashboard" element={<OfferDashboard />} />
           <Route path="/order-dashboard" element={<OrderPage/>} />
+          <Route path="/product/add" element={<AddProductForm/>} />
           <Route path='/' element={<SignIn/>}/>
 
 
