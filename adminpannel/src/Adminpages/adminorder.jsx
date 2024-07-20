@@ -14,7 +14,7 @@ const OrderPage = ({ orders }) => {
             </h1>
           </div>
       
-          <table className="table">
+          <table className="category-table">
             <thead>
               <tr className="table-header">
                 <th>S.No</th>
