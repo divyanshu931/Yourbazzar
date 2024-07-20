@@ -1,5 +1,6 @@
 import React from "react";
 import AdminLayout from "../components/layout/AdminLayout";
+import AdminContro from "../components/admincontrol";
 
 function AdminControl() {
   // Inline styles
@@ -13,12 +14,7 @@ function AdminControl() {
   return (
     <>
       <AdminLayout>
-        <div style={containerStyle}>
-          <p style={{ color: "black", fontWeight: "bold" }}>Welcome to the Admin Control Panel.</p>
-          <p style={{ color: "black" }}>Manage your admin tasks here.</p>
-
-          <h1 style={{ color: "black", fontWeight: "bold" }}>OPPs you are not a  super admin [owner of yourbajaar].</h1>
-        </div>
+       <AdminContro/>
       </AdminLayout>
     </>
   );

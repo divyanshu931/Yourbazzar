@@ -42,6 +42,8 @@ function App() {
           <Route path="/category/add" element={<AddCategoryForm/>} />
           <Route path="/offer/add" element={<AddOffer/>} />
           <Route path='/' element={<SignIn/>}/>
+         
+    
 
 
             {/* Route for 404 Not Found */}

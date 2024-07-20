@@ -132,33 +132,8 @@ function SignIn() {
       </div>
 
       {/* Footer */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          padding: "1rem",
-          textAlign: "center",
-          backgroundColor: "#f8f9fa",
-          borderTop: "1px solid #dee2e6",
-        }}
-      >
-        <div className="h6">By continuing, you agree to our Terms & Conditions.</div>
-        <p className="text-success mb-3">
-          <Link to="/terms" className="text-success">
-            Terms & Conditions
-          </Link>
-        </p>
-        <p className="mb-0">Not a member? Join YourBajaar today!</p>
-        <Link
-          to="/signup"
-          className="btn btn-outline-success btn-lg w-100 shadow mt-3"
-          style={{ marginBottom: "1rem" }}
-        >
-          SIGN UP
-        </Link>
-      </div>
+     
+      
     </>
   );
 }
