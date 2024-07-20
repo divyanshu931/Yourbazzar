@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../components/layout/AdminLayout";
+import CustomerControl from "../components/customercontrol";
 
 function CustomerDashboard() {
   const containerStyle = {
@@ -13,12 +14,7 @@ function CustomerDashboard() {
   return (
     <>
       <AdminLayout>
-      <div style={containerStyle}>
-          <p style={{ color: "black", fontWeight: "bold" }}>Welcome to the Customer Control Panel.</p>
-          <p style={{ color: "black" }}>Manage your admin tasks here.</p>
-
-          <h1 style={{ color: "black", fontWeight: "bold" }}>OPPs you are not a  super admin [owner of yourbajaar].</h1>
-        </div>
+      <CustomerControl></CustomerControl>
       </AdminLayout>
     </>
   );

@@ -14,7 +14,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
+const customerRoutes = require('./routes/customerRoutes');
 // Create an Express app
 const app = express();
 
@@ -50,6 +50,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/admins', adminRoutes); 
 
+app.use('/api', customerRoutes);
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
