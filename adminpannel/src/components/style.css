@@ -358,16 +358,218 @@ body {
   margin-top: 10px; /* Optional: Add space between product details and actions */
 }
 
-.delete-btn {
-  background-color: #dc3545; /* Red background color for delete button */
-  color: white;
+/* Table styling */
+.category-table {
+  width: 100%;
+  border-collapse: collapse; /* Collapse borders to avoid double lines */
+  margin-top: 20px;
+}
+
+/* Table header styling */
+.table-header {
+  background-color: #343a40; /* Dark black for header background */
+  color: #f8f9fa; /* Light text color for header */
+}
+
+.table-header th {
+  padding: 12px 15px;
+  border: 2px solid #000000; /* Blue borders */
+  text-align: left;
+}
+
+/* Table body styling */
+.category-table td {
+  padding: 12px 15px;
+  border: 2px solid #1d1d1e; /* Blue borders */
+  text-align: left;
+  color: #6c757d; /* Light black text color */
+}
+
+/* Table row styling */
+.category-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternate row color */
+}
+
+/* Button styling inside the table */
+.edit-btn, .delete-btn {
+  padding: 5px 10px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #fff;
+  font-size: 14px;
+}
+
+.edit-btn {
+  background-color: #007bff; /* Blue background for edit button */
+}
+
+.edit-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.delete-btn {
+  background-color: #dc3545; /* Red background for delete button */
 }
 
 .delete-btn:hover {
   background-color: #c82333; /* Darker red on hover */
+}
+
+/* Success message styling */
+.success-message {
+  color: #28a745; /* Green color for success message */
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Error message styling */
+.error-message {
+  color: #dc3545; /* Red color for error message */
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Modal container styling */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal form styling */
+.modal-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Modal title */
+.modal-title {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Modal label */
+.modal-label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Modal input and textarea */
+.modal-form input, .modal-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Modal form buttons */
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-btn, .cancel-btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-btn {
+  background-color: #007bff; /* Blue background for submit button */
+  color: #fff; /* White text */
+}
+
+.submit-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.cancel-btn {
+  background-color: #6c757d; /* Light black background for cancel button */
+  color: #fff; /* White text */
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268; /* Darker black on hover */
+}
+
+/* Modal close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Text color */
+.text {
+  color: #333; /* Dark text color */
+}
+/* src/components/style.css */
+
+.edit-product-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  border-radius: 8px;
+}
+
+.edit-product-form h3 {
+  margin-bottom: 10px;
+}
+
+.edit-product-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.edit-product-form input,
+.edit-product-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.edit-product-form button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.edit-product-form button[type="submit"] {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.edit-product-form button[type="button"] {
+  background: #f44336;
+  color: #fff;
 }

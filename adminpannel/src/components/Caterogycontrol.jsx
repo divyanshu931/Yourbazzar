@@ -1,183 +1,127 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
+
 import "./style.css"; // Import your CSS file
 
-function  Category() {
-  const [products, setProducts] = useState([]);
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: 0,
-    category: "",
-    bestProduct: false,
-    image: ""
-  });
-  const [addFormOpen, setAddFormOpen] = useState(false);
+function Category() {
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [editingProductId, setEditingProductId] = useState(null); // Track the ID of the product being edited
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [addFormOpen, setAddFormOpen] = useState(false); // State to manage visibility of Add Category form
+  const [categoryToEdit, setCategoryToEdit] = useState(null); // State to hold category to edit
+  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false); // State to manage visibility of Add Category form
 
   useEffect(() => {
-    fetchProducts();
+    fetchCategories();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/api/public/all");
+      const response = await axiosInstance.get("/api/categories"); // Fetch categories from the API
       console.log("Data received from API:", response.data);
-      setProducts(response.data);
+      setCategories(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching categories:", error);
       setLoading(false);
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleDelete = async (categoryId) => {
     try {
       setLoading(true);
-      if (editingProductId) {
-        // Update existing product
-        await axiosInstance.put(`/api/products/${editingProductId}`, formData);
-        // Assuming your backend updates the product and returns the updated data
-        const updatedProduct = { ...formData, _id: editingProductId };
-        setProducts(products.map(product => (product._id === editingProductId ? updatedProduct : product)));
-      } else {
-        // Add new product
-        await axiosInstance.post("/api/products", formData);
-        // After adding, fetch the updated list of products
-        fetchProducts();
-      }
-      setFormData({
-        name: "",
-        description: "",
-        price: 0,
-        category: "",
-        bestProduct: false,
-        image: ""
-      });
+      await axiosInstance.delete(`/api/categories/${categoryId}`); // Delete category from the API
+      setCategories(categories.filter((category) => category._id !== categoryId));
       setLoading(false);
-      setAddFormOpen(false);
-      setEditingProductId(null); // Reset editing state
+      setSuccessMessage("Category deleted successfully!");
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error deleting category:", error);
+      setErrorMessage("Failed to delete category. Please try again.");
       setLoading(false);
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
     }
   };
 
-  const handleDelete = async (productId) => {
-    try {
-      setLoading(true);
-      await axiosInstance.delete(`/api/products/${productId}`);
-      setProducts(products.filter(product => product._id !== productId));
-      setLoading(false);
-    } catch (error) {
-      console.error("Error deleting product:", error);
-      setLoading(false);
-    }
-  };
-
-  const handleEdit = (product) => {
-    setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      category: product.category,
-      bestProduct: product.bestProduct,
-      image: product.image
-    });
+  const handleEdit = (categoryId) => {
+    const category = categories.find((category) => category._id === categoryId);
+    setCategoryToEdit(category);
     setAddFormOpen(true);
-    setEditingProductId(product._id);
+  };
+
+  const handleCloseEditForm = () => {
+    setAddFormOpen(false);
+    setCategoryToEdit(null);
+  };
+
+  const handleAddCategory = () => {
+    setShowAddCategoryForm(true);
+  };
+
+  const handleCloseAddCategoryForm = () => {
+    setShowAddCategoryForm(false);
   };
 
   return (
     <div className="main-container">
-      <h2 className="main-title">Product Control</h2>
-      <button className="button" onClick={() => setAddFormOpen(true)}>Add Product</button>
+      <h2 className="main-title">Category Control</h2>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {/* Button to open Add Category Form */}
+      <button className="button" onClick={handleAddCategory}>
+        Add Category
+      </button>
+
+
+      {/* Category List in Table Format */}
+      <table className="category-table">
+        <thead>
+          <tr className="table-header">
+            <th>S.No</th>
+            <th>Category Name</th>
+            <th>Description</th>
+            <th>Photo URL</th>
+            <th>Update</th>
+            <th>Delete</th>
+            <th>Creation Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan="7">Loading...</td>
+            </tr>
+          ) : (
+            categories.map((category, index) => (
+              <tr key={category._id}>
+                <td>{index + 1}</td>
+                <td>{category.name}</td>
+                <td>{category.description}</td>
+                <td>{category.image}</td>
+                <td>
+                  <button className="edit-btn" onClick={() => handleEdit(category._id)}>
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button className="delete-btn" onClick={() => handleDelete(category._id)}>
+                    Delete
+                  </button>
+                </td>
+                <td>{new Date(category.createdAt).toLocaleString()}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
       
-      {addFormOpen && (
-        <div className="add-product-form-container">
-          <form className="add-product-form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Product Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="form-input"
-            />
-            <input
-              type="text"
-              name="description"
-              placeholder="Description"
-              value={formData.description}
-              onChange={handleChange}
-              className="form-input"
-            />
-            <input
-              type="number"
-              name="price"
-              placeholder="Price"
-              value={formData.price}
-              onChange={handleChange}
-              className="form-input"
-            />
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="form-input"
-            >
-              <option value="dairy">Dairy</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Cold drinks">Cold Drinks</option>
-              {/* Add more categories as needed */}
-            </select>
-            <input
-              type="text"
-              name="image"
-              placeholder="Image URL"
-              value={formData.image}
-              onChange={handleChange}
-              className="form-input"
-            />
-            <div className="form-buttons">
-              <button type="button" className="submit-btn" onClick={() => { setAddFormOpen(false); setEditingProductId(null); }}>
-                Close
-              </button>
-              <button type="button" className="submit-btn">
-                {editingProductId ? "Update" : "Add"}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="product-list">
-          {products.map((product) => (
-            <div className="product-item" key={product._id}>
-              <p className="product-name">{product.name}</p>
-              <p className="product-description">{product.description}</p>
-              <p className="product-price">${product.price.toFixed(2)}</p>
-              <p className="product-category">{product.category}</p>
-              <div className="product-actions">
-                <button className="delete-btn" onClick={() => handleDelete(product._id)}>Delete</button>
-                <button className="edit-btn" onClick={() => handleEdit(product)}>Edit</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
     </div>
   );
 }

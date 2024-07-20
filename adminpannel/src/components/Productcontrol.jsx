@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
+import EditProduct from "./editproduct"; // Import the EditProduct component
 
-import "./style.css"; // Import your CSS file
+import "./style.css";
 
 function Product() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addFormOpen, setAddFormOpen] = useState(false); // State to manage visibility of Add Product form
+  const [addFormOpen, setAddFormOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -19,7 +21,6 @@ function Product() {
     try {
       setLoading(true);
       const response = await axiosInstance.get("/api/public/all");
-      console.log("Data received from API:", response.data);
       setProducts(response.data);
       setLoading(false);
     } catch (error) {
@@ -27,10 +28,6 @@ function Product() {
       setLoading(false);
     }
   };
-
-
-
-
 
   const handleDelete = async (productId) => {
     try {
@@ -52,39 +49,83 @@ function Product() {
     }
   };
 
+  const handleEdit = (productId) => {
+    const product = products.find((product) => product._id === productId);
+    setProductToEdit(product);
+    setAddFormOpen(true);
+  };
+
+  const handleCloseEditForm = () => {
+    setAddFormOpen(false);
+    setProductToEdit(null);
+  };
+
+  const handleSave = () => {
+    fetchProducts(); // Refresh the product list
+  };
+
   return (
     <div className="main-container">
       <h2 className="main-title">Product Control</h2>
-      
+
       {/* Link to Add Product Form */}
       <Link to="/product/add" className="button">
         Add Product
       </Link>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {addFormOpen && productToEdit && (
+        <EditProduct
+          product={productToEdit}
+          onClose={handleCloseEditForm}
+          onSave={handleSave}
+        />
+      )}
+      {/* Product List in Table Format */}
+      <table className="category-table">
+        <thead>
+          <tr className="table-header">
+            <th>S.No</th>
+            <th>Product Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Update</th>
+            <th>Delete</th>
+            <th>Creation Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan="8">Loading...</td>
+            </tr>
+          ) : (
+            products.map((product, index) => (
+              <tr key={product._id}>
+                <td>{index + 1}</td>
+                <td>{product.name}</td>
+                <td>{product.description}</td>
+                <td>${product.price.toFixed(2)}</td>
+                <td>{product.category}</td>
+                <td>
+                  <button className="edit-btn" onClick={() => handleEdit(product._id)}>
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button className="delete-btn" onClick={() => handleDelete(product._id)}>
+                    Delete
+                  </button>
+                </td>
+                <td>{new Date(product.createdAt).toLocaleString()}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
-     
-   
-
-      {/* Product List */}
-      <div className="product-list">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          products.map((product) => (
-            <div className="product-item" key={product._id}>
-              <p className="product-name">{product.name}</p>
-              <p className="product-description">{product.description}</p>
-              <p className="product-price">${product.price.toFixed(2)}</p>
-              <p className="product-category">{product.category}</p>
-              <div className="product-actions">
-                <button className="delete-btn" onClick={() => handleDelete(product._id)}>
-                  Delete
-                </button>
-                {/* You can add an edit button here if needed */}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+    
     </div>
   );
 }

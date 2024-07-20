@@ -78,6 +78,10 @@ function AddProductForm({ onSuccess }) {
 
   return (
     <AdminLayout>
+      <div className="main-container">
+      <h2 className="main-title">Add Product</h2>
+      
+      {/* Link to Add Product Form */}
       <div className="add-product-form-container">
         <form className="add-product-form" onSubmit={handleAddSubmit}>
           {/* Input fields for adding a product */}
@@ -149,6 +153,16 @@ function AddProductForm({ onSuccess }) {
           {errorMessage && <p className="error-message" style={{ color: "red" }}>{errorMessage}</p>}
           {successMessage && <p className="success-message" style={{ color: "green" }}>{successMessage}</p>}
         </form>
+      </div>
+      <h4 className="main-title">Point to be notied</h4>
+      <h6 className="main-title">* Product name should be unique otherwise its show error when you try to add it and Maximum length of 100 characters for the product name</h6>
+    
+      <h6 className="main-title">* Product price should be number</h6>
+      <h6 className="main-title">* If you want to add new product in new category then firstly add the category and then comeback here and </h6>
+      <h6 className="main-title">* In Product Description add quantiy like 1 leter 500 mg and Maximum length of 1000 characters for the product description</h6>
+      <h6 className="main-title">* if your product is best selling  then select best selling default is false</h6>
+      <h6 className="main-title">* add image url and image should in png and for product its should 3by 2 in size for best view</h6>
+
       </div>
     </AdminLayout>
   );

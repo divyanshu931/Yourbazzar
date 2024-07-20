@@ -50,7 +50,7 @@ exports.deleteProduct = async (req, res) => {
 // Update product details
 exports.updateProduct = async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'description', 'price', 'category', 'bestProduct'];
+  const allowedUpdates = ['name', 'description', 'price', 'category', 'bestProduct','image'];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
   if (!isValidOperation) {
