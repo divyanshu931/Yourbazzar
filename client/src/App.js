@@ -17,6 +17,7 @@ import ShoppingCart from './Pages/shopingcart.jsx';
 import ProductDetailPage from './Pages/product_details.jsx';
 import  Productbycategory from './Pages/categorybyname.jsx';
 import AllOffers from './Pages/all-offer.jsx';
+import FaqPage from './Pages/FQA.jsx';
 
 
 
@@ -48,6 +49,8 @@ function App() {
             <Route path="/category/:categoryName" element={<Productbycategory/>} />
             <Route path="/product-detail/:productId" element={<ProductDetailPage />} />
             <Route  path="/bag" element={<ShoppingCart />} />
+
+            <Route  path="/FAQ" element={<FaqPage />} />
 
            
        {/* Route for 404 Not Found */}

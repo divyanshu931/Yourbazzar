@@ -5,8 +5,8 @@ const { protect, authorize } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.post('/create', protect, authorize('admin'), createOffer);
-router.put('/update/:id', protect, authorize('admin'), updateOffer);
+router.post('/create', createOffer);
+router.put('/update/:id',  updateOffer);
 router.delete('/delete/:id', deleteOffer);
 router.get('/:id', getOfferById);//public
 router.get('/', getAllOffers); // Public route

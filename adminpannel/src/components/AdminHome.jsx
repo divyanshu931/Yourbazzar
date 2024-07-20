@@ -21,14 +21,8 @@ import axiosInstance from "../apis/axiosInstance";
 import "./style.css";
 
 function AdminHome() {
+  const [stats, setStats] = useState({});
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState({
-    products: 0,
-    categories: 0,
-    customers: 0,
-    admins: 0,
-    offers: 0,
-  });
   const [error, setError] = useState("");
 
   useEffect(() => {

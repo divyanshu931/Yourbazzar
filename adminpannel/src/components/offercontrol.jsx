@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
+import { Link } from "react-router-dom";
+import EditOffer from "./editoffer"; // Import EditOffer component
 import "./style.css";
 
 function OfferControl() {
@@ -18,7 +20,7 @@ function OfferControl() {
     try {
       setLoading(true);
       const response = await axiosInstance.get("/api/offers/");
-      setOffers(response.data.offers); // Assuming response.data.offers is the array of offers
+      setOffers(response.data.offers);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching offers:", error);
@@ -47,37 +49,14 @@ function OfferControl() {
   };
 
   const handleEdit = (offerId) => {
-    const offer = offers.find((offer) => offer._id === offerId);
-    setOfferToEdit(offer);
-    setAddFormOpen(true);
+    // Set offerToEdit to trigger rendering of EditOffer component
+    const selectedOffer = offers.find((offer) => offer._id === offerId);
+    setOfferToEdit(selectedOffer);
+    setAddFormOpen(false); // Close add form if open
   };
 
-  const handleCloseForm = () => {
-    setAddFormOpen(false);
-    setOfferToEdit(null);
-  };
-
-  const handleSubmit = async (formData) => {
-    try {
-      setLoading(true);
-      let response;
-      if (offerToEdit) {
-        // Edit existing offer
-        response = await axiosInstance.put(`/api/offers/${offerToEdit._id}`, formData);
-        setSuccessMessage("Offer updated successfully!");
-      } else {
-        // Add new offer
-        response = await axiosInstance.post("/api/offers/add", formData);
-        setSuccessMessage("Offer added successfully!");
-      }
-      setLoading(false);
-      handleCloseForm();
-      fetchOffers(); // Refresh the offer list
-    } catch (error) {
-      console.error("Error saving offer:", error);
-      setErrorMessage("Failed to save offer. Please try again.");
-      setLoading(false);
-    }
+  const handleCloseEdit = () => {
+    setOfferToEdit(null); // Clear offerToEdit to hide EditOffer component
   };
 
   return (
@@ -85,9 +64,9 @@ function OfferControl() {
       <h2 className="main-title">Offer Control</h2>
 
       {/* Link to Add Offer Form */}
-      <button onClick={() => setAddFormOpen(true)} className="button">
-        {offerToEdit ? "Edit Offer" : "Add Offer"}
-      </button>
+      <Link to="/offer/add" className="button">
+        Add Offer
+      </Link>
 
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
@@ -136,50 +115,13 @@ function OfferControl() {
         </tbody>
       </table>
 
-      {/* Add/Edit Offer Form */}
-      {addFormOpen && (
-        <div className="edit-product-form">
-          <h3 className="main-title">{offerToEdit ? "Edit Offer" : "Add Offer"}</h3>
-          <form onSubmit={handleSubmit}>
-            <label>Title:</label>
-            <input
-              type="text"
-              value={offerToEdit ? offerToEdit.title : ""}
-              onChange={(e) => setOfferToEdit({ ...offerToEdit, title: e.target.value })}
-              required
-            />
-            <label>Description:</label>
-            <input
-              type="text"
-              value={offerToEdit ? offerToEdit.description : ""}
-              onChange={(e) => setOfferToEdit({ ...offerToEdit, description: e.target.value })}
-              required
-            />
-            <label>Discount (%):</label>
-            <input
-              type="number"
-              value={offerToEdit ? offerToEdit.discount : ""}
-              onChange={(e) => setOfferToEdit({ ...offerToEdit, discount: parseInt(e.target.value) })}
-              required
-            />
-            <label>Expiry Date:</label>
-            <input
-              type="date"
-              value={offerToEdit ? offerToEdit.expiryDate.slice(0,10) : ""}
-              onChange={(e) => setOfferToEdit({ ...offerToEdit, expiryDate: e.target.value })}
-              required
-            />
-            <label>Image URL:</label>
-            <input
-              type="text"
-              value={offerToEdit ? offerToEdit.imageUrl : ""}
-              onChange={(e) => setOfferToEdit({ ...offerToEdit, imageUrl: e.target.value })}
-              required
-            />
-            <button type="submit">Save</button>
-            <button type="button" onClick={handleCloseForm}>Cancel</button>
-          </form>
-        </div>
+      {/* Render EditOffer component when offerToEdit is set */}
+      {offerToEdit && (
+        <EditOffer
+          offer={offerToEdit}
+          onClose={handleCloseEdit}
+          onSave={fetchOffers} // Example: Refresh offers after save
+        />
       )}
     </div>
   );
