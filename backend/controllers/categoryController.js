@@ -47,9 +47,6 @@ const updateCategory = async (req, res) => {
       return res.status(404).json({ message: 'Cannot find category' });
     }
 
-    if (req.body.name != null) {
-      category.name = req.body.name;
-    }
     if (req.body.image != null) {
       category.image = req.body.image;
     }
@@ -67,14 +64,13 @@ const updateCategory = async (req, res) => {
 // Delete a category
 const deleteCategory = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id);
-    if (category == null) {
-      return res.status(404).json({ message: 'Cannot find category' });
+    const category = await Category.findByIdAndDelete(req.params.id);
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
     }
-
-    await category.remove();
     res.json({ message: 'Deleted category' });
   } catch (err) {
+    console.error('Error deleting category:', err);
     res.status(500).json({ message: err.message });
   }
 };

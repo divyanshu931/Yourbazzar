@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
 import { Link } from "react-router-dom";
 import EditProduct from "./editproduct"; // Import the EditProduct component
-
-import "./style.css";
+import "./style.css"; // Import your CSS file
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -31,14 +30,16 @@ function Product() {
 
   const handleDelete = async (productId) => {
     try {
-      setLoading(true);
-      await axiosInstance.delete(`/api/products/${productId}`);
-      setProducts(products.filter((product) => product._id !== productId));
-      setLoading(false);
-      setSuccessMessage("Product deleted successfully!");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      if (window.confirm("Are you sure you want to delete this product?")) {
+        setLoading(true);
+        await axiosInstance.delete(`/api/products/${productId}`);
+        setProducts(products.filter((product) => product._id !== productId));
+        setLoading(false);
+        setSuccessMessage("Product deleted successfully!");
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
+      }
     } catch (error) {
       console.error("Error deleting product:", error);
       setErrorMessage("Failed to delete product. Please try again.");
@@ -124,8 +125,6 @@ function Product() {
           )}
         </tbody>
       </table>
-
-    
     </div>
   );
 }

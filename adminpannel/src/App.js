@@ -12,6 +12,7 @@ import AdminProduct from './Adminpages/adminProduct';
 import SignIn from './components/signin';
 import OrderPage from './Adminpages/adminorder';
 import AddProductForm from './components/addproduct';
+import AddCategoryForm from './components/add caterogy';
 
 
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/offer-dashboard" element={<OfferDashboard />} />
           <Route path="/order-dashboard" element={<OrderPage/>} />
           <Route path="/product/add" element={<AddProductForm/>} />
+          <Route path="/category/add" element={<AddCategoryForm/>} />
           <Route path='/' element={<SignIn/>}/>
 
 

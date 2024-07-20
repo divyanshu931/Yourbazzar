@@ -573,3 +573,9 @@ body {
   background: #f44336;
   color: #fff;
 }
+
+.point-to-notice {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #777;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
-
+import { Link } from "react-router-dom";
+import EditCategory from "./editcaterogy"; // Import the EditCategory component
 import "./style.css"; // Import your CSS file
 
 function Category() {
@@ -8,9 +9,8 @@ function Category() {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addFormOpen, setAddFormOpen] = useState(false); // State to manage visibility of Add Category form
+  const [addFormOpen, setAddFormOpen] = useState(false); // State to manage visibility of Edit Category form
   const [categoryToEdit, setCategoryToEdit] = useState(null); // State to hold category to edit
-  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false); // State to manage visibility of Add Category form
 
   useEffect(() => {
     fetchCategories();
@@ -19,8 +19,7 @@ function Category() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/api/categories"); // Fetch categories from the API
-      console.log("Data received from API:", response.data);
+      const response = await axiosInstance.get("/api/categories");
       setCategories(response.data);
       setLoading(false);
     } catch (error) {
@@ -31,14 +30,16 @@ function Category() {
 
   const handleDelete = async (categoryId) => {
     try {
-      setLoading(true);
-      await axiosInstance.delete(`/api/categories/${categoryId}`); // Delete category from the API
-      setCategories(categories.filter((category) => category._id !== categoryId));
-      setLoading(false);
-      setSuccessMessage("Category deleted successfully!");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      if (window.confirm("Are you sure you want to delete this category?")) {
+        setLoading(true);
+        await axiosInstance.delete(`/api/categories/delete/${categoryId}`);
+        setCategories(categories.filter((category) => category._id !== categoryId));
+        setLoading(false);
+        setSuccessMessage("Category deleted successfully!");
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
+      }
     } catch (error) {
       console.error("Error deleting category:", error);
       setErrorMessage("Failed to delete category. Please try again.");
@@ -60,24 +61,30 @@ function Category() {
     setCategoryToEdit(null);
   };
 
-  const handleAddCategory = () => {
-    setShowAddCategoryForm(true);
-  };
-
-  const handleCloseAddCategoryForm = () => {
-    setShowAddCategoryForm(false);
+  const handleSave = () => {
+    fetchCategories(); // Refresh the category list
   };
 
   return (
     <div className="main-container">
       <h2 className="main-title">Category Control</h2>
+
+      {/* Link to Add Category Form */}
+      <Link to="/category/add" className="button">
+        Add Category
+      </Link>
+
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {/* Button to open Add Category Form */}
-      <button className="button" onClick={handleAddCategory}>
-        Add Category
-      </button>
-
+      
+      {/* Edit Category Form */}
+      {addFormOpen && categoryToEdit && (
+        <EditCategory
+          category={categoryToEdit}
+          onClose={handleCloseEditForm}
+          onSave={handleSave}
+        />
+      )}
 
       {/* Category List in Table Format */}
       <table className="category-table">
@@ -120,7 +127,6 @@ function Category() {
           )}
         </tbody>
       </table>
-
       
     </div>
   );
