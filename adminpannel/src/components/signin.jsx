@@ -7,7 +7,6 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
   const handleSignIn = async (event) => {
     event.preventDefault();
     try {
@@ -15,17 +14,19 @@ function SignIn() {
         email,
         password,
       });
-
+  
       if (response.data.token) {
         const token = response.data.token;
-        const expirationTime = new Date().getTime() + 3600 * 1000; // 1 hour from now in milliseconds
+        const expirationTime = new Date().getTime() + (8 * 60 * 60 * 1000); // 8 hours from now in milliseconds
         localStorage.setItem("token", token);
         localStorage.setItem("expirationTime", expirationTime);
+  
+        // Remove token and expiration time after 8 hours
         setTimeout(() => {
           localStorage.removeItem("token");
           localStorage.removeItem("expirationTime");
-        }, 3600 * 1000); // Remove token and expiration time after 1 hour
-
+        }, 8 * 60 * 60 * 1000);
+  
         navigate("/dashboard/admin");
       }
     } catch (err) {
@@ -33,7 +34,7 @@ function SignIn() {
       console.error(err);
     }
   };
-
+  
   return (
     <>
       {/* Header */}
