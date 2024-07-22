@@ -15,8 +15,10 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const customerRoutes = require('./routes/customerRoutes');
+
 // Create an Express app
 const app = express();
+app.use('/uploads', express.static('uploads'));
 
 // Allow requests from specific origins
 const allowedOrigins = [

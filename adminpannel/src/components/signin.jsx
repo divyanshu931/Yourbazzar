@@ -1,40 +1,90 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOTP] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showOTPInput, setShowOTPInput] = useState(false);
   const navigate = useNavigate();
+
+  // Function to handle login form submission
   const handleSignIn = async (event) => {
     event.preventDefault();
+    setLoading(true);
     try {
+      // Send login request
       const response = await axiosInstance.post("/api/auth/login", {
         email,
         password,
       });
-  
-      if (response.data.token) {
-        const token = response.data.token;
-        const expirationTime = new Date().getTime() + (8 * 60 * 60 * 1000); // 8 hours from now in milliseconds
-        localStorage.setItem("token", token);
-        localStorage.setItem("expirationTime", expirationTime);
-  
-        // Remove token and expiration time after 8 hours
-        setTimeout(() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("expirationTime");
-        }, 8 * 60 * 60 * 1000);
-  
-        navigate("/dashboard/admin");
+
+      if (response.data.success) {
+        const { token } = response.data; // Extract token from response
+        saveToken(token); // Save token to local storage
+        sendOTP(email); // Send OTP after successful login
+        setShowOTPInput(true); // Show OTP input box
+      } else {
+        setError("Invalid credentials. Please try again.");
       }
     } catch (err) {
-      setError("Invalid credentials. Please try again.");
+      setError("Something went wrong. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to send OTP
+  const sendOTP = async (email) => {
+    try {
+      const otpResponse = await axiosInstance.post("/api/otp/send-otp", { email });
+      if (otpResponse.data.success) {
+        // OTP sent successfully
+        setOTP(""); // Clear previous OTP input
+      } else {
+        setError(otpResponse.data.message || "Failed to send OTP. Please try again.");
+      }
+    } catch (err) {
+      setError("Something went wrong while sending OTP. Please try again.");
       console.error(err);
     }
   };
-  
+
+  // Function to handle OTP verification form submission
+  const handleOTPSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      // Verify OTP
+      const otpVerificationResponse = await axiosInstance.post("/api/otp/verify-otp", {
+        email,
+        otp,
+      });
+
+      if (otpVerificationResponse.data.success) {
+        navigate("/dashboard/admin"); // Navigate to dashboard upon successful OTP verification
+      } else {
+        setError("Invalid OTP. Please try again.");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to save token to local storage
+  const saveToken = (token) => {
+    const expirationTime = new Date().getTime() + 8 * 60 * 60 * 1000; // 8 hours
+    localStorage.setItem("token", token);
+    localStorage.setItem("tokenExpiration", expirationTime);
+  };
+
   return (
     <>
       {/* Header */}
@@ -57,63 +107,49 @@ function SignIn() {
 
       {/* Body */}
       <div style={{ padding: "2rem" }}>
-        <form onSubmit={handleSignIn}>
+        <form onSubmit={showOTPInput ? handleOTPSubmit : handleSignIn}>
           <div className="mb-4">
-            <label className="form-label text-muted small mb-1">Your Email</label>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: ".5rem",
-                backgroundColor: "#fff",
-                boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)",
-                borderRadius: ".25rem",
-                overflow: "hidden",
-              }}
-            >
-              <span className="input-group-text bg-white">
-                <i className="bi bi-envelope-open text-muted"></i>
-              </span>
+            <label className="form-label text-muted small mb-1" style={{ color: "black" }}>Your Email</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="yourbajaar@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={showOTPInput || loading}
+              style={{ border: "none", padding: ".5rem 1rem", color: "black" }}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="form-label text-muted small mb-1" style={{ color: "black" }}>Password</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="***********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={showOTPInput || loading}
+              style={{ border: "none", padding: ".5rem 1rem", color: "black" }}
+            />
+          </div>
+          {showOTPInput && (
+            <div className="mb-4">
+              <label className="form-label text-muted small mb-1" style={{ color: "black" }}>Enter OTP</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="yourbajaar@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{ border: "none", padding: ".5rem 1rem", flex: 1 }}
+                placeholder="1234"
+                value={otp}
+                onChange={(e) => setOTP(e.target.value)}
+                style={{ border: "none", padding: ".5rem 1rem", color: "black" }}
               />
             </div>
-          </div>
-          <div className="mb-4">
-            <label className="form-label text-muted small mb-1">Password</label>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: ".5rem",
-                backgroundColor: "#fff",
-                boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)",
-                borderRadius: ".25rem",
-                overflow: "hidden",
-              }}
-            >
-              <span className="input-group-text bg-white">
-                <i className="bi bi-lock text-muted"></i>
-              </span>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="***********"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{ border: "none", padding: ".5rem 1rem", flex: 1 }}
-              />
-            </div>
-          </div>
-          {error && <p className="text-danger" style={{ color: "black" }}>{error}</p>}
+          )}
+          {error && <p className="text-danger">{error}</p>}
           <button
             type="submit"
             className="btn btn-success btn-lg w-100 shadow-sm"
+            disabled={loading}
             style={{
               marginTop: "1rem",
               backgroundColor: "#28a745",
@@ -123,18 +159,18 @@ function SignIn() {
               borderRadius: ".25rem",
               padding: ".75rem 1.5rem",
               transition: "background-color 0.2s",
+              color: "black", // Button text color set to black
             }}
             onMouseOver={(e) => (e.target.style.backgroundColor = "#218838")}
             onMouseOut={(e) => (e.target.style.backgroundColor = "#28a745")}
           >
-            SIGN IN
+            {loading ? "WAIT..." : showOTPInput ? "VERIFY OTP" : "SIGN IN"}
           </button>
         </form>
       </div>
 
       {/* Footer */}
-     
-      
+      {/* ... */}
     </>
   );
 }

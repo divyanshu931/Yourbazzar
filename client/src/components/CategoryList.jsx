@@ -56,7 +56,6 @@ const CategoryList = () => {
     display: 'block',
     margin: '0 auto', // Center the image
   };
-  
 
   const nameStyle = {
     fontSize: '16px',
@@ -82,27 +81,29 @@ const CategoryList = () => {
   }
 
   return (
-    <div className=" p-3 bg-light ">
-    <h6 className="mb-3 text-black fw-bold">Categories</h6>
-    
-    <div style={containerStyle}>
-  
-      {categories.map(category => (
-        <div key={category._id} style={itemStyle}>
-          <Link to={`/category/${category.name}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <img
-              src={category.image}
-              alt={category.name}
-              style={imageStyle}
-              onError={handleImageError}
-              onLoad={(e) => e.target.style.opacity = 1}
-              loading="lazy"
-            />
-            <p style={nameStyle}>{category.name}</p>
-          </Link>
-        </div>
-      ))}
-    </div>
+    <div className="p-3 bg-light">
+      <h6 className="mb-3 text-black fw-bold">Categories</h6>
+
+      <div style={containerStyle}>
+        {categories.map((category) => (
+          <div key={category._id} style={itemStyle}>
+            <Link
+              to={`/category/${category.name}`}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <img
+                src={`${axiosInstance.defaults.baseURL}/${category.image}`}
+                alt={category.name}
+                style={imageStyle}
+                onError={handleImageError}
+                onLoad={(e) => (e.target.style.opacity = 1)}
+                loading="lazy"
+              />
+              <p style={nameStyle}>{category.name}</p>
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -116,19 +117,5 @@ const spinnerStyle = {
   height: '40px',
   animation: 'spin 1s linear infinite',
 };
-
-// Keyframes for spinner animation
-const spinnerAnimation = `
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-`;
-
-// Append spinner animation to document head
-const styleSheet = document.createElement("style");
-styleSheet.type = "text/css";
-styleSheet.innerText = spinnerAnimation;
-document.head.appendChild(styleSheet);
 
 export default CategoryList;

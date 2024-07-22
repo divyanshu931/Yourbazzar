@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../header";
 import Sidebar from "../slideBar";
@@ -7,41 +7,39 @@ const AdminLayout = ({ children }) => {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
   const navigate = useNavigate();
 
-  const OpenSidebar = () => {
+  const openSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);
   };
 
   useEffect(() => {
-    const checkToken = () => {
+    const checkTokenAndNavigate = () => {
       const token = localStorage.getItem("token");
-      const expirationTime = localStorage.getItem("expirationTime");
+      const expirationTime = localStorage.getItem("tokenExpiration");
 
       if (!token || !expirationTime) {
-        // Token or expiration time not found, redirect to login after 1 second
         setTimeout(() => {
           navigate("/");
-        }, ); // 1000 milliseconds delay
+        }, 2000);
         return;
       }
 
-      // Check if token is expired
-      if (new Date().getTime() > expirationTime) {
-        // Token expired, remove from localStorage and redirect to login after 1 second
+      if (new Date().getTime() > parseInt(expirationTime)) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiration");
         setTimeout(() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("expirationTime");
           navigate("/");
-        }, ); // 1000 milliseconds delay
+        }, 2000);
       }
     };
 
-    checkToken();
+    checkTokenAndNavigate();
+
   }, [navigate]);
 
   return (
     <div className="grid-container">
-      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
-      <Header OpenSidebar={OpenSidebar} />
+      <Sidebar openSidebarToggle={openSidebarToggle} openSidebar={openSidebar} />
+      <Header openSidebar={openSidebar} />
       {children}
     </div>
   );

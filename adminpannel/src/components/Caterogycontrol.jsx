@@ -1,7 +1,8 @@
+// Category.js
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
 import { Link } from "react-router-dom";
-import EditCategory from "./editcaterogy"; // Import the EditCategory component
+import EditCategory from "./editcaterogy"; // Update import path as needed
 import "./style.css"; // Import your CSS file
 
 function Category() {
@@ -9,8 +10,10 @@ function Category() {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addFormOpen, setAddFormOpen] = useState(false); // State to manage visibility of Edit Category form
-  const [categoryToEdit, setCategoryToEdit] = useState(null); // State to hold category to edit
+  const [addFormOpen, setAddFormOpen] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState(null);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -62,7 +65,17 @@ function Category() {
   };
 
   const handleSave = () => {
-    fetchCategories(); // Refresh the category list
+    fetchCategories();
+  };
+
+  const openImageModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage("");
+    setImageModalOpen(false);
   };
 
   return (
@@ -93,7 +106,7 @@ function Category() {
             <th>S.No</th>
             <th>Category Name</th>
             <th>Description</th>
-            <th>Photo URL</th>
+            <th>Photo</th>
             <th>Update</th>
             <th>Delete</th>
             <th>Creation Time</th>
@@ -110,7 +123,11 @@ function Category() {
                 <td>{index + 1}</td>
                 <td>{category.name}</td>
                 <td>{category.description}</td>
-                <td>{category.image}</td>
+                <td>
+                  <button className="view-image-btn" onClick={() => openImageModal(category.image)}>
+                    View
+                  </button>
+                </td>
                 <td>
                   <button className="edit-btn" onClick={() => handleEdit(category._id)}>
                     Edit
@@ -127,6 +144,16 @@ function Category() {
           )}
         </tbody>
       </table>
+
+      {/* Image Modal */}
+      {imageModalOpen && (
+        <div className="image-modal">
+          <div className="image-modal-content">
+            <span className="close" onClick={closeImageModal}>&times;</span>
+            <img src={`${axiosInstance.defaults.baseURL}/${selectedImage}`} alt="Category Image" className="modal-image" />
+          </div>
+        </div>
+      )}
       
     </div>
   );

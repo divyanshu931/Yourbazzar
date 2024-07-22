@@ -1,28 +1,34 @@
-// controllers/adminController.js
+const bcrypt = require('bcrypt');
 
-const User = require('../models/userModel');
+
+const User = require('../models/userModel'); // Assuming User model is defined somewhere
 
 // Controller to add a new admin
 exports.addAdmin = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
+
+    // Create a new User instance with hashed password
     const newAdmin = new User({
       name,
       email,
-      password,
+      password: hashedPassword, // Store hashed password in database
       role: 'Admin' // Hardcode role as 'Admin' when adding admin
     });
 
+    // Save newAdmin to database
     await newAdmin.save();
 
+    // Respond with the newly created admin user
     res.status(201).json(newAdmin);
   } catch (error) {
     console.error('Error adding admin:', error);
     res.status(500).json({ error: 'Failed to add admin. Please try again.' });
   }
 };
-
 // Controller to delete an admin by ID
 exports.deleteAdmin = async (req, res) => {
   const { adminId } = req.params;

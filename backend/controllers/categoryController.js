@@ -1,4 +1,5 @@
 const Category = require('../models/categoryModel');
+const upload = require('../middlewares/multerConfig');
 
 // Get all categories
 const getAllCategories = async (req, res) => {
@@ -12,15 +13,23 @@ const getAllCategories = async (req, res) => {
 
 // Create a new category
 const createCategory = async (req, res) => {
-  const category = new Category({
-    name: req.body.name,
-    image: req.body.image,
-    description: req.body.description
-  });
+  const { name, description } = req.body;
 
   try {
-    const newCategory = await category.save();
-    res.status(201).json(newCategory);
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload an image' });
+    }
+
+    // File uploaded successfully, continue with category creation
+    const newCategory = new Category({
+      name: name,
+      image: req.file.path, // Store the path to the uploaded image
+      description: description
+    });
+
+    const savedCategory = await newCategory.save();
+    res.status(201).json(savedCategory);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
