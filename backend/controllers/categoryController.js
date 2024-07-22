@@ -52,13 +52,15 @@ const getCategoryById = async (req, res) => {
 const updateCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
-    if (category == null) {
-      return res.status(404).json({ message: 'Cannot find category' });
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
     }
 
-    if (req.body.image != null) {
-      category.image = req.body.image;
+    // Check if a file was uploaded
+    if (req.file) {
+      category.image = req.file.path; // Update the image path if a new file is uploaded
     }
+
     if (req.body.description != null) {
       category.description = req.body.description;
     }
@@ -69,7 +71,6 @@ const updateCategory = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
-
 // Delete a category
 const deleteCategory = async (req, res) => {
   try {

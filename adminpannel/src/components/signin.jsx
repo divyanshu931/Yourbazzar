@@ -1,84 +1,166 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
 
-function SignIn() {
+// Define CSS constant for SignIn component
+const signInStyles = `
+.container {
+  margin-top: 0rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.card {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  max-width: 30rem;
+  width: 100%;
+}
+
+.card-header {
+  background-color: #ffc107;
+  color: #343a40;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 2rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.form-label {
+  color: #495057;
+  font-weight: bold;
+  padding: 2rem;
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  color: #495057;
+  background-color: #f8f9fa;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 0.25rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 0.75rem 1.25rem;
+  margin-top: 1rem;
+  border-radius: 0.25rem;
+}
+`;
+
+const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOTP] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showOTPInput, setShowOTPInput] = useState(false);
+  const [showError, setShowError] = useState(false); // State to control error display
   const navigate = useNavigate();
 
-  // Function to handle login form submission
+  useEffect(() => {
+    // Clear error after 3 seconds
+    const errorTimer = setTimeout(() => {
+      setShowError(false);
+      setError("");
+    }, 1000);
+
+    return () => clearTimeout(errorTimer);
+  }, [error]); // Clear timer when error state changes
+
   const handleSignIn = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
-      // Send login request
       const response = await axiosInstance.post("/api/auth/login", {
         email,
         password,
       });
 
       if (response.data.success) {
-        const { token } = response.data; // Extract token from response
-        saveToken(token); // Save token to local storage
-        sendOTP(email); // Send OTP after successful login
-        setShowOTPInput(true); // Show OTP input box
+        const { token } = response.data;
+        saveToken(token);
+        sendOTP(email);
+        setShowOTPInput(true);
       } else {
         setError("Invalid credentials. Please try again.");
+        setShowError(true); // Show error message
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
+      setShowError(true); // Show error message
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Function to send OTP
   const sendOTP = async (email) => {
     try {
       const otpResponse = await axiosInstance.post("/api/otp/send-otp", { email });
       if (otpResponse.data.success) {
-        // OTP sent successfully
-        setOTP(""); // Clear previous OTP input
+        setOTP("");
       } else {
         setError(otpResponse.data.message || "Failed to send OTP. Please try again.");
+        setShowError(true); // Show error message
       }
     } catch (err) {
       setError("Something went wrong while sending OTP. Please try again.");
+      setShowError(true); // Show error message
       console.error(err);
     }
   };
 
-  // Function to handle OTP verification form submission
   const handleOTPSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
-      // Verify OTP
       const otpVerificationResponse = await axiosInstance.post("/api/otp/verify-otp", {
         email,
         otp,
       });
 
       if (otpVerificationResponse.data.success) {
-        navigate("/dashboard/admin"); // Navigate to dashboard upon successful OTP verification
+        navigate("/dashboard/admin");
       } else {
         setError("Invalid OTP. Please try again.");
+        setShowError(true); // Show error message
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
+      setShowError(true); // Show error message
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Function to save token to local storage
   const saveToken = (token) => {
     const expirationTime = new Date().getTime() + 8 * 60 * 60 * 1000; // 8 hours
     localStorage.setItem("token", token);
@@ -86,93 +168,65 @@ function SignIn() {
   };
 
   return (
-    <>
-      {/* Header */}
-      <div
-        style={{
-          padding: "2rem",
-          boxShadow: "0 .5rem 1rem rgba(0,0,0,.1)",
-          backgroundColor: "#ffc107",
-          position: "sticky",
-          top: 0,
-          zIndex: 1000,
-          textAlign: "center",
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-          color: "#343a40",
-        }}
-      >
-        Sign In to YourBajaar Admin
-      </div>
-
-      {/* Body */}
-      <div style={{ padding: "2rem" }}>
-        <form onSubmit={showOTPInput ? handleOTPSubmit : handleSignIn}>
-          <div className="mb-4">
-            <label className="form-label text-muted small mb-1" style={{ color: "black" }}>Your Email</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="yourbajaar@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={showOTPInput || loading}
-              style={{ border: "none", padding: ".5rem 1rem", color: "black" }}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="form-label text-muted small mb-1" style={{ color: "black" }}>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              placeholder="***********"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={showOTPInput || loading}
-              style={{ border: "none", padding: ".5rem 1rem", color: "black" }}
-            />
-          </div>
-          {showOTPInput && (
-            <div className="mb-4">
-              <label className="form-label text-muted small mb-1" style={{ color: "black" }}>Enter OTP</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="1234"
-                value={otp}
-                onChange={(e) => setOTP(e.target.value)}
-                style={{ border: "none", padding: ".5rem 1rem", color: "black" }}
-              />
+    <div className="container">
+      <style>{signInStyles}</style>
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card shadow">
+            <div className="card-header">
+              Sign In to YourBajaar Admin
             </div>
-          )}
-          {error && <p className="text-danger">{error}</p>}
-          <button
-            type="submit"
-            className="btn btn-success btn-lg w-100 shadow-sm"
-            disabled={loading}
-            style={{
-              marginTop: "1rem",
-              backgroundColor: "#28a745",
-              borderColor: "#28a745",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              borderRadius: ".25rem",
-              padding: ".75rem 1.5rem",
-              transition: "background-color 0.2s",
-              color: "black", // Button text color set to black
-            }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#218838")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "#28a745")}
-          >
-            {loading ? "WAIT..." : showOTPInput ? "VERIFY OTP" : "SIGN IN"}
-          </button>
-        </form>
+            <div className="card-body">
+              <form onSubmit={showOTPInput ? handleOTPSubmit : handleSignIn}>
+                <div className="mb-3">
+                  <label className="form-label mb-1">Your Email</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="yourbajaar@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={showOTPInput || loading}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label mb-1">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="***********"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={showOTPInput || loading}
+                  />
+                </div>
+                {showOTPInput && (
+                  <div className="mb-3">
+                    <label className="form-label mb-1">Enter OTP</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="1234"
+                      value={otp}
+                      onChange={(e) => setOTP(e.target.value)}
+                    />
+                  </div>
+                )}
+                {error && <div className="alert alert-danger">{error}</div>}
+                <button
+                  type="submit"
+                  className="btn btn-success btn-lg w-100 mt-3"
+                  disabled={loading}
+                >
+                  {loading ? "WAIT..." : showOTPInput ? "VERIFY OTP" : "SIGN IN"}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Footer */}
-      {/* ... */}
-    </>
+    </div>
   );
-}
+};
 
 export default SignIn;

@@ -21,7 +21,6 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-   
   },
   bestProduct: {
     type: Boolean,
@@ -30,6 +29,10 @@ const productSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true // Image URL is required
+  },
+  approved: {
+    type: Boolean,
+    default: false // Default value for approved is false
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields to the document

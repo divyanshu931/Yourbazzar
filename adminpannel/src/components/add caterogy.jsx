@@ -22,12 +22,12 @@ function AddCategoryForm({ onSuccess }) {
         // Validate image dimensions
         const img = new Image();
         img.onload = function () {
-          if (this.width === 800 && this.height === 600) { // Specify your required dimensions here
+          if (this.width === 312 && this.height === 360) { // Specify your required dimensions here
             setFormData({ ...formData, image: file });
             setErrorMessage('');
           } else {
             setFormData({ ...formData, image: null });
-            setErrorMessage('Please select an image with dimensions 800x600.');
+            setErrorMessage('Please select an image with dimensions 312x360.');
           }
         };
         img.src = URL.createObjectURL(file);
@@ -102,7 +102,8 @@ function AddCategoryForm({ onSuccess }) {
             />
             <div className="file-input-container">
               <label className="file-input-label">
-                Choose an image
+                Choose an image<br/>
+                Image Upload (312x360 pixels):
                 <input
                   type="file"
                   name="image"

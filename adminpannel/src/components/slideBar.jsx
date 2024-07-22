@@ -85,6 +85,13 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
             <BsPeopleFill className="icon" /> Customers
           </Link>
         </li>
+        <li className="sidebar-list-item">
+              <Link to="/admin-control">
+                <BsMenuButtonWideFill className="icon" /> approval request
+              </Link>
+              
+            </li>
+
             {/* Add more super user items here */}
           </ul>
         )}

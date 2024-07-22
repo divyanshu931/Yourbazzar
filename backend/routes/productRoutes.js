@@ -1,15 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { addProduct, deleteProduct, updateProduct } = require('../controllers/productController');
-const { protect, authorize } = require('../middlewares/authMiddleware');
+const productController = require('../controllers/productController');
 
-// Add a new product
-router.post('/add',  addProduct);
+// Route to fetch unapproved products
+router.get('/products/unapproved', productController.getUnapprovedProducts);
 
-// Delete a product
-router.delete('/:id',  deleteProduct);
+// Route to add a new product
+router.post('/products', productController.addProduct);
 
-// Update product details
-router.patch('/:id', updateProduct);
+// Route to delete a product by ID
+router.delete('/products/:id', productController.deleteProduct);
+
+// Route to update a product by ID
+router.put('/products/:id', productController.updateProduct);
+
+// Route to toggle approval of a product by ID
+router.patch('/products/approve/:id', productController.toggleProductApproval);
 
 module.exports = router;
