@@ -58,8 +58,8 @@ function AdminHome() {
     fetchData();
   }, []);
 
-  return (
-    <main className="main-container">
+  return (  <>
+   
       <div className="main-title">
         <h3>DASHBOARD</h3>
       </div>
@@ -137,10 +137,10 @@ function AdminHome() {
             <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
+        
       </div>
 
-      {error && <p className="text-danger">{error}</p>}
-    </main>
+  </>
   );
 }
 

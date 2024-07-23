@@ -32,7 +32,7 @@ function Product() {
     try {
       if (window.confirm("Are you sure you want to delete this product?")) {
         setLoading(true);
-        await axiosInstance.delete(`/api/products/${productId}`);
+        await axiosInstance.delete(`/api/products/products/${productId}`);
         setProducts(products.filter((product) => product._id !== productId));
         setLoading(false);
         setSuccessMessage("Product deleted successfully!");
@@ -49,6 +49,7 @@ function Product() {
       }, 3000);
     }
   };
+  
 
   const handleEdit = (productId) => {
     const product = products.find((product) => product._id === productId);

@@ -33,6 +33,10 @@ const productSchema = new mongoose.Schema({
   approved: {
     type: Boolean,
     default: false // Default value for approved is false
+  },
+  sellerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields to the document

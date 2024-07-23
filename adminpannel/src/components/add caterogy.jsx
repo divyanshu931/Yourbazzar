@@ -5,7 +5,7 @@ import AdminLayout from './layout/AdminLayout';
 function AddCategoryForm({ onSuccess }) {
   const [formData, setFormData] = useState({
     name: '',
-    image: null, // Updated to hold the selected file object
+    image: null,
     description: ''
   });
 
@@ -13,43 +13,50 @@ function AddCategoryForm({ onSuccess }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Function to handle input changes (including file input)
-  const handleChange = (e) => {
-    if (e.target.name === 'image') {
-      const file = e.target.files[0];
-      // Check if file is selected
-      if (file) {
-        // Validate image dimensions
-        const img = new Image();
-        img.onload = function () {
-          if (this.width === 312 && this.height === 360) { // Specify your required dimensions here
-            setFormData({ ...formData, image: file });
-            setErrorMessage('');
-          } else {
-            setFormData({ ...formData, image: null });
-            setErrorMessage('Please select an image with dimensions 312x360.');
-          }
-        };
-        img.src = URL.createObjectURL(file);
-      } else {
-        setFormData({ ...formData, image: null });
-      }
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Function to handle form submission
+  const handleImageChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        const minWidth = 800;
+        const maxWidth = 800;
+        const minHeight = 600;
+        const maxHeight = 800;
+  
+        if (
+          img.width >= minWidth &&
+          img.width <= maxWidth &&
+          img.height >= minHeight &&
+          img.height <= maxHeight
+                ) {
+          setFormData({ ...formData, image: selectedFile });
+        } else {
+          setErrorMessage('Image dimensions must be between 800x600 to 800x800 pixels .');
+        }
+      };
+  
+      img.src = event.target.result;
+    };
+  
+    if (selectedFile) {
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+  
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Check if formData.image is set and its dimensions are correct
-      if (!formData.image) {
-        setErrorMessage('Please select an image.');
-        return;
-      }
+    setLoading(true);
+    setErrorMessage('');
+    setSuccessMessage('');
 
-      setLoading(true);
+    try {
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('image', formData.image);
@@ -63,23 +70,25 @@ function AddCategoryForm({ onSuccess }) {
 
       setLoading(false);
       if (response.status === 201) {
-        setErrorMessage(''); // Clear any previous error message
-        setSuccessMessage('Category successfully added!'); // Set success message
+        setSuccessMessage('Category successfully added!');
+        setFormData({
+          name: '',
+          image: null,
+          description: ''
+        });
         if (typeof onSuccess === 'function') {
-          onSuccess(); // Notify parent component of success
+          onSuccess();
         }
       } else {
         setErrorMessage('Failed to add category. Please try again.');
       }
     } catch (error) {
-      console.error('Error adding category:', error);
-      if (error.response) {
-        console.error('Response data:', error.response.data); // Log detailed response data
-        setErrorMessage(error.response.data.message || 'Failed to add category. Please try again.');
+      setLoading(false);
+      if (error.response && error.response.data && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
       } else {
         setErrorMessage('Failed to add category. Please try again.');
       }
-      setLoading(false);
     }
   };
 
@@ -87,28 +96,28 @@ function AddCategoryForm({ onSuccess }) {
     <AdminLayout>
       <div className="main-container">
         <h2 className="main-title">Add Category</h2>
-        
+
         <div className="add-category-form-container">
           <form className="add-category-form" onSubmit={handleAddSubmit}>
-            {/* Input fields for adding a category */}
+            {/* Point to notice: Category name must be unique */}
             <input
               type="text"
               name="name"
-              placeholder="Category Name"
+              placeholder="Category Name (unique)"
               value={formData.name}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="form-input"
               required
             />
             <div className="file-input-container">
               <label className="file-input-label">
-                Choose an image<br/>
-                Image Upload (312x360 pixels):
+                Choose an image<br />
+                Image Upload (600x800 to 800x1200pixels):
                 <input
                   type="file"
                   name="image"
                   accept="image/*"
-                  onChange={handleChange}
+                  onChange={handleImageChange}
                   className="file-input"
                   required
                 />
@@ -122,7 +131,7 @@ function AddCategoryForm({ onSuccess }) {
               name="description"
               placeholder="Description"
               value={formData.description}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className="form-input"
             />
             <div className="form-buttons">
@@ -130,7 +139,9 @@ function AddCategoryForm({ onSuccess }) {
                 {loading ? 'Adding...' : 'Add'}
               </button>
             </div>
+            {/* Point to notice: Display error message if category name is not unique */}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {/* Point to notice: Display success message upon successful category addition */}
             {successMessage && <p className="success-message">{successMessage}</p>}
           </form>
         </div>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 // Define CSS constant for SignIn component
 const signInStyles = `
@@ -89,10 +92,21 @@ const SignIn = () => {
     const errorTimer = setTimeout(() => {
       setShowError(false);
       setError("");
-    }, 1000);
+    }, 3000);
 
     return () => clearTimeout(errorTimer);
   }, [error]); // Clear timer when error state changes
+
+  const saveToken = (token, id, role) => {
+    const expirationTime = new Date();
+    expirationTime.setDate(expirationTime.getDate() + 1); // Expires next day
+  
+    // Save token, id, and role to cookies
+    cookies.set('token', token, { path: '/', expires: expirationTime });
+    cookies.set('userId', id, { path: '/', expires: expirationTime });
+    cookies.set('userRole', role, { path: '/', expires: expirationTime });
+  };
+  
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -102,12 +116,18 @@ const SignIn = () => {
         email,
         password,
       });
-
+  
       if (response.data.success) {
-        const { token } = response.data;
-        saveToken(token);
-        sendOTP(email);
-        setShowOTPInput(true);
+        const { token, userId, role } = response.data;
+        
+        if (role === "Customer") {
+          setError("Access denied for customers. Please use admin or seller credentials.");
+          setShowError(true); // Show error message
+        } else if (role === "Admin" || role === "Seller") {
+          saveToken(token, userId, role); // Save token, id, and role
+          sendOTP(email);
+          setShowOTPInput(true);
+        }
       } else {
         setError("Invalid credentials. Please try again.");
         setShowError(true); // Show error message
@@ -161,12 +181,7 @@ const SignIn = () => {
     }
   };
 
-  const saveToken = (token) => {
-    const expirationTime = new Date().getTime() + 8 * 60 * 60 * 1000; // 8 hours
-    localStorage.setItem("token", token);
-    localStorage.setItem("tokenExpiration", expirationTime);
-  };
-
+  
   return (
     <div className="container">
       <style>{signInStyles}</style>

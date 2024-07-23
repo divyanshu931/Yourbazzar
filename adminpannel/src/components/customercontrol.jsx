@@ -118,6 +118,9 @@ function CustomerControl() {
             <th>S.No</th>
             <th>Customer Name</th>
             <th>Email</th>
+            <th>last login</th>
+            
+          
             <th>Delete</th>
             <th>Email</th>
           </tr>
@@ -133,6 +136,7 @@ function CustomerControl() {
                 <td>{index + 1}</td>
                 <td>{customer.name}</td>
                 <td>{customer.email}</td>
+                <td>{customer.lastLogin ? new Date(customer.lastLogin).toLocaleString() : 'Never logged in'}</td>
                 <td>
                   <button className="delete-btn" onClick={() => handleDeleteCustomer(customer._id)}>
                     Delete

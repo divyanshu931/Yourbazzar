@@ -1,4 +1,3 @@
-// models/userModel.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -20,6 +19,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['Admin', 'Seller', 'Customer'],
     default: 'Customer'
+  },
+  lastLogin: {
+    type: Date,
+    default: null
   }
 });
 

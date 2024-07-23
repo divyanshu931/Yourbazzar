@@ -1,8 +1,24 @@
-// controllers/authController.js
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const OTP = require('../models/otpModel');
 const jwt = require('jsonwebtoken');
+
+// Function to update last login time
+async function updateUserLastLogin(userId) {
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      user.lastLogin = new Date();
+      await user.save();
+      console.log('Last login updated for user:', user.name);
+    } else {
+      console.error('User not found');
+    }
+  } catch (error) {
+    console.error('Error updating last login:', error);
+  }
+}
+
 exports.signup = async (req, res) => {
   try {
     const { name, email, password, role, otp } = req.body;
@@ -86,6 +102,9 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Update last login time
+    await updateUserLastLogin(user._id);
+
     // Generate JWT token
     const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: '8h',
@@ -96,8 +115,10 @@ exports.login = async (req, res) => {
       success: true,
       message: 'Logged in successfully',
       token,
+     
       name: user.name,
       email: user.email,
+      role: user.role
     });
   } catch (error) {
     console.log(error.message);

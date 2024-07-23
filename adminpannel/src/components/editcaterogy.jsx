@@ -6,7 +6,7 @@ const Editcategories = ({ category, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     name: category.name,
     description: category.description,
-    image: category.image,
+    imageFile: null, // Store the image file to be uploaded
   });
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -23,71 +23,54 @@ const Editcategories = ({ category, onClose, onSave }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
+      // Validate file type (optional)
       if (!file.type.startsWith("image/")) {
         setErrorMessage("Please upload an image file.");
         return;
       }
-      // Validate image dimensions
+      // Validate image dimensions (optional)
       const img = new Image();
       img.onload = () => {
-        if (img.width === 312 && img.height === 360) {
+        const { width, height } = img;
+        if (width === 300 && height === 400) {
           setErrorMessage(""); // Clear error message if dimensions are correct
-          resizeImage(file); // Resize the image if dimensions are correct
+          setFormData({ ...formData, imageFile: file }); // Store the selected image file
         } else {
-          setErrorMessage("Please upload an image with dimensions 312x360 pixels.");
+          setErrorMessage("Please upload an image with dimensions 300x400 pixels.");
         }
       };
       img.src = URL.createObjectURL(file);
     }
   };
 
-  const resizeImage = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const img = new Image();
-      img.src = reader.result;
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = 312;
-        canvas.height = 360;
-        ctx.drawImage(img, 0, 0, 312, 360);
-        const resizedImageDataUrl = canvas.toDataURL("image/jpeg"); // You can change format if needed
-        setFormData({ ...formData, image: resizedImageDataUrl });
-      };
-    };
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { _id } = category; // Assuming category has _id field
       const formDataToSend = new FormData();
-      formDataToSend.append('description', formData.description);
+      formDataToSend.append("description", formData.description);
       
-      // Check if formData.image is a Blob (indicating it's an image file)
-      if (formData.image instanceof Blob) {
-        formDataToSend.append('image', formData.image, 'category_image.jpg');
+      // Append image file to FormData if it exists
+      if (formData.imageFile) {
+        formDataToSend.append("image", formData.imageFile);
       }
-      
-      const response = await axiosInstance.put(`/api/categories/update/${_id}`, formDataToSend, {
+
+      const response = await axiosInstance.put(`/api/categories/update/${category._id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-  
+
       setSuccessMessage("Updated"); // Set success message
-      onSave(); // Notify the parent component to refresh the category list
+      onSave(); // Notify parent component to refresh category list
       onClose(); // Close the form
-  
+
       // Clear success message after 1 second
       setTimeout(() => {
         setSuccessMessage("");
       }, 1000);
     } catch (error) {
       console.error("Error updating category:", error);
+      setErrorMessage("Failed to update category. Please try again.");
     }
   };
 
@@ -121,7 +104,7 @@ const Editcategories = ({ category, onClose, onSave }) => {
           />
         </label>
         <label>
-          Image Upload (312x360 pixels):
+          Image Upload (300x400 pixels):
           <input
             type="file"
             accept="image/*"
@@ -129,12 +112,14 @@ const Editcategories = ({ category, onClose, onSave }) => {
             required
           />
         </label>
-        {formData.image && (
-          <img
-            src={formData.image}
-            alt="Selected Category"
-            className="selected-image-preview"
-          />
+        {formData.imageFile && (
+          <div className="image-preview-container">
+            <img
+              src={URL.createObjectURL(formData.imageFile)}
+              alt="Selected Category"
+              className="selected-image-preview"
+            />
+          </div>
         )}
         <div className="form-buttons">
           <button type="submit">Save</button>

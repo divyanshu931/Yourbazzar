@@ -1,5 +1,5 @@
 const Product = require('../models/productModel');
-
+const upload = require('../middlewares/multerConfig');
 // Fetch unapproved products
 exports.getUnapprovedProducts = async (req, res) => {
   try {
@@ -16,41 +16,56 @@ exports.getUnapprovedProducts = async (req, res) => {
   }
 };
 
-// Add a new product
+// Add a new product with image handling
 exports.addProduct = async (req, res) => {
-  const { name, description, price, category, bestProduct, image } = req.body;
-  const product = new Product({
-    name,
-    description,
-    price,
-    category,
-    bestProduct,
-    image
-  });
   try {
+    // Extract form data and uploaded file path
+    const { name, description, price, category, bestProduct, approved } = req.body;
+   
+    // Get the file path from req.file if available
+    const image = req.file ? req.file.path : null;
+
+    // Create new Product instance
+    const product = new Product({
+      name,
+      description,
+      price,
+      category,
+      bestProduct,
+      image,
+   
+      approved
+    });
+
+    // Save product to database
     await product.save();
+
+    // Respond with success message and product data
     res.status(201).json({
       success: true,
       data: product,
     });
   } catch (err) {
+    // Handle errors
+    console.error('Error adding product:', err);
     res.status(400).json({
       success: false,
-      message: err.message,
+      message: 'Failed to add product. Please try again.',
     });
   }
 };
-
 // Delete a product
 exports.deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findOneAndDelete({ _id: req.params.id});
+
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found.',
+        message: 'Product not found or you are not authorized to delete this product.',
       });
     }
+
     res.json({
       success: true,
       data: product,
@@ -77,16 +92,18 @@ exports.updateProduct = async (req, res) => {
   }
 
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id, sellerId: req.user._id });
+
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found.',
+        message: 'Product not found or you are not authorized to update this product.',
       });
     }
 
     updates.forEach((update) => (product[update] = req.body[update]));
     await product.save();
+
     res.json({
       success: true,
       data: product,
@@ -102,12 +119,12 @@ exports.updateProduct = async (req, res) => {
 // Toggle approval status of a product
 exports.toggleProductApproval = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id, sellerId: req.user._id });
 
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found.',
+        message: 'Product not found or you are not authorized to approve/update this product.',
       });
     }
 

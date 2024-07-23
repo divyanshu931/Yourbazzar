@@ -1,4 +1,3 @@
-// Category.js
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
 import { Link } from "react-router-dom";
@@ -89,7 +88,14 @@ function Category() {
 
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
-      
+      {imageModalOpen && (
+        <div className="image-modal">
+          <div className="image-modal-content">
+            <span className="close" onClick={closeImageModal}>&times;</span>
+            <img src={`${axiosInstance.defaults.baseURL}/${selectedImage}`} alt="Category Image" className="modal-image" />
+          </div>
+        </div>
+      )}
       {/* Edit Category Form */}
       {addFormOpen && categoryToEdit && (
         <EditCategory
@@ -146,14 +152,7 @@ function Category() {
       </table>
 
       {/* Image Modal */}
-      {imageModalOpen && (
-        <div className="image-modal">
-          <div className="image-modal-content">
-            <span className="close" onClick={closeImageModal}>&times;</span>
-            <img src={`${axiosInstance.defaults.baseURL}/${selectedImage}`} alt="Category Image" className="modal-image" />
-          </div>
-        </div>
-      )}
+   
       
     </div>
   );

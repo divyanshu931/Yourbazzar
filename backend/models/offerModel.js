@@ -1,4 +1,3 @@
-// models/offerModel.js
 const mongoose = require('mongoose');
 
 const offerSchema = new mongoose.Schema({
@@ -29,4 +28,5 @@ const offerSchema = new mongoose.Schema({
 });
 
 const Offer = mongoose.model('Offer', offerSchema);
+
 module.exports = Offer;

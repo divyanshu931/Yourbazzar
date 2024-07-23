@@ -49,6 +49,7 @@ const getCategoryById = async (req, res) => {
 };
 
 // Update a category
+// Update a category
 const updateCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -71,6 +72,7 @@ const updateCategory = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
 // Delete a category
 const deleteCategory = async (req, res) => {
   try {

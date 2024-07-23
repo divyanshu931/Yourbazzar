@@ -60,7 +60,7 @@ function OfferControl() {
   };
 
   return (
-    <div className="main-container">
+   <>
       <h2 className="main-title">Offer Control</h2>
 
       {/* Link to Add Offer Form */}
@@ -123,7 +123,7 @@ function OfferControl() {
           onSave={fetchOffers} // Example: Refresh offers after save
         />
       )}
-    </div>
+    </>
   );
 }
 

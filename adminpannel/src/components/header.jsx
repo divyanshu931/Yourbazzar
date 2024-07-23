@@ -8,11 +8,12 @@ import {
   BsJustify,
 } from "react-icons/bs";
 
-function Header({ OpenSidebar }) {
+function Header({ openSidebar }) {
   return (
     <header className="header">
       <div className="menu-icon">
-        <BsJustify className="icon" onClick={OpenSidebar} />
+        {/* Ensure OpenSidebar is correctly passed and triggers sidebar toggle */}
+        <BsJustify className="icon" onClick={openSidebar} />
       </div>
       <div className="header-left">
         <BsSearch className="icon" />

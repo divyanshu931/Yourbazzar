@@ -75,7 +75,7 @@ function AdminControl() {
   };
 
   return (
-    <div className="main-container">
+    <>
       <h2 className="main-title">Admin Control</h2>
 
       {/* Button to toggle Add Admin Form */}
@@ -97,13 +97,14 @@ function AdminControl() {
             <th>Admin Name</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Last Login</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="5">Loading...</td>
+              <td colSpan="6">Loading...</td>
             </tr>
           ) : (
             admins.map((admin, index) => (
@@ -112,6 +113,7 @@ function AdminControl() {
                 <td>{admin.name}</td>
                 <td>{admin.email}</td>
                 <td>{admin.role}</td>
+                <td>{admin.lastLogin ? new Date(admin.lastLogin).toLocaleString() : 'Never logged in'}</td>
                 <td>
                   <button className="delete-btn" onClick={() => handleDeleteAdmin(admin._id)}>
                     Delete
@@ -122,7 +124,7 @@ function AdminControl() {
           )}
         </tbody>
       </table>
-    </div>
+    </>
   );
 }
 

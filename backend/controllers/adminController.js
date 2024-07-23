@@ -16,7 +16,7 @@ exports.addAdmin = async (req, res) => {
       name,
       email,
       password: hashedPassword, // Store hashed password in database
-      role: 'Admin' // Hardcode role as 'Admin' when adding admin
+      role: 'Seller' // Hardcode role as 'Admin' when adding admin
     });
 
     // Save newAdmin to database
@@ -25,8 +25,8 @@ exports.addAdmin = async (req, res) => {
     // Respond with the newly created admin user
     res.status(201).json(newAdmin);
   } catch (error) {
-    console.error('Error adding admin:', error);
-    res.status(500).json({ error: 'Failed to add admin. Please try again.' });
+    console.error('Error adding seller:', error);
+    res.status(500).json({ error: 'Failed to add seller. Please try again.' });
   }
 };
 // Controller to delete an admin by ID
@@ -50,7 +50,7 @@ exports.deleteAdmin = async (req, res) => {
 // Controller to fetch all admins
 exports.fetchAdmins = async (req, res) => {
   try {
-    const admins = await User.find({ role: 'Admin' }); // Fetch users with role 'Admin'
+    const admins = await User.find({ role: 'Seller' }); // Fetch users with role 'Admin'
     res.json(admins);
   } catch (error) {
     console.error('Error fetching admins:', error);

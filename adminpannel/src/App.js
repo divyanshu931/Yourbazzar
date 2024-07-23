@@ -14,6 +14,7 @@ import OrderPage from './Adminpages/adminorder';
 import AddProductForm from './components/addproduct';
 import AddCategoryForm from './components/add caterogy';
 import AddOffer from './components/addoffer';
+import ApproveProducts from './Adminpages/aprrove';
 
 
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="/product/add" element={<AddProductForm/>} />
           <Route path="/category/add" element={<AddCategoryForm/>} />
           <Route path="/offer/add" element={<AddOffer/>} />
+          <Route path="/approval-request" element={<ApproveProducts/>} />
           <Route path='/' element={<SignIn/>}/>
          
     

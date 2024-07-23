@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const upload = require('../middlewares/multerConfig'); 
 
 // Route to fetch unapproved products
 router.get('/products/unapproved', productController.getUnapprovedProducts);
 
 // Route to add a new product
-router.post('/products', productController.addProduct);
+router.post('/products', upload.single('image'), productController.addProduct);
 
 // Route to delete a product by ID
 router.delete('/products/:id', productController.deleteProduct);
