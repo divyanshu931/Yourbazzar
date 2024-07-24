@@ -54,6 +54,11 @@ app.use('/api/admins', adminRoutes);
 
 app.use('/api', customerRoutes);
 // Start the server
+app.get('/uploads/:filename', (req, res) => {
+    const filename = req.params.filename;
+    // Assuming 'filename' contains the actual filename like '1721788065910-4peu4n13.png'
+    res.sendFile(__dirname + '/uploads/' + filename);
+  });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -7,6 +7,7 @@ import {
   BsFillArchiveFill,
   BsFillGrid3X3GapFill,
   BsPeopleFill,
+  BsQuestionCircleFill, // Added icon for seller support
   BsMenuButtonWideFill,
 } from "react-icons/bs";
 import Cookies from 'universal-cookie';
@@ -41,16 +42,15 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
             <BsGrid1X2Fill className="icon" /> Dashboard
           </Link>
         </li>
-       
 
         {/* Additional sidebar items based on user role */}
         {userRole === "Admin" && (
           <>
-           <li className="sidebar-list-item">
-          <Link to="/product-dashboard">
-            <BsFillArchiveFill className="icon" /> Products
-          </Link>
-        </li>
+            <li className="sidebar-list-item">
+              <Link to="/product-dashboard">
+                <BsFillArchiveFill className="icon" /> Products
+              </Link>
+            </li>
             <li className="sidebar-list-item">
               <Link to="/category-dashboard">
                 <BsFillGrid3X3GapFill className="icon" /> Categories
@@ -61,7 +61,6 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
                 <BsMenuButtonWideFill className="icon" /> Admin Control
               </Link>
             </li>
-            
             <li className="sidebar-list-item">
               <Link to="/customer-dashboard">
                 <BsPeopleFill className="icon" /> Customers
@@ -78,9 +77,10 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
         {/* Additional sidebar items for Seller role */}
         {userRole === "Seller" && (
           <>
+          
             <li className="sidebar-list-item">
-              <Link to="/seller-dashboard">
-                <BsFillGrid3X3GapFill className="icon" /> Seller Dashboard
+              <Link to="/product/add">
+                <BsFillArchiveFill className="icon" /> Add Products
               </Link>
             </li>
             <li className="sidebar-list-item">
@@ -88,6 +88,13 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
                 <BsFillArchiveFill className="icon" /> My Products
               </Link>
             </li>
+            {/* Seller Support (Customer Support) */}
+            <li className="sidebar-list-item">
+              <Link to="/seller-support">
+                <BsQuestionCircleFill className="icon" /> Seller Support
+              </Link>
+            </li>
+           
           </>
         )}
       </ul>

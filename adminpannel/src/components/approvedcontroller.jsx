@@ -28,7 +28,7 @@ const ApprovedControl = () => {
     try {
       if (window.confirm("Are you sure you want to delete this product?")) {
         setLoading(true);
-        await axiosInstance.delete(`/api/products/${productId}`);
+        await axiosInstance.delete(`/api/products/products/${productId}`);
         setProducts(products.filter((product) => product._id !== productId));
         setLoading(false);
       }
@@ -42,7 +42,7 @@ const ApprovedControl = () => {
   const handleToggleApproval = async (productId) => {
     try {
       setLoading(true);
-      await axiosInstance.patch(`/api/products/products/approve/${productId}`);
+      await axiosInstance.patch(`api/products/products/approve/${productId}`);
       const updatedProducts = products.map((product) => {
         if (product._id === productId) {
           return { ...product, approved: !product.approved };
@@ -58,17 +58,11 @@ const ApprovedControl = () => {
     }
   };
 
-  if (loading) {
-    return <div className="loading-container">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
   return (
     <div className="main-container">
       <h2 className="main-title">Unapproved Products</h2>
+      {loading && <div className="loading-container">Loading...</div>}
+      {error && <div className="error-message">{error}</div>}
       <table className="category-table">
         <thead>
           <tr className="table-header">

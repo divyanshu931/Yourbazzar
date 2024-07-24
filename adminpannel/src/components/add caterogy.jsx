@@ -25,20 +25,23 @@ function AddCategoryForm({ onSuccess }) {
       const img = new Image();
       img.onload = () => {
         const aspectRatio = img.width / img.height;
-        const minWidth = 800;
-        const maxWidth = 800;
-        const minHeight = 600;
+        const minWidth = 300;
+        const maxWidth = 600;
+        const minHeight = 400;
         const maxHeight = 800;
   
         if (
           img.width >= minWidth &&
           img.width <= maxWidth &&
           img.height >= minHeight &&
-          img.height <= maxHeight
-                ) {
+          img.height <= maxHeight &&
+          Math.abs(aspectRatio - (3 / 4)) < 0.01  // Allow slight tolerance for aspect ratio
+        ) {
           setFormData({ ...formData, image: selectedFile });
+          setErrorMessage('');
         } else {
-          setErrorMessage('Image dimensions must be between 800x600 to 800x800 pixels .');
+          setErrorMessage('Image dimensions must be between 300x400 to 600x800 pixels with a 3:4 aspect ratio.');
+          setFormData({ ...formData, image: null });
         }
       };
   
@@ -49,6 +52,7 @@ function AddCategoryForm({ onSuccess }) {
       reader.readAsDataURL(selectedFile);
     }
   };
+  
   
   const handleAddSubmit = async (e) => {
     e.preventDefault();
@@ -112,7 +116,7 @@ function AddCategoryForm({ onSuccess }) {
             <div className="file-input-container">
               <label className="file-input-label">
                 Choose an image<br />
-                Image Upload (600x800 to 800x1200pixels):
+                300x400 to 600x800 pixels with a 3:4 aspect ratio
                 <input
                   type="file"
                   name="image"

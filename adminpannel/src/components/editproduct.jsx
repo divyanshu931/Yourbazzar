@@ -9,32 +9,38 @@ const EditProduct = ({ product, onClose, onSave }) => {
     price: "",
     category: "",
     bestProduct: false,
-    image: "",
   });
 
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (product) {
       setFormData({
         name: product.name,
         description: product.description,
-        price: product.price.toString(), // Convert price to string for display
+        price: product.price.toString(),
         category: product.category,
         bestProduct: product.bestProduct || false,
-        image: product.image || "",
       });
     }
-    
-    // Fetch categories from backend
+    fetchCategories();
+  }, [product]);
+
+  const fetchCategories = () => {
+    setLoading(true);
     axiosInstance.get("/api/categories/")
       .then(response => {
-        setCategories(response.data); // Assuming response.data is an array of category objects
+        setCategories(response.data);
+        setLoading(false);
       })
       .catch(error => {
         console.error("Error fetching categories:", error);
+        setError("Failed to fetch categories. Please try again later.");
+        setLoading(false);
       });
-  }, [product]);
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,15 +54,25 @@ const EditProduct = ({ product, onClose, onSave }) => {
     e.preventDefault();
     try {
       const { _id } = product;
-      const updatedProduct = {
-        ...formData,
-        price: Number(formData.price), // Convert price from string to number
+      const formDataToSend = {
+        name: formData.name,
+        description: formData.description,
+        price: Number(formData.price),
+        category: formData.category,
+        bestProduct: formData.bestProduct,
       };
-      await axiosInstance.patch(`/api/products/${_id}`, updatedProduct);
-      onSave(); // Notify the parent component to refresh the product list
-      onClose(); // Close the form
+
+      setLoading(true);
+
+      const response = await axiosInstance.put(`/api/products/products/${_id}`, formDataToSend);
+
+      setLoading(false);
+      onSave();
+      onClose();
     } catch (error) {
       console.error("Error updating product:", error);
+      setError("Failed to update product. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -64,74 +80,69 @@ const EditProduct = ({ product, onClose, onSave }) => {
     <div className="edit-product-form">
       <button className="close-btn" onClick={onClose}>×</button>
       <h3 className="main-title">Edit Product</h3>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Product Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Price:
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Category:
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select category</option>
-            {categories.map(category => (
-              <option key={category._id} value={category.name}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Best Product:
-          <input
-            type="checkbox"
-            name="bestProduct"
-            checked={formData.bestProduct}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Image URL:
-          <input
-            type="text"
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <button type="submit">Save</button>
-        <button type="button" onClick={onClose}>Cancel</button>
-      </form>
+      {error && <div className="error-message">{error}</div>}
+      {loading ? (
+        <div className="loading-container">Loading...</div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <label>
+            Product Name:
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Description:
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Price:
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Category:
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select category</option>
+              {categories.map(category => (
+                <option key={category._id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Best Product:
+            <input
+              type="checkbox"
+              name="bestProduct"
+              checked={formData.bestProduct}
+              onChange={handleChange}
+            />
+          </label>
+          <button type="submit">Save</button>
+          <button type="button" onClick={onClose}>Cancel</button>
+        </form>
+      )}
     </div>
   );
 };

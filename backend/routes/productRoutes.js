@@ -13,7 +13,7 @@ router.post('/products', upload.single('image'), productController.addProduct);
 router.delete('/products/:id', productController.deleteProduct);
 
 // Route to update a product by ID
-router.put('/products/:id', productController.updateProduct);
+router.put('/products/:id', upload.single('image'), productController.updateProduct);
 
 // Route to toggle approval of a product by ID
 router.patch('/products/approve/:id', productController.toggleProductApproval);

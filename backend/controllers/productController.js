@@ -78,21 +78,21 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// Update product details
+
 exports.updateProduct = async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'description', 'price', 'category', 'bestProduct', 'image', 'approved'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
-
-  if (!isValidOperation) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid updates!',
-    });
-  }
-
   try {
-    const product = await Product.findOne({ _id: req.params.id, sellerId: req.user._id });
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['name', 'description', 'price', 'category', 'bestProduct', 'image', 'approved'];
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid updates!',
+      });
+    }
+
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({
@@ -101,12 +101,20 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    updates.forEach((update) => (product[update] = req.body[update]));
-    await product.save();
+    updates.forEach(update => {
+      if (update === 'image' && req.file) {
+        // Update image if a new file is uploaded
+        product[update] = req.file.path;
+      } else {
+        product[update] = req.body[update];
+      }
+    });
+
+    const updatedProduct = await product.save();
 
     res.json({
       success: true,
-      data: product,
+      data: updatedProduct,
     });
   } catch (err) {
     res.status(400).json({
@@ -116,10 +124,9 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// Toggle approval status of a product
 exports.toggleProductApproval = async (req, res) => {
   try {
-    const product = await Product.findOne({ _id: req.params.id, sellerId: req.user._id });
+    const product = await Product.findOne({ _id: req.params.id });
 
     if (!product) {
       return res.status(404).json({
@@ -136,9 +143,10 @@ exports.toggleProductApproval = async (req, res) => {
       data: product,
     });
   } catch (err) {
+    console.error("Error toggling product approval:", err);
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: 'Failed to toggle approval status. Please try again later.',
     });
   }
 };
