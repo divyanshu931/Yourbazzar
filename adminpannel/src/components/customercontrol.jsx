@@ -3,6 +3,7 @@ import axiosInstance from "../apis/axiosInstance"; // Replace with your Axios in
 
 function CustomerControl() {
   const [customers, setCustomers] = useState([]);
+  const [customerEmails, setCustomerEmails] = useState({}); // State to store customer emails
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,6 +24,21 @@ function CustomerControl() {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching customers:", error);
+      setLoading(false);
+    }
+  };
+
+  const fetchCustomerEmail = async (customerId) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(`/api/customers/email/${customerId}`);
+      setCustomerEmails((prevEmails) => ({
+        ...prevEmails,
+        [customerId]: response.data.email,
+      }));
+      setLoading(false);
+    } catch (error) {
+      console.error(`Error fetching email for customer ${customerId}:`, error);
       setLoading(false);
     }
   };
@@ -49,15 +65,24 @@ function CustomerControl() {
     }
   };
 
-  const toggleEmailForm = (customerId) => {
+  const toggleEmailForm = async (customerId) => {
     setEmailFormOpen(!emailFormOpen); // Toggle the state to show/hide the Email Customer form
     setSelectedCustomerId(customerId); // Set the selected customer ID for sending email
+
+    if (customerId) {
+      // Fetch customer email if not already fetched
+      if (!customerEmails[customerId]) {
+        await fetchCustomerEmail(customerId);
+      }
+    }
   };
 
   const handleSendEmail = async () => {
     try {
       setLoading(true);
-      if (selectedCustomerId) {
+      const recipientEmail = selectedCustomerId ? customerEmails[selectedCustomerId] : null;
+
+      if (selectedCustomerId && recipientEmail) {
         // Send email to a specific customer
         await axiosInstance.post(`/api/customers/email/${selectedCustomerId}`, { subject: emailSubject, body: emailBody });
         setSuccessMessage("Email sent to customer successfully!");
@@ -66,6 +91,7 @@ function CustomerControl() {
         await axiosInstance.post(`/api/customers/email/all`, { subject: emailSubject, body: emailBody });
         setSuccessMessage("Email sent to all customers successfully!");
       }
+
       setLoading(false);
       setEmailFormOpen(false); // Close the Email Customer form after sending email
       setEmailSubject("");
@@ -96,6 +122,12 @@ function CustomerControl() {
       {emailFormOpen && (
         <div className="email-form">
           <h3>Email Form</h3>
+          {selectedCustomerId && customerEmails[selectedCustomerId] && (
+            <div className="form-group">
+              <label>To:</label>
+              <input type="text" value={customerEmails[selectedCustomerId]} readOnly />
+            </div>
+          )}
           <div className="form-group">
             <label>Subject:</label>
             <input type="text" value={emailSubject} onChange={(e) => setEmailSubject(e.target.value)} />
@@ -118,9 +150,7 @@ function CustomerControl() {
             <th>S.No</th>
             <th>Customer Name</th>
             <th>Email</th>
-            <th>last login</th>
-            
-          
+            <th>Last Login</th>
             <th>Delete</th>
             <th>Email</th>
           </tr>
@@ -128,7 +158,7 @@ function CustomerControl() {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="5">Loading...</td>
+              <td colSpan="6">Loading...</td>
             </tr>
           ) : (
             customers.map((customer, index) => (
