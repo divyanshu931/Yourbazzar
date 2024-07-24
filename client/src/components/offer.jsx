@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Slider from 'react-slick';
 import axiosInstance from '../apis/axiosInstance';
 import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -34,35 +34,27 @@ const TodayOffers = () => {
     return <p>{error}</p>;
   }
 
-  const settings = {
+  // Slider settings
+  const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
     autoplay: true,
     autoplaySpeed: 3000,
     slidesToShow: 3,
-    slidesToScroll: 3,
-    cssEase: "linear",
+    slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: 2,
+          slidesToScroll: 1,
           infinite: true,
           dots: true
         }
       },
       {
         breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2
-        }
-      },
-      {
-        breakpoint: 480,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1
@@ -79,30 +71,19 @@ const TodayOffers = () => {
           SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
         </Link>
       </div>
-      <Slider {...settings} className="home-cate">
+      <Slider {...sliderSettings} className="offer-details-container">
         {offers.map(offer => (
-          <div key={offer._id} style={{ padding: '0 0.5rem' }}>
-            <Link to={`/offer-details/${offer._id}`} style={{ textDecoration: 'none' }}>
-              <div
-                style={{
-                  backgroundColor: '#fff',
-                  borderRadius: '0.25rem',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                  overflow: 'hidden',
-                  transition: 'transform 0.2s ease-in-out',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', overflow: 'hidden' }}>
-                  <img src={offer.imageUrl} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} alt={offer.title} />
+          <div key={offer._id} className="offer-details">
+            <Link to={`/offer-details/${offer._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="offer-card">
+                <div className="offer-image">
+                  <img src={offer.imageUrl} alt={offer.title} />
                 </div>
-                <div style={{ padding: '1rem', textAlign: 'center' }}>
-                  <h5 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0.5rem 0' }}>{offer.title}</h5>
-                  <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#666' }}>{offer.description}</p>
-                  <p style={{ fontSize: '1rem', margin: '0.5rem 0', color: '#ff0000', fontWeight: 'bold' }}>Discount: {offer.discount}%</p>
-                  <p style={{ fontSize: '0.875rem', color: '#888' }}>Expiry Date: {new Date(offer.expiryDate).toLocaleDateString()}</p>
+                <div className="offer-content">
+                  <h5 className="offer-title">{offer.title}</h5>
+                  <p className="offer-description">{offer.description}</p>
+                  <p className="offer-discount">Discount: {offer.discount}%</p>
+                  <p className="offer-expiry">Expiry Date: {new Date(offer.expiryDate).toLocaleDateString()}</p>
                 </div>
               </div>
             </Link>

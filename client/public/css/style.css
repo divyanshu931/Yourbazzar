@@ -289,36 +289,76 @@ body {
 .footer-menu a {
     padding: 12px 12px !important;
 }
-
 .offer-details-container {
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .offer-details {
-    margin-top: 20px;
-    color:black
-  }
-  
-  .offer-title {
-    color: var(--theme);
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .offer-description {
-    margin-top: 10px;
-  }
-  
-  .offer-discount {
-    margin-top: 10px;
-  }
-  
-  .offer-expiry {
-    margin-top: 10px;
-  }
+  display: flex; /* Use flexbox */
+  overflow-x: hidden; /* Enable horizontal scrolling if needed */
+  padding: 20px; /* Adjust padding as needed */
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.offer-details {
+  margin-top: 20px;
+  color: black;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  text-align: center;
+  background: hsla(60, 100%, 100%, 0.981);
+}
+
+.offer-card {
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.offer-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* Adjust height as needed */
+  overflow: hidden; /* Ensure image does not overflow */
+  border-radius: 8px 8px 0 0; /* Rounded corners for top */
+}
+
+.offer-image img {
+  width: auto;
+  height: auto;
+  object-fit: cover; /* Maintain aspect ratio and cover entire container */
+  border-radius: 8px 8px 0 0; /* Rounded corners for top */
+}
+
+.offer-content {
+  padding: 1rem;
+}
+
+.offer-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.offer-description {
+  font-size: 1rem;
+  color: #1c1c1a;
+  margin: 0.5rem 0;
+}
+
+.offer-discount {
+  font-size: 1rem;
+  color: #ff0000;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.offer-expiry {
+  font-size: 0.875rem;
+  color: #888;
+  margin: 0.5rem 0;
+}
+
   
   .error-message {
     color: red;

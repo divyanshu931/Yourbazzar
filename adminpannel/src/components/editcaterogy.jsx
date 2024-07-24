@@ -32,11 +32,11 @@ const Editcategories = ({ category, onClose, onSave }) => {
       const img = new Image();
       img.onload = () => {
         const { width, height } = img;
-        if (width === 300 && height === 400) {
+        if (width === 600 && height === 800) {
           setErrorMessage(""); // Clear error message if dimensions are correct
           setFormData({ ...formData, imageFile: file }); // Store the selected image file
         } else {
-          setErrorMessage("Please upload an image with dimensions 300x400 pixels.");
+          setErrorMessage("Please upload an image with dimensions 600x800 pixels.");
         }
       };
       img.src = URL.createObjectURL(file);
