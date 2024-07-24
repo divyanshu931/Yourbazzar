@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/layout/layout_';
-import BestSellingProducts from '../components/bestproducts';
+import { Link } from 'react-router-dom';
 
 const ProductDetailPage = () => {
   const { productId } = useParams(); // Get the product ID from route parameters
@@ -115,8 +115,9 @@ const ProductDetailPage = () => {
                 {/* You might want to remove these buttons if they are not relevant */}
               </div>
               <div className="d-flex align-items-center mt-3">
-                <button className="btn btn-success me-2">Add to Cart</button>
-                <button className="btn btn-outline-secondary">Buy Now</button>
+                {/* Use Link to navigate to the Buy Now page */}
+                <Link to={`/buy/${productId}`} className="btn btn-success me-2">Buy now</Link>
+                <button className="btn btn-outline-secondary">Add to cart</button>
               </div>
               <div className="mt-4">
                 <h4 className="fw-bold text-dark">Customer Reviews</h4>

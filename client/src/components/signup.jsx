@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosWithAuth";
+import Cookies from "universal-cookie";
 
 function SignUp({ toggleSidebar }) {
   const [email, setEmail] = useState("");
@@ -9,8 +10,9 @@ function SignUp({ toggleSidebar }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [loading, setLoading] = useState(false); // To handle loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -26,37 +28,37 @@ function SignUp({ toggleSidebar }) {
       return;
     }
 
-    setLoading(true); // Start loading state
+    setLoading(true);
 
     try {
-      // Send request to backend to send OTP to user's email
       const response = await axiosInstance.post("api/otp/send-otp", { email });
 
       console.log("API Response:", response);
 
       if (response.status === 200) {
-        localStorage.setItem("signupData", JSON.stringify({
+        // Store sign-up data in cookies
+        cookies.set("signupData", {
           email,
           name,
           password,
           confirmPassword,
           expiresAt: new Date().getTime() + 10 * 60 * 1000, // 10 minutes from now
-        }));
+        });
+
         setOtpSent(true);
-        // Navigate to verification page with user data
         navigate(`/verification`, { state: { email } });
       } else {
         setError("Error sending OTP. Please try again.");
       }
     } catch (err) {
-      console.error("API Error:", err); // Log the error
+      console.error("API Error:", err);
       if (err.response && err.response.status === 400) {
         setError(err.response.data.message);
       } else {
         setError("Error sending OTP. Please try again.");
       }
     } finally {
-      setLoading(false); // Stop loading state
+      setLoading(false);
     }
   };
 
@@ -71,11 +73,7 @@ function SignUp({ toggleSidebar }) {
             Sign Up
           </h6>
           <div className="ms-auto d-flex align-items-center">
-            <a
-              className="toggle osahan-toggle fs-4 text-dark ms-auto"
-              href="#"
-              onClick={toggleSidebar}
-            >
+            <a className="toggle osahan-toggle fs-4 text-dark ms-auto" href="#" onClick={toggleSidebar}>
               <i className="bi bi-list"></i>
             </a>
           </div>
@@ -148,7 +146,7 @@ function SignUp({ toggleSidebar }) {
           <button
             type="submit"
             className="btn btn-success btn-lg w-100 shadow"
-            disabled={loading || otpSent} // Disable button while loading or OTP sent
+            disabled={loading || otpSent}
           >
             {loading ? "Loading..." : otpSent ? "OTP SENT" : "SEND OTP"}
           </button>

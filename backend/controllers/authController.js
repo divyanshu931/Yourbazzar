@@ -110,18 +110,18 @@ exports.login = async (req, res) => {
       expiresIn: '8h',
     });
 
-    // Return name, email, and token in response
+    // Return name, email, role, and token in response
     return res.status(200).json({
       success: true,
       message: 'Logged in successfully',
       token,
-     
+      userId: user._id,
+      role: user.role,
       name: user.name,
       email: user.email,
-      role: user.role
     });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ success: false, error: error.message });
+    console.error(error.message);
+    return res.status(500).json({ success: false, error: 'Server Error' });
   }
 };

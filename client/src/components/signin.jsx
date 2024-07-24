@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
+import Cookies from "universal-cookie";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false); // New loading state
+  const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   const handleSignIn = async (event) => {
     event.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const response = await axiosInstance.post("/api/auth/login", {
@@ -22,22 +24,25 @@ function SignIn() {
       if (response.data.token) {
         const token = response.data.token;
         const expirationTime = new Date().getTime() + 3600 * 1000; // 1 hour from now in milliseconds
-        localStorage.setItem("token", token);
-        localStorage.setItem("expirationTime", expirationTime);
-        setTimeout(() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("expirationTime");
-        }, 3600 * 1000); // Remove token and expiration time after 1 hour
 
+        // Set cookies for token, userId, role, name, and email
+        cookies.set("token", token, { path: "/", expires: new Date(expirationTime) });
+        cookies.set("userId", response.data.userId, { path: "/" });
+        cookies.set("role", response.data.role, { path: "/" });
+        cookies.set("name", response.data.name, { path: "/" });
+        cookies.set("email", response.data.email, { path: "/" });
+
+        // Navigate to home page
         navigate("/home");
       }
     } catch (err) {
       setError("Invalid credentials. Please try again.");
       console.error(err);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
+
 
   return (
     <>
@@ -52,7 +57,6 @@ function SignIn() {
         </div>
       </div>
 
-      {/* Body */}
       <div className="p-4">
         <form onSubmit={handleSignIn}>
           <div className="mb-4">
@@ -86,7 +90,6 @@ function SignIn() {
             </div>
           </div>
           {error && <p className="text-danger">{error}</p>}
-          {/* Conditional rendering of button or loading state */}
           {!isLoading ? (
             <button type="submit" className="btn btn-success btn-lg w-100 shadow">
               SIGN IN
@@ -100,7 +103,6 @@ function SignIn() {
         </form>
       </div>
 
-      {/* Fixed Bottom */}
       <div className="osahan-footer fixed-bottom p-3 text-center">
         <div className="h6">by continue, you agree to our</div>
         <p className="text-success mb-3">

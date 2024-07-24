@@ -10,7 +10,7 @@ import SignUp from './components/signup';
 import Verification from './components/verification.jsx';
 import OfferDetails from './Pages/offer_.jsx';
 import Home from './Pages/home.jsx';
-import ShoppingCart from './Pages/shopingcart.jsx';
+import Buynow from './Pages/shopingcart.jsx';
 import ProductDetailPage from './Pages/product_details.jsx';
 import Productbycategory from './Pages/categorybyname.jsx';
 import AllOffers from './Pages/all-offer.jsx';
@@ -58,7 +58,7 @@ function App() {
             <Route path="/offers" element={<AllOffers />} />
             <Route path="/category/:categoryName" element={<Productbycategory />} />
             <Route path="/product-detail/:productId" element={<ProductDetailPage />} />
-            <Route path="/bag" element={<ShoppingCart />} />
+            <Route path="/buy/:productId" element={<Buynow />} />
             <Route path="/FAQ" element={<FaqPage />} />
             <Route path="/signout" element={<SignOut />} /> {/* Add the SignOut route */}
             <Route path="*" element={<NotFound />} /> {/* Route for 404 Not Found */}
