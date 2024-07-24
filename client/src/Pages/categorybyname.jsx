@@ -53,7 +53,7 @@ const Productbycategory = () => {
             products.map((product) => (
               <div className="d-flex bag-item position-relative p-3 border-bottom align-items-center fit-screen" key={product._id}>
                 <div className="bag-item-left me-3">
-                  <img src={product.image} className="img-fluid rounded-3 border" alt={product.name} />
+                  <img  src={`${axiosInstance.defaults.baseURL}/${product.image}`}className="img-fluid rounded-3 border" alt={product.name} />
                 </div>
                 <div className="bag-item-right w-100">
                   <div className="card-body pe-0 py-0">

@@ -10,6 +10,7 @@ exports.getCounts = async (req, res) => {
     
     // Count users based on roles
     const adminCount = await User.countDocuments({ role: 'Admin' });
+    const sellerCount = await User.countDocuments({ role: 'Seller' });
     const customerCount = await User.countDocuments({ role: 'Customer' });
 
     const offerCount = await Offer.countDocuments();
@@ -21,6 +22,7 @@ exports.getCounts = async (req, res) => {
       adminCount,
       customerCount,
       offerCount,
+      sellerCount
     });
   } catch (err) {
     console.error(err.message);

@@ -3,8 +3,8 @@ import axiosInstance from '../apis/axiosInstance';
 import { Link } from 'react-router-dom';
 
 const ProductListing = () => {
-  const [activeCategory, setActiveCategory] = useState('dairy');
-  const [categories] = useState(['dairy', 'Cold drinks', 'Personal care', 'Home']);
+  const [activeCategory, setActiveCategory] = useState('Dairy');
+  const [categories] = useState(['Dairy', 'Cold drinks', 'Personal care', 'Home']);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -87,7 +87,7 @@ const ProductListing = () => {
                   <div className="list-item-img p-4">
                   
                     <img
-                      src={product.image}
+                   src={`${axiosInstance.defaults.baseURL}/${product.image}`}
                       className="img-fluid p-3"
                       alt={product.name}
                       style={{ maxHeight: '200px', objectFit: 'cover' }}

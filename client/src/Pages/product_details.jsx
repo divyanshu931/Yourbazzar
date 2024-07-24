@@ -71,7 +71,7 @@ const ProductDetailPage = () => {
                       style={{ overflow: 'hidden', cursor: 'crosshair' }}
                     >
                       <img
-                        src={product.image}
+                        src={`${axiosInstance.defaults.baseURL}/${product.image}`}
                         className="d-block w-100"
                         alt={product.name}
                         style={{ transform: `scale(1.1)` }} // Slightly zoomed in for better hover effect
@@ -91,7 +91,7 @@ const ProductDetailPage = () => {
                           }}
                         >
                           <img
-                            src={product.image}
+                          src={`${axiosInstance.defaults.baseURL}/${product.image}`}
                             className="mw-100 mh-100"
                             style={{
                               transform: 'scale(2)', // Zoom factor for magnifying glass

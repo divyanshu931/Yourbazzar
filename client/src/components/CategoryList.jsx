@@ -98,6 +98,7 @@ const CategoryList = () => {
                 onError={handleImageError}
                 onLoad={(e) => (e.target.style.opacity = 1)}
                 loading="lazy"
+                
               />
               <p style={nameStyle}>{category.name}</p>
             </Link>

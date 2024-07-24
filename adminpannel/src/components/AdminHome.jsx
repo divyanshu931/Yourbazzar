@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
-  BsFillArchiveFill,
-  BsFillGrid3X3GapFill,
+  BsArchiveFill,
+  BsGrid3X3GapFill,
   BsPeopleFill,
-  BsFillBellFill,
+  BsFillPersonFill,
+  BsTagFill,
+  BsShopWindow,
 } from "react-icons/bs";
 import {
   BarChart,
@@ -37,6 +39,7 @@ function AdminHome() {
           adminCount,
           customerCount,
           offerCount,
+          sellerCount
         } = response.data;
 
         setStats({
@@ -45,6 +48,7 @@ function AdminHome() {
           customers: customerCount,
           admins: adminCount,
           offers: offerCount,
+          seller: sellerCount,
         });
 
         // Assuming response.data.chartData is properly formatted for recharts
@@ -58,8 +62,8 @@ function AdminHome() {
     fetchData();
   }, []);
 
-  return (  <>
-   
+  return (
+    <>
       <div className="main-title">
         <h3>DASHBOARD</h3>
       </div>
@@ -68,14 +72,14 @@ function AdminHome() {
         <div className="cardd">
           <div className="cardd-inner">
             <h3>PRODUCTS</h3>
-            <BsFillArchiveFill className="cardd_icon" />
+            <BsArchiveFill className="cardd_icon" />
           </div>
           <h1>{stats.products}</h1>
         </div>
         <div className="cardd">
           <div className="cardd-inner">
             <h3>CATEGORIES</h3>
-            <BsFillGrid3X3GapFill className="cardd_icon" />
+            <BsGrid3X3GapFill className="cardd_icon" />
           </div>
           <h1>{stats.categories}</h1>
         </div>
@@ -88,17 +92,24 @@ function AdminHome() {
         </div>
         <div className="cardd">
           <div className="cardd-inner">
-            <h3>Admins</h3>
-            <BsFillBellFill className="cardd_icon" />
+            <h3>ADMINS</h3>
+            <BsFillPersonFill className="cardd_icon" />
           </div>
           <h1>{stats.admins}</h1>
         </div>
         <div className="cardd">
           <div className="cardd-inner">
-            <h3>Offers</h3>
-            <BsFillBellFill className="cardd_icon" />
+            <h3>OFFERS</h3>
+            <BsTagFill className="cardd_icon" />
           </div>
           <h1>{stats.offers}</h1>
+        </div>
+        <div className="cardd">
+          <div className="cardd-inner">
+            <h3>SELLERS</h3>
+            <BsShopWindow className="cardd_icon" />
+          </div>
+          <h1>{stats.seller}</h1>
         </div>
       </div>
 
@@ -137,10 +148,8 @@ function AdminHome() {
             <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
-        
       </div>
-
-  </>
+    </>
   );
 }
 

@@ -180,7 +180,9 @@ body {
 .cardd:nth-child(5) {
   background-color: #d5a300;
 }
-
+.cardd:nth-child(6) {
+  background-color: #7bea65;
+}
 .cardd-inner {
   display: flex;
   align-items: center;

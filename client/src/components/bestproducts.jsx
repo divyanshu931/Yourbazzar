@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const BestSellingProducts = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,10 +61,10 @@ const BestSellingProducts = () => {
   if (loading) {
     return (
       <div className="loading-container text-center p-3">
-       
+
         <div className="spinner-border text-black" role="status">
           <span className="visually-hidden">Loading...</span>
-      
+
         </div>
       </div>
     );
@@ -84,13 +84,15 @@ const BestSellingProducts = () => {
               <div className="card border shadow-sm rounded-3">
                 <div className="image-container">
                   <img
-                    src={product.image}
+                    src={`${axiosInstance.defaults.baseURL}/${product.image}`}
                     className="card-img-top p-3"
                     alt={product.name}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover' 
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                      width: 'auto',
+                      height: 'auto',
+                      objectFit: 'contain'  // Use 'contain' or 'cover' based on your preference
                     }}
                   />
                 </div>

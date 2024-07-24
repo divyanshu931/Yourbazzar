@@ -80,6 +80,7 @@ const EditProduct = ({ product, onClose, onSave }) => {
     <div className="edit-product-form">
       <button className="close-btn" onClick={onClose}>×</button>
       <h3 className="main-title">Edit Product</h3>
+      <p style={{ fontStyle: "italic",color:"black"}}>Note: Product photo cannot be directly updated. If you need to change the photo, please delete the product and re-upload it with the new photo. Ensure the photo size meets the specified requirements.</p>
       {error && <div className="error-message">{error}</div>}
       {loading ? (
         <div className="loading-container">Loading...</div>
