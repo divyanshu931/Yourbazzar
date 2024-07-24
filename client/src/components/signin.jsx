@@ -6,10 +6,13 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate();
 
   const handleSignIn = async (event) => {
     event.preventDefault();
+    setLoading(true); // Start loading
+
     try {
       const response = await axiosInstance.post("/api/auth/login", {
         email,
@@ -31,6 +34,8 @@ function SignIn() {
     } catch (err) {
       setError("Invalid credentials. Please try again.");
       console.error(err);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -81,9 +86,17 @@ function SignIn() {
             </div>
           </div>
           {error && <p className="text-danger">{error}</p>}
-          <button type="submit" className="btn btn-success btn-lg w-100 shadow">
-            SIGN IN
-          </button>
+          {/* Conditional rendering of button or loading state */}
+          {!isLoading ? (
+            <button type="submit" className="btn btn-success btn-lg w-100 shadow">
+              SIGN IN
+            </button>
+          ) : (
+            <button className="btn btn-success btn-lg w-100 shadow" disabled>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+          )}
         </form>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faHome, faGift, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [authSubMenuOpen, setAuthSubMenuOpen] = useState(false);
   const [profileSubMenuOpen, setProfileSubMenuOpen] = useState(false);
   const [extraSubMenuOpen, setExtraSubMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
 
   const toggleAuthSubMenu = () => {
     setAuthSubMenuOpen(!authSubMenuOpen);
@@ -30,14 +37,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <h3 className="m-0 fw-bold  text-black">Your <span className="text-success">Bajaar</span></h3>
+        <h3 className="m-0 fw-bold text-black">Your <span className="text-success">Bajaar</span></h3>
         <button className="close-btn" onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
       <ul className="sidebar-menu">
         <li>
-          <Link to="/home" onClick={handleLinkClick}>
+          <Link to="/Landing_2" onClick={handleLinkClick}>
             <i className="bi bi-code-square me-2"></i> Splash
           </Link>
         </li>
@@ -56,27 +63,34 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <i className="bi bi-lock me-2"></i> Authentication
           </a>
           <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
-            <li><Link to="/signin" onClick={handleLinkClick}>Sign In</Link></li>
-            <li><Link to="/signup" onClick={handleLinkClick}>Sign Up</Link></li>
-            <li><Link to="/change-password" onClick={handleLinkClick}>Change Password</Link></li>
-            <li><Link to="/verification" onClick={handleLinkClick}>Verification</Link></li>
+            {!isAuthenticated && (
+              <>
+                <li><Link to="/signin" onClick={handleLinkClick}>Sign In</Link></li>
+                <li><Link to="/signup" onClick={handleLinkClick}>Sign Up</Link></li>
+                <li><Link to="/verification" onClick={handleLinkClick}>Verification</Link></li>
+              </>
+            )}
+            {isAuthenticated && (
+              <>
+                <li><Link to="/change-password" onClick={handleLinkClick}>Change Password</Link></li>
+                <li><Link to="/signout" onClick={handleLinkClick}>Sign Out</Link></li>
+              </>
+            )}
           </ul>
         </li>
         <li>
           <Link to="/home" onClick={handleLinkClick}><i className="bi bi-house me-2"></i> Homepage</Link>
         </li>
         <li>
-          <Link to="/gift-card" onClick={handleLinkClick}><i className="bi bi-award me-2"></i> Offers</Link>
+          <Link to="/offers" onClick={handleLinkClick}><i className="bi bi-award me-2"></i> Offers</Link>
         </li>
         <li>
-          <Link to="/listing." onClick={handleLinkClick}><i className="bi bi-list-task me-2"></i> Listing</Link>
+          <Link to="/whislist" onClick={handleLinkClick}><i className="bi bi-list-task me-2"></i> whislist</Link>
         </li>
         <li>
-        <Link to="/bag" onClick={handleLinkClick} style={{ display: 'block', padding: '10px', textDecoration: 'none', color: 'inherit' }}>
-  <i className="bi bi-bag me-2"></i> Bag
-</Link>
-
-
+          <Link to="/bag" onClick={handleLinkClick}>
+            <i className="bi bi-bag me-2"></i> Bag
+          </Link>
         </li>
         <li className={profileSubMenuOpen ? 'active' : ''}>
           <a href="#!" onClick={(e) => { e.preventDefault(); toggleProfileSubMenu(); }}>
@@ -95,8 +109,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </a>
           <ul className={`sub-menu ${extraSubMenuOpen ? 'open' : ''}`}>
             <li><Link to="/support" onClick={handleLinkClick}>Support</Link></li>
-            <li><Link to="/notification" onClick={handleLinkClick}>Notification</Link></li>
-            <li><Link to="/empty" onClick={handleLinkClick}>Empty Cart</Link></li>
+            <li><Link to="/notification" onClick={handleLinkClick}>contact</Link></li>
+            <li><Link to="/empty" onClick={handleLinkClick}></Link> term & condition</li>
           </ul>
         </li>
       </ul>
@@ -108,7 +122,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </Link>
         </li>
         <li className="github">
-          <Link className={`nav-item text-center ${location.pathname === '/gift-card' ? 'active' : ''}`} to="/gift-card" tabIndex="0" role="menuitem">
+          <Link className={`nav-item text-center ${location.pathname === '/gift-card' ? 'active' : ''}`} to="/offers" tabIndex="0" role="menuitem">
             <p className="h5 m-0"><FontAwesomeIcon icon={faGift} /></p>
             Offers
           </Link>
