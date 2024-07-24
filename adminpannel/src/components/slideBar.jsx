@@ -57,6 +57,11 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
               </Link>
             </li>
             <li className="sidebar-list-item">
+              <Link to="/offer-dashboard">
+                <BsFillGrid3X3GapFill className="icon" /> Offer
+              </Link>
+            </li>
+            <li className="sidebar-list-item">
               <Link to="/admin-control">
                 <BsMenuButtonWideFill className="icon" /> Admin Control
               </Link>
