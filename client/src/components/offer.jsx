@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+
 const TodayOffers = () => {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,14 +41,14 @@ const TodayOffers = () => {
     infinite: true,
     speed: 500,
     autoplay: true,
-    autoplaySpeed: 3000,
-    slidesToShow: 3,
+    autoplaySpeed: 1800,
+    slidesToShow: 4,
     slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
           slidesToScroll: 1,
           infinite: true,
           dots: true
@@ -64,28 +65,19 @@ const TodayOffers = () => {
   };
 
   return (
-    <div style={{ padding: '1rem 0', zIndex: '998', position: 'relative' }}>
-      <div style={{ padding: '0 1rem', display: 'flex', justifyContent: 'space-between' }}>
-        <h6 style={{ marginBottom: '0.5rem', color: 'black', fontWeight: 'bold' }}>Today's Offers</h6>
-        <Link to="/offers" style={{ color: 'green', textDecoration: 'none' }}>
+    <div className="py-3">
+      <div className="px-3 d-flex justify-content-between">
+        <h6 className="mb-2 text-black fw-bold">Today's Offers</h6>
+        <Link to="/offers" className="text-success text-decoration-none">
           SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
         </Link>
       </div>
-      <Slider {...sliderSettings} className="offer-details-container">
-        {offers.map(offer => (
-          <div key={offer._id} className="offer-details">
-            <Link to={`/offer-details/${offer._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className="offer-card">
-                <div className="offer-image">
-                  <img src={offer.imageUrl} alt={offer.title} />
-                </div>
-                <div className="offer-content">
-                  <h5 className="offer-title">{offer.title}</h5>
-                  <p className="offer-description">{offer.description}</p>
-                  <p className="offer-discount">Discount: {offer.discount}%</p>
-                  <p className="offer-expiry">Expiry Date: {new Date(offer.expiryDate).toLocaleDateString()}</p>
-                </div>
-              </div>
+
+      <Slider {...sliderSettings} className="slick-slider">
+        {offers.map((offer, index) => (
+          <div key={index} className="home-productc">
+            <Link to={`/offer-details/${offer._id}`}>
+              <img src={`${offer.imageUrl} `}className="img-fluid" alt={offer.title} style={{ width: '400px', height: '400px', objectFit: 'zoomout' }} />
             </Link>
           </div>
         ))}

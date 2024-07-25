@@ -82,20 +82,13 @@ const BestSellingProducts = () => {
           <Link to={`/product-detail/${product._id}`} key={product._id} className="text-decoration-none">
             <div className="home-product">
               <div className="card border shadow-sm rounded-3">
-                <div className="image-container">
+              
                   <img
                     src={`${axiosInstance.defaults.baseURL}/${product.image}`}
-                    className="card-img-top p-3"
+                    class="card-img-top rounded-3 p-3" 
                     alt={product.name}
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '100%',
-                      width: 'auto',
-                      height: 'auto',
-                      objectFit: 'contain'  // Use 'contain' or 'cover' based on your preference
-                    }}
-                  />
-                </div>
+                     />
+                
                 <div className="card-body p-2 border-top">
                   <p className="card-text m-0 d-flex align-items-center" style={{ color: 'black' }}>
                     {product.name}

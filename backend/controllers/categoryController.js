@@ -13,7 +13,7 @@ const getAllCategories = async (req, res) => {
 
 // Create a new category
 const createCategory = async (req, res) => {
-  const { name, description } = req.body;
+  const { name} = req.body;
 
   try {
     // Check if file was uploaded
@@ -25,7 +25,6 @@ const createCategory = async (req, res) => {
     const newCategory = new Category({
       name: name,
       image: req.file.path, // Store the path to the uploaded image
-      description: description
     });
 
     const savedCategory = await newCategory.save();
@@ -48,7 +47,7 @@ const getCategoryById = async (req, res) => {
   }
 };
 
-// Update a category
+
 // Update a category
 const updateCategory = async (req, res) => {
   try {
@@ -62,9 +61,7 @@ const updateCategory = async (req, res) => {
       category.image = req.file.path; // Update the image path if a new file is uploaded
     }
 
-    if (req.body.description != null) {
-      category.description = req.body.description;
-    }
+  
 
     const updatedCategory = await category.save();
     res.json(updatedCategory);

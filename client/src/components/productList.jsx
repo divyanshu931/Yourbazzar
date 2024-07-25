@@ -90,7 +90,7 @@ const ProductListing = () => {
                    src={`${axiosInstance.defaults.baseURL}/${product.image}`}
                       className="img-fluid p-3"
                       alt={product.name}
-                      style={{ maxHeight: '200px', objectFit: 'cover' }}
+                     
                     />
                   </div>
                   </Link>

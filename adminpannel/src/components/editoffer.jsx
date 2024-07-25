@@ -9,13 +9,36 @@ const EditOffer = ({ offer, onClose, onSave }) => {
     discount: offer.discount,
     expiryDate: offer.expiryDate,
     imageUrl: offer.imageUrl,
+    imageFile: null, // New state to handle file upload
   });
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "imageFile") {
+      const file = e.target.files[0];
+      // Validate file type and dimensions
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            if (img.width === 720 && img.height === 418) {
+              setFormData({ ...formData, imageUrl: event.target.result, imageFile: file });
+              setErrorMessage("");
+            } else {
+              setFormData({ ...formData, imageUrl: null, imageFile: null });
+              setErrorMessage("Image must be exactly 720x418 pixels.");
+            }
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -32,15 +55,14 @@ const EditOffer = ({ offer, onClose, onSave }) => {
         return;
       }
 
-      const updatedOffer = {
-        title: formData.title,
-        description: formData.description,
-        discount: formData.discount,
-        expiryDate: formData.expiryDate,
-        imageUrl: formData.imageUrl,
-      };
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("discount", formData.discount);
+      formDataToSend.append("expiryDate", formData.expiryDate);
+      formDataToSend.append("image", formData.imageFile);
 
-      await axiosInstance.put(`/api/offers/update/${_id}`, updatedOffer);
+      await axiosInstance.put(`/api/offers/update/${_id}`, formDataToSend);
       setSuccessMessage("Offer Updated Successfully");
       onSave(); // Notify the parent component to refresh the offer list or take other actions
       onClose(); // Close the form
@@ -102,13 +124,12 @@ const EditOffer = ({ offer, onClose, onSave }) => {
           />
         </label>
         <label>
-          Image URL:
+          Image (PNG or AVIF format, 720x418 pixels):
           <input
-            type="text"
-            name="imageUrl"
-            value={formData.imageUrl}
+            type="file"
+            name="imageFile"
             onChange={handleChange}
-            required
+            accept=".png,.avif"
           />
         </label>
         <div className="form-buttons">

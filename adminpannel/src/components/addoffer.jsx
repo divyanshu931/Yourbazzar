@@ -9,7 +9,7 @@ const AddOffer = ({ onClose, onAdd }) => {
     description: "",
     discount: "",
     expiryDate: "",
-    imageUrl: "",
+    imageFile: null, // Store the image file
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -17,9 +17,25 @@ const AddOffer = ({ onClose, onAdd }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Function to handle input changes
+  // Function to handle input changes including file input
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "imageFile") {
+      const file = e.target.files[0];
+      // Check if a file is selected
+      if (file) {
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        // Check if the selected file is either PNG or AVIF
+        if (fileExtension === "png" || fileExtension === "avif") {
+          setFormData({ ...formData, [e.target.name]: file });
+          setErrorMessage(""); // Clear any previous error message
+        } else {
+          setFormData({ ...formData, imageFile: null });
+          setErrorMessage("Please upload a PNG or AVIF image."); // Display error message for unsupported format
+        }
+      }
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   // Function to handle form submission
@@ -27,7 +43,14 @@ const AddOffer = ({ onClose, onAdd }) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/api/offers/create", formData);
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("discount", formData.discount);
+      formDataToSend.append("expiryDate", formData.expiryDate);
+      formDataToSend.append("image", formData.imageFile); // Append image file
+
+      const response = await axiosInstance.post("/api/offers/create", formDataToSend);
       setLoading(false);
       if (response.status === 201) {
         setErrorMessage(""); // Clear any previous error message
@@ -55,88 +78,86 @@ const AddOffer = ({ onClose, onAdd }) => {
 
   return (
     <AdminLayout>
-     <div className="main-container">
-    
-      <div className="add-offer-form">
-      <h3 className="main-title">Add Offer</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Title:</label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="form-input"
-              required
-              placeholder="Enter title"
-            />
-          </div>
-          <div className="form-group">
-            <label>Description:</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="form-input"
-              required
-              placeholder="Enter description"
-            />
-          </div>
-          <div className="form-group">
-            <label>Discount (%):</label>
-            <input
-              type="number"
-              name="discount"
-              value={formData.discount}
-              onChange={handleChange}
-              className="form-input"
-              required
-              placeholder="Enter discount"
-            />
-          </div>
-          <div className="form-group">
-            <label>Expiry Date:</label>
-            <input
-              type="date"
-              name="expiryDate"
-              value={formData.expiryDate}
-              onChange={handleChange}
-              className="form-input"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Image URL:</label>
-            <input
-              type="text"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              className="form-input"
-              required
-              placeholder="Enter image URL"
-            />
-          </div>
-          <div className="form-buttons">
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? "Adding..." : "Add"}
-            </button>
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
-          {errorMessage && (
-            <p className="error-message">{errorMessage}</p>
-          )}
-          {successMessage && (
-            <p className="success-message">{successMessage}</p>
-          )}
-        </form>
+      <div className="main-container">
+        <div className="add-offer-form">
+          <h3 className="main-title">Add Offer</h3>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Title:</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Enter title"
+              />
+            </div>
+            <div className="form-group">
+              <label>Description:</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Enter description"
+              />
+            </div>
+            <div className="form-group">
+              <label>Discount (%):</label>
+              <input
+                type="number"
+                name="discount"
+                value={formData.discount}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Enter discount"
+              />
+            </div>
+            <div className="form-group">
+              <label>Expiry Date:</label>
+              <input
+                type="date"
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Image (PNG or AVIF format):</label>
+              <input
+                type="file" // Use type="file" for file input
+                name="imageFile"
+                onChange={handleChange}
+                className="form-input"
+                accept=".png,.avif" // Accept PNG and AVIF files
+                required
+              />
+            </div>
+            <div className="form-buttons">
+              <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? "Adding..." : "Add"}
+              </button>
+              <button type="button" className="cancel-btn" onClick={onClose}>
+                Cancel
+              </button>
+            </div>
+            {errorMessage && (
+              <p className="error-message">{errorMessage}</p>
+            )}
+            {successMessage && (
+              <p className="success-message">{successMessage}</p>
+            )}
+          </form>
+        </div>
       </div>
-    </div>
-</AdminLayout> 
-);
+    </AdminLayout>
+  );
 };
 
 export default AddOffer;

@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 // File filter function to restrict file types if needed
 const fileFilter = (req, file, cb) => {
   // Allowed file types
-  const allowedTypes = /jpeg|jpg|png/;
+  const allowedTypes = /jpeg|jpg|png|avif/; // Add AVIF format here
   // Check extension
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
   // Check mime type
@@ -24,7 +24,7 @@ const fileFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true); // Accept the file
   } else {
-    cb(new Error('Only JPEG, JPG, or PNG files are allowed'), false); // Reject the file
+    cb(new Error('Only JPEG, JPG, PNG, or AVIF files are allowed'), false); // Reject the file
   }
 };
 

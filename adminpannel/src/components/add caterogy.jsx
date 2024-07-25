@@ -5,8 +5,7 @@ import AdminLayout from './layout/AdminLayout';
 function AddCategoryForm({ onSuccess }) {
   const [formData, setFormData] = useState({
     name: '',
-    image: null,
-    description: ''
+    image: null
   });
 
   const [loading, setLoading] = useState(false);
@@ -20,40 +19,35 @@ function AddCategoryForm({ onSuccess }) {
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
     const reader = new FileReader();
-  
+
     reader.onload = (event) => {
       const img = new Image();
       img.onload = () => {
-        const aspectRatio = img.width / img.height;
-        const minWidth = 300;
-        const maxWidth = 600;
-        const minHeight = 400;
-        const maxHeight = 800;
-  
+        const { width, height } = img;
+        // Check image dimensions and format
         if (
-          img.width >= minWidth &&
-          img.width <= maxWidth &&
-          img.height >= minHeight &&
-          img.height <= maxHeight &&
-          Math.abs(aspectRatio - (3 / 4)) < 0.01  // Allow slight tolerance for aspect ratio
+          width === 270 &&
+          height === 396 &&
+          (selectedFile.type === 'image/png' || selectedFile.type === 'image/avif')
         ) {
-          setFormData({ ...formData, image: selectedFile });
-          setErrorMessage('');
+          setErrorMessage(''); // Clear error message if dimensions and format are correct
+          setFormData({ ...formData, image: selectedFile }); // Store the selected image file
         } else {
-          setErrorMessage('Image dimensions must be between 300x400 to 600x800 pixels with a 3:4 aspect ratio.');
+          setErrorMessage(
+            'Please upload an image with dimensions 270x396 pixels in PNG or AVIF format.'
+          );
           setFormData({ ...formData, image: null });
         }
       };
-  
+
       img.src = event.target.result;
     };
-  
+
     if (selectedFile) {
       reader.readAsDataURL(selectedFile);
     }
   };
-  
-  
+
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -64,7 +58,6 @@ function AddCategoryForm({ onSuccess }) {
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('image', formData.image);
-      formDataToSend.append('description', formData.description);
 
       const response = await axiosInstance.post('/api/categories/create', formDataToSend, {
         headers: {
@@ -77,8 +70,7 @@ function AddCategoryForm({ onSuccess }) {
         setSuccessMessage('Category successfully added!');
         setFormData({
           name: '',
-          image: null,
-          description: ''
+          image: null
         });
         if (typeof onSuccess === 'function') {
           onSuccess();
@@ -103,7 +95,7 @@ function AddCategoryForm({ onSuccess }) {
 
         <div className="add-category-form-container">
           <form className="add-category-form" onSubmit={handleAddSubmit}>
-            {/* Point to notice: Category name must be unique */}
+            {/* Category name */}
             <input
               type="text"
               name="name"
@@ -113,14 +105,15 @@ function AddCategoryForm({ onSuccess }) {
               className="form-input"
               required
             />
+            {/* Image upload */}
             <div className="file-input-container">
               <label className="file-input-label">
                 Choose an image<br />
-                300x400 to 600x800 pixels with a 3:4 aspect ratio
+                270x396 pixels in PNG or AVIF format
                 <input
                   type="file"
                   name="image"
-                  accept="image/*"
+                  accept="image/png, image/avif"
                   onChange={handleImageChange}
                   className="file-input"
                   required
@@ -130,22 +123,14 @@ function AddCategoryForm({ onSuccess }) {
                 <span className="selected-file-name">{formData.image.name}</span>
               )}
             </div>
-            <input
-              type="text"
-              name="description"
-              placeholder="Description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className="form-input"
-            />
+            {/* Form submission */}
             <div className="form-buttons">
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? 'Adding...' : 'Add'}
               </button>
             </div>
-            {/* Point to notice: Display error message if category name is not unique */}
+            {/* Error and success messages */}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            {/* Point to notice: Display success message upon successful category addition */}
             {successMessage && <p className="success-message">{successMessage}</p>}
           </form>
         </div>

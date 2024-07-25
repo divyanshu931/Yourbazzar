@@ -537,3 +537,18 @@ body {
 .z-index-fixed {
     z-index: 999;
 }
+.slick-slider {
+  opacity: 0;
+  animation: slideInRight 0.5s forwards;
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

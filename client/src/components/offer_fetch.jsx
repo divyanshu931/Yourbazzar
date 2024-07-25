@@ -29,7 +29,7 @@ function OfferFetch() {
     <div style={containerStyle}>
       {offer ? (
         <div style={offerDetailsStyle}>
-          <img src={offer.imageUrl} alt={offer.title} style={imageStyle} />
+          <img src={offer.imageUrl} alt={offer.title} style={imageStyle}  />
           <div style={contentStyle}>
             <h2 style={titleStyle}>{offer.title}</h2>
             <p style={descriptionStyle}>Description: {offer.description}</p>

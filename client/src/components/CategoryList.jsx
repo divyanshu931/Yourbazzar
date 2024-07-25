@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -21,102 +24,80 @@ const CategoryList = () => {
     fetchCategories();
   }, []);
 
-  const containerStyle = {
-    backgroundColor: '#fff3cd',
-    padding: '20px 20px 0',
-    borderRadius: '15px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '30px',
-    justifyContent: 'space-between',
-    marginTop: '0',
-    zIndex: 998,
-    position: 'relative',
-  };
-
-  const itemStyle = {
-    textAlign: 'center',
-    borderRadius: '15px',
-    overflow: 'hidden',
-    backgroundColor: '#d3d3d3',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    padding: '20px',
-    width: 'calc(14% - 20px)',
-    minWidth: '100px',
-    margin: '10px',
-  };
-
-  const imageStyle = {
-    maxWidth: '100%',
-    maxHeight: '150px',
-    objectFit: 'cover',
-    borderTopLeftRadius: '15px',
-    borderTopRightRadius: '15px',
-    display: 'block',
-    margin: '0 auto', // Center the image
-  };
-
-  const nameStyle = {
-    fontSize: '16px',
-    color: '#000',
-    marginTop: '10px',
-    fontWeight: 'bold',
-    padding: '10px',
-    textAlign: 'center',
-  };
-
+  // Placeholder image for error handling
   const handleImageError = (e) => {
     e.target.onerror = null;
-    e.target.src = '/placeholder-image.jpg';
+    e.target.src = '/placeholder-image.jpg'; // Replace with your placeholder image URL
   };
 
-  // Render loading spinner if data is still being fetched
-  if (loading) {
-    return (
-      <div>
-        <div className="spinner" style={spinnerStyle}></div>
-      </div>
-    );
-  }
+  // Slider settings
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 8, // Default number of slides per row for large screens
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 5, // Number of slides per row for tablets (medium screens)
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },{
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 3, // Number of slides per row for phones (small screens)
+          slidesToScroll: 1,
+        },
+      },  {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3, // Number of slides per row for phones (small screens)
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 2, // Number of slides per row for phones (small screens)
+          slidesToScroll: 1,
+        },
+      },
+    
+    ],
+  };
+
+
 
   return (
-    <div className="p-3 bg-light">
-      <h6 className="mb-3 text-black fw-bold">Categories</h6>
-
-      <div style={containerStyle}>
+    <div className="p-3 bg-light2">
+      <div className="pb-1 d-flex justify-content-between">
+        <h6 className="mb-2 text-black fw-bold">Shop by category</h6>
+        <Link className="text-success text-decoration-none" to="/listing">
+          SEE ALL <i className="bi bi-arrow-right-circle-fill"></i>
+        </Link>
+      </div>
+      <Slider {...sliderSettings} className="single-item selling-box">
         {categories.map((category) => (
-          <div key={category._id} style={itemStyle}>
-            <Link
-              to={`/category/${category.name}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
+          <div key={category._id}>
+            <Link to={`/category/${category.name}`} className="text-dark text-decoration-none">
               <img
                 src={`${axiosInstance.defaults.baseURL}/${category.image}`}
                 alt={category.name}
-                style={imageStyle}
                 onError={handleImageError}
-                onLoad={(e) => (e.target.style.opacity = 1)}
-                loading="lazy"
-                
+                style={{ width: '150px', height: '200px', objectFit: 'zoomout' }} // Set image size and maintain aspect ratio
               />
-              <p style={nameStyle}>{category.name}</p>
             </Link>
           </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
-};
-
-// Spinner styles
-const spinnerStyle = {
-  border: '8px solid #f3f3f3', // Light grey background
-  borderTop: '8px solid black', // Black spinner
-  borderRadius: '50%',
-  width: '40px',
-  height: '40px',
-  animation: 'spin 1s linear infinite',
 };
 
 export default CategoryList;

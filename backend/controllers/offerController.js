@@ -1,43 +1,60 @@
 // controllers/offerController.js
 const Offer = require('../models/offerModel');
 
-// Create Offer
 exports.createOffer = async (req, res) => {
-  try {
-    const { title, description, discount, expiryDate, imageUrl } = req.body;
+  const { title, description, discount, expiryDate } = req.body;
 
-    const newOffer = await Offer.create({
+  try {
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload an image' });
+    }
+
+    // File uploaded successfully, continue with offer creation
+    const newOffer = new Offer({
       title,
       description,
       discount,
       expiryDate,
-      imageUrl
+      imageUrl: req.file.path, // Store the path to the uploaded image
     });
 
+    const savedOffer = await newOffer.save();
     res.status(201).json({
       success: true,
       message: 'Offer created successfully',
-      offer: newOffer
+      offer: savedOffer,
     });
-  } catch (error) {
-    console.error(error.message);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).json({
       success: false,
       message: 'Failed to create offer',
-      error: error.message
+      error: err.message,
     });
   }
 };
-
 // Update Offer
 exports.updateOffer = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, discount, expiryDate, imageUrl } = req.body;
+    const { title, description, discount, expiryDate } = req.body;
+
+    // Check if file was uploaded
+    let imageUrl;
+    if (req.file) {
+      imageUrl = req.file.path; // If new image is uploaded, update imageUrl
+    }
 
     const updatedOffer = await Offer.findByIdAndUpdate(
       id,
-      { title, description, discount, expiryDate, imageUrl },
+      {
+        title,
+        description,
+        discount,
+        expiryDate,
+        ...(imageUrl && { imageUrl }), // Conditionally update imageUrl if new image is uploaded
+      },
       { new: true }
     );
 

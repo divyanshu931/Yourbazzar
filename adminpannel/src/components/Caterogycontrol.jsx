@@ -111,7 +111,7 @@ function Category() {
           <tr className="table-header">
             <th>S.No</th>
             <th>Category Name</th>
-            <th>Description</th>
+            
             <th>Photo</th>
             <th>Update</th>
             <th>Delete</th>
@@ -128,7 +128,7 @@ function Category() {
               <tr key={category._id}>
                 <td>{index + 1}</td>
                 <td>{category.name}</td>
-                <td>{category.description}</td>
+           
                 <td>
                   <button className="view-image-btn" onClick={() => openImageModal(category.image)}>
                     View

@@ -5,7 +5,6 @@ import "./style.css";
 const Editcategories = ({ category, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     name: category.name,
-    description: category.description,
     imageFile: null, // Store the image file to be uploaded
   });
 
@@ -20,7 +19,7 @@ const Editcategories = ({ category, onClose, onSave }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       // Validate file type (optional)
@@ -28,19 +27,65 @@ const Editcategories = ({ category, onClose, onSave }) => {
         setErrorMessage("Please upload an image file.");
         return;
       }
-      // Validate image dimensions (optional)
-      const img = new Image();
-      img.onload = () => {
-        const { width, height } = img;
-        if (width === 600 && height === 800) {
-          setErrorMessage(""); // Clear error message if dimensions are correct
-          setFormData({ ...formData, imageFile: file }); // Store the selected image file
-        } else {
-          setErrorMessage("Please upload an image with dimensions 600x800 pixels.");
-        }
-      };
-      img.src = URL.createObjectURL(file);
+      
+      try {
+        // Resize image to 270x396 pixels using canvas
+        const resizedImageBlob = await resizeImage(file, 270, 396);
+        // Create a new File object from the resized image blob
+        const resizedImageFile = new File([resizedImageBlob], file.name, { type: 'image/png' }); // Convert to PNG for compatibility
+
+        // Store the resized image file in formData
+        setFormData({ ...formData, imageFile: resizedImageFile });
+
+        // Clear any previous error messages
+        setErrorMessage("");
+      } catch (error) {
+        console.error("Error resizing image:", error);
+        setErrorMessage("Failed to resize image. Please try again.");
+      }
     }
+  };
+
+  // Function to resize image using canvas
+  const resizeImage = (file, maxWidth, maxHeight) => {
+    return new Promise((resolve, reject) => {
+      let img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate new dimensions to fit within maxWidth and maxHeight
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            resolve(blob); // Resolve with the resized image blob
+          },
+          file.type, // Use original image type (e.g., 'image/jpeg', 'image/png')
+          1 // Quality level (1 is the highest)
+        );
+      };
+
+      img.onerror = (error) => {
+        reject(error); // Reject if image loading fails
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -48,17 +93,21 @@ const Editcategories = ({ category, onClose, onSave }) => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("description", formData.description);
-      
+
       // Append image file to FormData if it exists
       if (formData.imageFile) {
         formDataToSend.append("image", formData.imageFile);
       }
 
-      const response = await axiosInstance.put(`/api/categories/update/${category._id}`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const response = await axiosInstance.put(
+        `/api/categories/update/${category._id}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
 
       setSuccessMessage("Updated"); // Set success message
       onSave(); // Notify parent component to refresh category list
@@ -83,6 +132,17 @@ const Editcategories = ({ category, onClose, onSave }) => {
       <p className="point-to-notice">
         Note: You cannot change the category name.
       </p>
+      
+      {errorMessage && (
+        <div className="error-message">
+          <p>{errorMessage}</p>
+        </div>
+      )}
+      {successMessage && (
+        <div className="success-message">
+          <p>{successMessage}</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           Name:
@@ -94,17 +154,9 @@ const Editcategories = ({ category, onClose, onSave }) => {
             disabled // Disable editing of the name field
           />
         </label>
+      
         <label>
-          Description:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Image Upload (300x400 pixels):
+          Image Upload (270x396 pixels, PNG format):
           <input
             type="file"
             accept="image/*"
@@ -129,16 +181,6 @@ const Editcategories = ({ category, onClose, onSave }) => {
         </div>
       </form>
 
-      {errorMessage && (
-        <div className="error-message">
-          <p>{errorMessage}</p>
-        </div>
-      )}
-      {successMessage && (
-        <div className="success-message">
-          <p>{successMessage}</p>
-        </div>
-      )}
     </div>
   );
 };
