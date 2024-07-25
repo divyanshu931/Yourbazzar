@@ -16,12 +16,12 @@ exports.getUnapprovedProducts = async (req, res) => {
   }
 };
 
-// Add a new product with image handling
+
 exports.addProduct = async (req, res) => {
   try {
     // Extract form data and uploaded file path
-    const { name, description, price, category, bestProduct, approved } = req.body;
-   
+    const { name, description, price, mrp, category, bestProduct, approved, sellerName, discount ,sellerId} = req.body;
+    
     // Get the file path from req.file if available
     const image = req.file ? req.file.path : null;
 
@@ -30,11 +30,14 @@ exports.addProduct = async (req, res) => {
       name,
       description,
       price,
+      mrp,
       category,
       bestProduct,
       image,
-   
-      approved
+      approved,
+      sellerName,
+      discount, // Ensure discount is included
+      sellerId // Assuming you have req.user._id available for sellerId
     });
 
     // Save product to database
@@ -54,6 +57,8 @@ exports.addProduct = async (req, res) => {
     });
   }
 };
+
+
 // Delete a product
 exports.deleteProduct = async (req, res) => {
   try {

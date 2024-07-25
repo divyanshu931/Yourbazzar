@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css';
@@ -16,18 +16,16 @@ import AddCategoryForm from './components/add caterogy';
 import AddOffer from './components/addoffer';
 import ApproveProducts from './Adminpages/aprrove';
 
-
-
 const NotFound = () => (
   <div style={{ textAlign: 'center', color: '#000' }}>
-  <h1>404 Not Found</h1>
-  <p>The page you are looking for does not exist.</p>
-</div>
+    <h1>404 Not Found</h1>
+    <p>The page you are looking for does not exist.</p>
+  </div>
 );
 
 function App() {
+ 
   return (
-    
     <Router>
       <div className="App">
         {/* Define your routes inside the <Routes> component */}
@@ -38,18 +36,15 @@ function App() {
           <Route path="/category-dashboard" element={<CategoryDashboard />} />
           <Route path="/customer-dashboard" element={<CustomerDashboard />} />
           <Route path="/offer-dashboard" element={<OfferDashboard />} />
-          <Route path="/order-dashboard" element={<OrderPage/>} />
-          <Route path="/product/add" element={<AddProductForm/>} />
-          <Route path="/category/add" element={<AddCategoryForm/>} />
-          <Route path="/offer/add" element={<AddOffer/>} />
-          <Route path="/approval-request" element={<ApproveProducts/>} />
-          <Route path='/' element={<SignIn/>}/>
-         
-    
+          <Route path="/order-dashboard" element={<OrderPage />} />
+          <Route path="/product/add" element={<AddProductForm />} />
+          <Route path="/category/add" element={<AddCategoryForm />} />
+          <Route path="/offer/add" element={<AddOffer />} />
+          <Route path="/approval-request" element={<ApproveProducts />} />
+          <Route path="/" element={<SignIn />} />
 
-
-            {/* Route for 404 Not Found */}
-       <Route path="*" element={<NotFound />} />
+          {/* Route for 404 Not Found */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>

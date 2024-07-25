@@ -44,15 +44,20 @@ const signInStyles = `
   color: #495057;
   font-weight: bold;
   padding: 2rem;
+  align: right;
 }
 
 .form-control {
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem .25rem ;
   color: #495057;
   background-color: #f8f9fa;
+  width: 100%;
+  text-align: center; /* Align text inside input to center */
 }
+
+
 
 .btn-success {
   background-color: #28a745;
@@ -60,7 +65,7 @@ const signInStyles = `
   color: #ffffff;
   font-weight: bold;
   border-radius: 0.25rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem 0.75rem 1.5rem; /* Adjusted padding values */
 }
 
 .btn-success:hover {
@@ -75,6 +80,20 @@ const signInStyles = `
   margin-top: 1rem;
   border-radius: 0.25rem;
 }
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-10px); }
+  80% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 `;
 
 const SignIn = () => {
@@ -84,29 +103,28 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showOTPInput, setShowOTPInput] = useState(false);
-  const [showError, setShowError] = useState(false); // State to control error display
   const navigate = useNavigate();
 
+  // Handle error state with useEffect
   useEffect(() => {
-    // Clear error after 3 seconds
-    const errorTimer = setTimeout(() => {
-      setShowError(false);
-      setError("");
-    }, 3000);
+    if (error) {
+      const errorTimer = setTimeout(() => {
+        setError(""); // Clear error after 3 seconds
+      }, 3000);
 
-    return () => clearTimeout(errorTimer);
-  }, [error]); // Clear timer when error state changes
+      return () => clearTimeout(errorTimer); // Clean up timer on component unmount or state change
+    }
+  }, [error]);
 
   const saveToken = (token, id, role) => {
     const expirationTime = new Date();
     expirationTime.setDate(expirationTime.getDate() + 1); // Expires next day
-  
+
     // Save token, id, and role to cookies
     cookies.set('token', token, { path: '/', expires: expirationTime });
     cookies.set('userId', id, { path: '/', expires: expirationTime });
     cookies.set('userRole', role, { path: '/', expires: expirationTime });
   };
-  
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -116,13 +134,12 @@ const SignIn = () => {
         email,
         password,
       });
-  
+
       if (response.data.success) {
         const { token, userId, role } = response.data;
-        
+
         if (role === "Customer") {
           setError("Access denied for customers. Please use admin or seller credentials.");
-          setShowError(true); // Show error message
         } else if (role === "Admin" || role === "Seller") {
           saveToken(token, userId, role); // Save token, id, and role
           sendOTP(email);
@@ -130,11 +147,9 @@ const SignIn = () => {
         }
       } else {
         setError("Invalid credentials. Please try again.");
-        setShowError(true); // Show error message
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
-      setShowError(true); // Show error message
       console.error(err);
     } finally {
       setLoading(false);
@@ -144,15 +159,11 @@ const SignIn = () => {
   const sendOTP = async (email) => {
     try {
       const otpResponse = await axiosInstance.post("/api/otp/send-otp", { email });
-      if (otpResponse.data.success) {
-        setOTP("");
-      } else {
+      if (!otpResponse.data.success) {
         setError(otpResponse.data.message || "Failed to send OTP. Please try again.");
-        setShowError(true); // Show error message
       }
     } catch (err) {
       setError("Something went wrong while sending OTP. Please try again.");
-      setShowError(true); // Show error message
       console.error(err);
     }
   };
@@ -170,18 +181,15 @@ const SignIn = () => {
         navigate("/dashboard/admin");
       } else {
         setError("Invalid OTP. Please try again.");
-        setShowError(true); // Show error message
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
-      setShowError(true); // Show error message
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  
   return (
     <div className="container">
       <style>{signInStyles}</style>
@@ -198,12 +206,13 @@ const SignIn = () => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="yourbajaar@gmail.com"
+                    placeholder=" "
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={showOTPInput || loading}
                   />
                 </div>
+                <br/>
                 <div className="mb-3">
                   <label className="form-label mb-1">Password</label>
                   <input
@@ -228,9 +237,10 @@ const SignIn = () => {
                   </div>
                 )}
                 {error && <div className="alert alert-danger">{error}</div>}
+                <br/>
                 <button
                   type="submit"
-                  className="btn btn-success btn-lg w-100 mt-3"
+                  className="btn btn-success btn-lg w-100 mt-5"
                   disabled={loading}
                 >
                   {loading ? "WAIT..." : showOTPInput ? "VERIFY OTP" : "SIGN IN"}

@@ -10,10 +10,14 @@ function AddProductForm({ onSuccess }) {
     name: "",
     description: "",
     price: 0,
+    mrp: 0,
     category: "",
     bestProduct: false,
     imageFile: null,
-    approved: false // Initialize approved field
+    approved: false,
+    sellerName: "",
+    discount: 0,
+    sellerId: "", // Initialize sellerId state
   });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -36,6 +40,14 @@ function AddProductForm({ onSuccess }) {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    // Fetch userId (assuming it's the same as sellerId in your context) from cookies
+    const userId = cookies.get("userId");
+    if (userId) {
+      setFormData({ ...formData, sellerId: userId });
+    }
+  }, []); // Empty dependency array to run only once after initial render
+
   const handleChange = (e) => {
     if (e.target.type === "file") {
       setFormData({ ...formData, imageFile: e.target.files[0] });
@@ -52,32 +64,60 @@ function AddProductForm({ onSuccess }) {
     }
   };
 
+  const validateImageDimensions = (file) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        if (img.width === 270 && img.height === 270) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      };
+      img.onerror = () => {
+        reject("Failed to load image for dimension check.");
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-
+  
+      // Validate image dimensions
+      const isValidDimensions = await validateImageDimensions(formData.imageFile);
+      if (!isValidDimensions) {
+        setLoading(false);
+        setErrorMessage("Please upload an image with dimensions 270x270 pixels.");
+        return;
+      }
+  
       const formDataForUpload = new FormData();
       formDataForUpload.append("name", formData.name);
       formDataForUpload.append("description", formData.description);
       formDataForUpload.append("price", Number(formData.price));
+      formDataForUpload.append("mrp", Number(formData.mrp));
       formDataForUpload.append("category", formData.category);
       formDataForUpload.append("bestProduct", formData.bestProduct);
       formDataForUpload.append("image", formData.imageFile);
-
+      formDataForUpload.append("sellerName", formData.sellerName);
+      formDataForUpload.append("discount", Number(formData.discount));
+      formDataForUpload.append("sellerId", formData.sellerId); // Ensure sellerId is included
+  
       // Read userRole from cookies
       const userRole = cookies.get("userRole");
-
-      // Set approved based on userRole (assuming "Admin" grants approval)
-      const approved = userRole === "Admin";
+  
+      // Set approved based on userRole (assuming "admin" grants approval)
+      const approved = userRole === "admin";
       formDataForUpload.append("approved", approved);
-
+  
       const response = await axiosInstance.post("/api/products/products", formDataForUpload, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
       });
-
+  
       setLoading(false);
       if (response.status === 201) {
         setErrorMessage("");
@@ -99,7 +139,8 @@ function AddProductForm({ onSuccess }) {
       setLoading(false);
     }
   };
-
+  
+  
   return (
     <AdminLayout>
       <div className="main-container">
@@ -108,6 +149,7 @@ function AddProductForm({ onSuccess }) {
         <div className="add-product-form-container">
           <form className="add-product-form" onSubmit={handleAddSubmit}>
             {/* Input fields for adding a product */}
+            <label style={{ color: "black" }}>Product Name</label>
             <input
               type="text"
               name="name"
@@ -118,6 +160,8 @@ function AddProductForm({ onSuccess }) {
               required
               maxLength={100}
             />
+
+            <label style={{ color: "black" }}>Description</label>
             <input
               type="text"
               name="description"
@@ -128,6 +172,8 @@ function AddProductForm({ onSuccess }) {
               required
               maxLength={1000}
             />
+
+            <label style={{ color: "black" }}>Price</label>
             <input
               type="number"
               name="price"
@@ -136,7 +182,22 @@ function AddProductForm({ onSuccess }) {
               onChange={handleChange}
               className="form-input"
               required
+              min="0"
             />
+
+            <label style={{ color: "black" }}>MRP</label>
+            <input
+              type="number"
+              name="mrp"
+              placeholder="MRP"
+              value={formData.mrp}
+              onChange={handleChange}
+              className="form-input"
+              required
+              min="0"
+            />
+
+            <label style={{ color: "black" }}>Category</label>
             <select
               name="category"
               value={formData.category}
@@ -151,12 +212,14 @@ function AddProductForm({ onSuccess }) {
                 </option>
               ))}
             </select>
+
+            <label style={{ color: "black" }}>Choose photo</label>
             <input
               type="file"
               name="image"
               onChange={handleChange}
               className="form-input"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/avif" // Accept PNG and AVIF formats
             />
             {imagePreview && (
               <div className="image-preview">
@@ -164,30 +227,56 @@ function AddProductForm({ onSuccess }) {
                   src={imagePreview}
                   alt="Preview"
                   className="preview-image"
-                  style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto" }}
+                  style={{ maxWidth: "500px", maxHeight: "500px", width: "auto", height: "auto" }}
                 />
               </div>
             )}
+
+            <label style={{ color: "black" }}>Seller Name</label>
+            <input
+              type="text"
+              name="sellerName"
+              placeholder="Seller Name"
+              value={formData.sellerName}
+              onChange={handleChange}
+              className="form-input"
+              required
+            />
+
+            <label style={{ color: "black" }}>Discount (%)</label>
+            <input
+              type="number"
+              name="discount"
+              placeholder="Discount"
+              value={formData.discount}
+              onChange={handleChange}
+              className="form-input"
+              min="0"
+            />
+
             <div className="form-checkbox">
               <input
                 type="checkbox"
                 name="bestProduct"
                 checked={formData.bestProduct}
                 onChange={handleChange}
-                style={{ marginRight: "5px", color: "black" }}
+                style={{ marginRight: "5px" }}
               />
-              <label htmlFor="bestProduct" style={{ color: "black" }}>Best Product</label>
+              <label style={{ color: "black" }}>Best Product</label>
             </div>
+
             <div className="form-buttons">
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? "Adding..." : "Add"}
               </button>
             </div>
+
             {fetchError && <p className="error-message" style={{ color: "red" }}>{fetchError}</p>}
             {errorMessage && <p className="error-message" style={{ color: "red" }}>{errorMessage}</p>}
             {successMessage && <p className="success-message" style={{ color: "green" }}>{successMessage}</p>}
+
             <p className="note" style={{ color: "gray", fontSize: "12px" }}>
-              Note: Upload the image file (PNG or JPEG) for the product. Maximum file size is 3MB.
+              Note: Upload the image file 500 by 500 (PNG or AVIF) for the product. Maximum file size is 3MB.
             </p>
           </form>
         </div>

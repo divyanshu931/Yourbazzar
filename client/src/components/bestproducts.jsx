@@ -30,28 +30,28 @@ const BestSellingProducts = () => {
     dots: true,
     infinite: true,
     speed: 1000,
-    slidesToShow: 3,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: false,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 1,
         }
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
           slidesToScroll: 1,
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1,
         }
       }
@@ -87,6 +87,7 @@ const BestSellingProducts = () => {
                     src={`${axiosInstance.defaults.baseURL}/${product.image}`}
                     class="card-img-top rounded-3 p-3" 
                     alt={product.name}
+                    style={{ width: '270px', height: '270px', objectFit: 'zoomout' }}
                      />
                 
                 <div className="card-body p-2 border-top">

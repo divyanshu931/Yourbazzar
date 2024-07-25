@@ -30,12 +30,21 @@ const CategoryList = () => {
     e.target.src = '/placeholder-image.jpg'; // Replace with your placeholder image URL
   };
 
+  // Function to split array into pairs
+  const splitArrayIntoPairs = (array) => {
+    const pairs = [];
+    for (let i = 0; i < array.length; i += 2) {
+      pairs.push(array.slice(i, i + 2));
+    }
+    return pairs;
+  };
+
   // Slider settings
   const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 8, // Default number of slides per row for large screens
+    slidesToShow: 6, // Default number of slides per row for large screens
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -43,18 +52,13 @@ const CategoryList = () => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 5, // Number of slides per row for tablets (medium screens)
+          slidesToShow: 4, // Number of slides per row for tablets (medium screens)
           slidesToScroll: 1,
           infinite: true,
           dots: true,
         },
-      },{
-        breakpoint: 800,
-        settings: {
-          slidesToShow: 3, // Number of slides per row for phones (small screens)
-          slidesToScroll: 1,
-        },
-      },  {
+      },
+      {
         breakpoint: 768,
         settings: {
           slidesToShow: 3, // Number of slides per row for phones (small screens)
@@ -68,11 +72,8 @@ const CategoryList = () => {
           slidesToScroll: 1,
         },
       },
-    
     ],
   };
-
-
 
   return (
     <div className="p-3 bg-light2">
@@ -83,16 +84,23 @@ const CategoryList = () => {
         </Link>
       </div>
       <Slider {...sliderSettings} className="single-item selling-box">
-        {categories.map((category) => (
-          <div key={category._id}>
-            <Link to={`/category/${category.name}`} className="text-dark text-decoration-none">
-              <img
-                src={`${axiosInstance.defaults.baseURL}/${category.image}`}
-                alt={category.name}
-                onError={handleImageError}
-                style={{ width: '150px', height: '200px', objectFit: 'zoomout' }} // Set image size and maintain aspect ratio
-              />
-            </Link>
+        {splitArrayIntoPairs(categories).map((pair, index) => (
+          <div key={index}>
+            <div className="category-pair">
+              {pair.map((category, subIndex) => (
+                <div key={subIndex}>
+                  <Link to={`/category/${category.name}`} className="text-dark text-decoration-none">
+                    <img
+                      src={`${axiosInstance.defaults.baseURL}/${category.image}`}
+                      alt={category.name}
+                      onError={handleImageError}
+                      style={{ width: '150px', height: '200px', objectFit: 'cover' }} // Adjust style as needed
+                    />
+                  </Link>
+                  <br/>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </Slider>

@@ -6,17 +6,22 @@ const productSchema = new mongoose.Schema({
     required: true,
     trim: true,
     unique: true,
-    maxlength: 100 // Maximum length of 100 characters for the product name
+    maxlength: 100
   },
   description: {
     type: String,
     required: true,
-    maxlength: 1000 // Maximum length of 1000 characters for the product description
+    maxlength: 1000
   },
   price: {
     type: Number,
     required: true,
-    min: 0 // Minimum price allowed is 0 (ensures positive number)
+    min: 0
+  },
+  mrp: {
+    type: Number,
+    required: true,
+    min: 0
   },
   category: {
     type: String,
@@ -24,22 +29,34 @@ const productSchema = new mongoose.Schema({
   },
   bestProduct: {
     type: Boolean,
-    default: false // Default value for bestProduct is false
+    default: false
   },
   image: {
     type: String,
-    required: true // Image URL is required
+    required: true
   },
   approved: {
     type: Boolean,
-    default: false // Default value for approved is false
+    default: false
+  },
+  sellerName: {
+    type: String,
+    required: true
   },
   sellerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    type: String,
+   
+  },
+  discount: {
+    type: Number,
+    default: 0,
+    min: 0
+  
   }
 }, {
-  timestamps: true // Automatically adds createdAt and updatedAt fields to the document
+  timestamps: true
 });
+
+
 
 module.exports = mongoose.model('Product', productSchema);
