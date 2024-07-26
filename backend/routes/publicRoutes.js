@@ -21,32 +21,32 @@ router.get('/products', async (req, res) => {
   }
 });
 
-
-// Route for searching products by name containing a specific substring
 router.get('/products/search', async (req, res) => {
   try {
-    // Extract search parameter from query string
-    const { name } = req.query;
+    const { q } = req.query;
 
-    // Validate if 'name' parameter is provided
-    if (!name) {
-      return res.status(400).json({ error: 'Missing search parameter: name' });
+    if (!q) {
+      return res.status(400).json({ error: 'Missing search parameter: q' });
     }
 
-    // Construct query to find products with name containing 'name' substring
-    const query = { name: { $regex: name, $options: 'i' } };
+    // Example MongoDB query to find products by name or category
+    const query = {
+      $or: [
+        { name: { $regex: q, $options: 'i' } },
+        { category: { $regex: q, $options: 'i' } }
+      ]
+    };
 
-    // Fetch products based on the constructed query
     const products = await Product.find(query);
 
-    res.json(products);
+    res.json(products); 
   } catch (error) {
     console.error('Error searching products:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
- 
+
 // Route to get the best products
 router.get('/products/best', async (req, res) => {
   try {

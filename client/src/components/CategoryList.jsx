@@ -47,7 +47,7 @@ const CategoryList = () => {
     slidesToShow: 6, // Default number of slides per row for large screens
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2000,
     responsive: [
       {
         breakpoint: 1024,
@@ -94,7 +94,7 @@ const CategoryList = () => {
                       src={`${axiosInstance.defaults.baseURL}/${category.image}`}
                       alt={category.name}
                       onError={handleImageError}
-                      style={{ width: '150px', height: '200px', objectFit: 'cover' }} // Adjust style as needed
+                      style={{ width: '170px', height: '230px', objectFit: 'cover' }} // Adjust style as needed
                     />
                   </Link>
                   <br/>

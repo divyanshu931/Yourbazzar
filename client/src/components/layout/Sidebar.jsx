@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Cookies from "universal-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faHome, faGift, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,12 +10,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [profileSubMenuOpen, setProfileSubMenuOpen] = useState(false);
   const [extraSubMenuOpen, setExtraSubMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const cookies = new Cookies();
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-  }, []);
+    // Check if user is authenticated based on cookies
+    const token = cookies.get('token');
+    const userId = cookies.get('userId');
+    setIsAuthenticated(!!token && !!userId); // Set authentication state based on token and userId presence
+  }, [cookies]);
 
   const toggleAuthSubMenu = () => {
     setAuthSubMenuOpen(!authSubMenuOpen);
@@ -58,26 +61,28 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <i className="bi bi-ui-checks-grid me-2"></i> Get Started
           </Link>
         </li>
-        <li className={authSubMenuOpen ? 'active' : ''}>
-          <a href="#!" onClick={(e) => { e.preventDefault(); toggleAuthSubMenu(); }}>
-            <i className="bi bi-lock me-2"></i> Authentication
-          </a>
-          <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
-            {!isAuthenticated && (
-              <>
-                <li><Link to="/signin" onClick={handleLinkClick}>Sign In</Link></li>
-                <li><Link to="/signup" onClick={handleLinkClick}>Sign Up</Link></li>
-                <li><Link to="/verification" onClick={handleLinkClick}>Verification</Link></li>
-              </>
-            )}
-            {isAuthenticated && (
-              <>
-                <li><Link to="/change-password" onClick={handleLinkClick}>Change Password</Link></li>
-                <li><Link to="/signout" onClick={handleLinkClick}>Sign Out</Link></li>
-              </>
-            )}
-          </ul>
-        </li>
+        {isAuthenticated ? (
+          <li className={authSubMenuOpen ? 'active' : ''}>
+            <a href="#!" onClick={(e) => { e.preventDefault(); toggleAuthSubMenu(); }}>
+              <i className="bi bi-lock me-2"></i> Authentication
+            </a>
+            <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
+              <li><Link to="/change-password" onClick={handleLinkClick}>Change Password</Link></li>
+              <li><Link to="/signout" onClick={handleLinkClick}>Sign Out</Link></li>
+            </ul>
+          </li>
+        ) : (
+          <li className={authSubMenuOpen ? 'active' : ''}>
+            <a href="#!" onClick={(e) => { e.preventDefault(); toggleAuthSubMenu(); }}>
+              <i className="bi bi-lock me-2"></i> Authentication
+            </a>
+            <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
+              <li><Link to="/signin" onClick={handleLinkClick}>Sign In</Link></li>
+              <li><Link to="/signup" onClick={handleLinkClick}>Sign Up</Link></li>
+              <li><Link to="/" onClick={handleLinkClick}>Verification</Link></li>
+            </ul>
+          </li>
+        )}
         <li>
           <Link to="/home" onClick={handleLinkClick}><i className="bi bi-house me-2"></i> Homepage</Link>
         </li>
@@ -85,7 +90,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <Link to="/offers" onClick={handleLinkClick}><i className="bi bi-award me-2"></i> Offers</Link>
         </li>
         <li>
-          <Link to="/whislist" onClick={handleLinkClick}><i className="bi bi-list-task me-2"></i> whislist</Link>
+          <Link to="/whislist" onClick={handleLinkClick}><i className="bi bi-list-task me-2"></i> Whislist</Link>
         </li>
         <li>
           <Link to="/bag" onClick={handleLinkClick}>
@@ -109,8 +114,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </a>
           <ul className={`sub-menu ${extraSubMenuOpen ? 'open' : ''}`}>
             <li><Link to="/support" onClick={handleLinkClick}>Support</Link></li>
-            <li><Link to="/notification" onClick={handleLinkClick}>contact</Link></li>
-            <li><Link to="/empty" onClick={handleLinkClick}></Link> term & condition</li>
+            <li><Link to="/notification" onClick={handleLinkClick}>Contact</Link></li>
+            <li><Link to="/empty" onClick={handleLinkClick}>Terms & Conditions</Link></li>
           </ul>
         </li>
       </ul>
@@ -122,7 +127,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </Link>
         </li>
         <li className="github">
-          <Link className={`nav-item text-center ${location.pathname === '/gift-card' ? 'active' : ''}`} to="/offers" tabIndex="0" role="menuitem">
+          <Link className={`nav-item text-center ${location.pathname === '/offers' ? 'active' : ''}`} to="/offers" tabIndex="0" role="menuitem">
             <p className="h5 m-0"><FontAwesomeIcon icon={faGift} /></p>
             Offers
           </Link>

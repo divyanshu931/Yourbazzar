@@ -12,15 +12,27 @@ function SignOut() {
       Object.keys(allCookies).forEach((cookieName) => {
         cookies.remove(cookieName);
       });
-      navigate("/signin");
+
+      // Wait for 2 seconds before redirecting
+      setTimeout(() => {
+        navigate("/signin");
+      }, 1000); // 2000 milliseconds = 2 seconds
     };
 
     handleSignOut();
   }, [navigate, cookies]);
 
   return (
-    <div className="p-4">
-      <h2>Signing Out...</h2>
+    <div className="text-center">
+      <br/>
+      <div className="text-center">
+        <img 
+          src="https://www.letsgowild.co.uk/wp-content/uploads/thankyouowl.png" 
+          alt="Thank you" 
+          className="signout-image"
+        />
+        <h2>Signing Out...</h2>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar'; // Import Sidebar
+import Cookies from 'universal-cookie'; // Import universal-cookie
 
 import Landing_2 from './components/Landing_2.jsx';
 import Landing from './components/Landing';
@@ -16,6 +17,7 @@ import Productbycategory from './Pages/categorybyname.jsx';
 import AllOffers from './Pages/all-offer.jsx';
 import FaqPage from './Pages/FQA.jsx';
 import SignOut from './components/signout.jsx'; // Import SignOut component
+import Search from './Pages/sreach.jsx';
 
 const NotFound = () => (
   <div style={{ textAlign: 'center', color: '#000' }}>
@@ -25,17 +27,15 @@ const NotFound = () => (
 );
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const cookies = new Cookies(); // Instantiate Cookies
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, []);
+    // Check if authentication token is present in cookies
+    const token = cookies.get('token');
+    setIsAuthenticated(!!token); // Set authentication state based on token presence
+  }, [cookies]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -49,6 +49,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Landing_2" element={<Landing_2 />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/getStarted" element={<GetStart />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />

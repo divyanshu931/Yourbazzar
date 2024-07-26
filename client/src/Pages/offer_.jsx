@@ -21,9 +21,7 @@ function OfferDetails() {
         setOffer(offerResponse.data.offer);
 
         // Fetch products related to the offer
-        const productsResponse = await axiosInstance.get(`/api/public/products`, {
-          params: { offerId: id }
-        });
+        const productsResponse = await axiosInstance.get(`/api/public/all`);
         setProducts(productsResponse.data);
 
       } catch (error) {
