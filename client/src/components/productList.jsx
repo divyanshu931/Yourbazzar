@@ -1,6 +1,8 @@
+// ProductListing.js
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../apis/axiosInstance';
-import { Link } from 'react-router-dom';
+
+import ProductItem from './productmap'; // Import the ProductItem component
 
 const ProductListing = () => {
   const [activeCategory, setActiveCategory] = useState('Milk&bread');
@@ -75,56 +77,7 @@ const ProductListing = () => {
         <div className="osahan-listing">
           <div className="osahan-listing p-0 m-0 row">
             {products.map((product) => (
-              <div className="text-dark col-4 px-0 border-bottom border-end position-relative" key={product._id}>
-
-<div class="list_item_gird m-0 bg-white listing-item">
-                <Link to={`/product-detail/${product._id}`} className="text-decoration-none">
-              
-                    <span class="badge bg-success m-3 position-absolute">{product.discount}% OFF</span>
-                    <div class="list-item-img p-4">
-
-
-
-                      <img
-                        src={`${axiosInstance.defaults.baseURL}/${product.image}`}
-                        className="img-fluid p-3"
-                        alt={product.name}
-
-                      />
-                    </div>
-                
-                </Link>
-                <div className="tic-div px-3 pb-3">
-                  <p className="mb-1 text-black">{product.name}</p>
-                  <p className="mb-2 text-muted">{product.description}</p>
-                  <h6 className="card-title mt-2 mb-3 text-success fw-bold">
-                    ₹{product.price}.00{' '}
-                    <small className="text-decoration-line-through text-muted small fw-light">{product.mrp}</small>
-                  </h6>
-                  <div className="d-flex align-items-center justify-content-between gap-1">
-
-                  <div className="quantity-btn">
-              <div className="input-group input-group-sm border rounded overflow-hiddem">
-                <div className="btn btn-light text-success minus border-0 bg-white"><i className="bi bi-dash"></i></div>
-                <input type="text" className="form-control text-center box border-0" value="1" placeholder="" aria-label="Example text with button addon" />
-                <div className="btn btn-light text-success plus border-0 bg-white"><i className="bi bi-plus"></i></div>
-              </div>
-            </div>
-
-
-                    <div>
-                      <button
-                        className="btn btn-success btn-sm d-flex border-0"
-                        onClick={() => addToCart('user123', product._id)}
-                      >
-                        <i className="bi bi-plus me-2"></i> ADD
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                </div>
-              </div>
+              <ProductItem key={product._id} product={product} addToCart={addToCart} />
             ))}
           </div>
         </div>
