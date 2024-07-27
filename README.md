@@ -1,1 +1,1 @@
-tine to handover
+npm i and npm start
