@@ -8,8 +8,7 @@ const EditOffer = ({ offer, onClose, onSave }) => {
     description: offer.description,
     discount: offer.discount,
     expiryDate: offer.expiryDate,
-    imageUrl: offer.imageUrl,
-    imageFile: null, // New state to handle file upload
+    imageFile: null, // State to handle file upload
   });
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -24,12 +23,12 @@ const EditOffer = ({ offer, onClose, onSave }) => {
         reader.onload = function (event) {
           const img = new Image();
           img.onload = function () {
-            if (img.width === 720 && img.height === 418) {
-              setFormData({ ...formData, imageUrl: event.target.result, imageFile: file });
+            if (img.width === 826 && img.height === 826) {
+              setFormData({ ...formData, imageFile: file });
               setErrorMessage("");
             } else {
-              setFormData({ ...formData, imageUrl: null, imageFile: null });
-              setErrorMessage("Image must be exactly 720x418 pixels.");
+              setFormData({ ...formData, imageFile: null });
+              setErrorMessage("Image must be exactly 826x826 pixels.");
             }
           };
           img.src = event.target.result;
@@ -60,9 +59,13 @@ const EditOffer = ({ offer, onClose, onSave }) => {
       formDataToSend.append("description", formData.description);
       formDataToSend.append("discount", formData.discount);
       formDataToSend.append("expiryDate", formData.expiryDate);
-      formDataToSend.append("image", formData.imageFile);
+      if (formData.imageFile) {
+        formDataToSend.append("image", formData.imageFile);
+      }
 
-      await axiosInstance.put(`/api/offers/update/${_id}`, formDataToSend);
+      const response = await axiosInstance.put(`/api/offers/update/${_id}`, formDataToSend);
+      console.log(response.data); // Check response from the backend
+
       setSuccessMessage("Offer Updated Successfully");
       onSave(); // Notify the parent component to refresh the offer list or take other actions
       onClose(); // Close the form
@@ -124,7 +127,7 @@ const EditOffer = ({ offer, onClose, onSave }) => {
           />
         </label>
         <label>
-          Image (PNG or AVIF format, 720x418 pixels):
+          Image (PNG or AVIF format, 826x826 pixels):
           <input
             type="file"
             name="imageFile"

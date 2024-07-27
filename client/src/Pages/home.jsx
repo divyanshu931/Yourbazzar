@@ -14,7 +14,7 @@ function Home() {
   return (
     <>
       
-  <Layout>
+  <Layout >
   <TodayOffers />
   <CategoryList />
   

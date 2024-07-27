@@ -732,3 +732,6 @@ body {
 }
 /* Add these animations to your existing CSS or create a new CSS file */
 
+.icon.sign-out-icon:hover {
+  cursor: pointer;
+}

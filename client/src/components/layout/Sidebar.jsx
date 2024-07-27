@@ -40,15 +40,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <h3 className="m-0 fw-bold text-black">Your <span className="text-success">Bajaar</span></h3>
+      <h4 class="m-0 fw-bold text-black">Your<span class="text-success">Bajaar</span></h4>
+
         <button className="close-btn" onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
-      <ul className="sidebar-menu">
+      <ul className="sidebar-menu fade show">
         <li>
           <Link to="/Landing_2" onClick={handleLinkClick}>
-            <i className="bi bi-code-square me-2"></i> Splash
+            <i  className="bi bi-code-square me-2"></i> Splash
           </Link>
         </li>
         <li>

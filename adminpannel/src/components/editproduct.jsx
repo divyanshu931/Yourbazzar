@@ -9,6 +9,8 @@ const EditProduct = ({ product, onClose, onSave }) => {
     price: "",
     category: "",
     bestProduct: false,
+    mrp: 0, // Initialize as 0 if it's supposed to be a number
+    discount: 0, // Initialize as 0 if it's supposed to be a number
   });
 
   const [categories, setCategories] = useState([]);
@@ -23,6 +25,8 @@ const EditProduct = ({ product, onClose, onSave }) => {
         price: product.price.toString(),
         category: product.category,
         bestProduct: product.bestProduct || false,
+        mrp: product.mrp || 0, // Ensure it defaults to 0 if undefined
+        discount: product.discount || 0, // Ensure it defaults to 0 if undefined
       });
     }
     fetchCategories();
@@ -46,7 +50,7 @@ const EditProduct = ({ product, onClose, onSave }) => {
     const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : type === "number" ? Number(value) : value,
     }));
   };
 
@@ -60,6 +64,8 @@ const EditProduct = ({ product, onClose, onSave }) => {
         price: Number(formData.price),
         category: formData.category,
         bestProduct: formData.bestProduct,
+        mrp: formData.mrp, // Already a number
+        discount: formData.discount, // Already a number
       };
 
       setLoading(true);
@@ -80,7 +86,9 @@ const EditProduct = ({ product, onClose, onSave }) => {
     <div className="edit-product-form">
       <button className="close-btn" onClick={onClose}>×</button>
       <h3 className="main-title">Edit Product</h3>
-      <p style={{ fontStyle: "italic",color:"black"}}>Note: Product photo cannot be directly updated. If you need to change the photo, please delete the product and re-upload it with the new photo. Ensure the photo size meets the specified requirements.</p>
+      <p style={{ fontStyle: "italic", color: "black" }}>
+        Note: Product photo cannot be directly updated. If you need to change the photo, please delete the product and re-upload it with the new photo. Ensure the photo size meets the specified requirements.
+      </p>
       {error && <div className="error-message">{error}</div>}
       {loading ? (
         <div className="loading-container">Loading...</div>
@@ -111,6 +119,26 @@ const EditProduct = ({ product, onClose, onSave }) => {
               type="number"
               name="price"
               value={formData.price}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            MRP:
+            <input
+              type="number"
+              name="mrp"
+              value={formData.mrp}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Discount:
+            <input
+              type="number"
+              name="discount"
+              value={formData.discount}
               onChange={handleChange}
               required
             />

@@ -437,13 +437,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #212529;
+  background-color: #ffc107;
+
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: #fff;
+  color: #4f4747;
   font-size: 1.5rem;
 }
 

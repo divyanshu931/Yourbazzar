@@ -6,6 +6,8 @@ const ApprovedControl = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     fetchUnapprovedProducts();
@@ -42,7 +44,7 @@ const ApprovedControl = () => {
   const handleToggleApproval = async (productId) => {
     try {
       setLoading(true);
-      await axiosInstance.patch(`api/products/products/approve/${productId}`);
+      await axiosInstance.patch(`/api/products/products/approve/${productId}`);
       const updatedProducts = products.map((product) => {
         if (product._id === productId) {
           return { ...product, approved: !product.approved };
@@ -58,11 +60,29 @@ const ApprovedControl = () => {
     }
   };
 
+  const openImageModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage("");
+    setImageModalOpen(false);
+  };
+
   return (
     <div className="main-container">
       <h2 className="main-title">Unapproved Products</h2>
       {loading && <div className="loading-container">Loading...</div>}
       {error && <div className="error-message">{error}</div>}
+      {imageModalOpen && (
+        <div className="image-modal">
+          <div className="image-modal-content">
+            <span className="close" onClick={closeImageModal}>&times;</span>
+            <img src={`${axiosInstance.defaults.baseURL}/${selectedImage}`} alt="Product Image" className="modal-image" />
+          </div>
+        </div>
+      )}
       <table className="category-table">
         <thead>
           <tr className="table-header">
@@ -80,13 +100,15 @@ const ApprovedControl = () => {
               <td>{product.name}</td>
               <td>${product.price}</td>
               <td>
-                <img src={product.image} alt={product.name} style={{ width: 100, height: 100, objectFit: "cover" }} />
+                <button className="view-image-btn" onClick={() => openImageModal(product.image)}>
+                  View
+                </button>
               </td>
               <td>
                 <button onClick={() => handleToggleApproval(product._id)}>
                   {product.approved ? "Unapprove" : "Approve"}
                 </button>
-                <button onClick={() => handleDelete(product._id)}>Delete</button>
+                <button onClick={() => handleDelete(product._id) } >Delete</button>
               </td>
             </tr>
           ))}

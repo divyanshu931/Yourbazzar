@@ -34,7 +34,8 @@ exports.createOffer = async (req, res) => {
     });
   }
 };
-// Update Offer
+
+
 exports.updateOffer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -43,7 +44,7 @@ exports.updateOffer = async (req, res) => {
     // Check if file was uploaded
     let imageUrl;
     if (req.file) {
-      imageUrl = req.file.path; // If new image is uploaded, update imageUrl
+      imageUrl = req.file.path; // Assuming 'path' is where multer stores the uploaded file
     }
 
     const updatedOffer = await Offer.findByIdAndUpdate(

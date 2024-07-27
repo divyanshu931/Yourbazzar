@@ -20,7 +20,9 @@ function Product() {
     try {
       setLoading(true);
       const response = await axiosInstance.get("/api/public/all");
-      setProducts(response.data);
+      // Filter only approved products
+      const approvedProducts = response.data.filter(product => product.approved);
+      setProducts(approvedProducts);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -49,7 +51,6 @@ function Product() {
       }, 3000);
     }
   };
-  
 
   const handleEdit = (productId) => {
     const product = products.find((product) => product._id === productId);
@@ -92,18 +93,16 @@ function Product() {
             <th>Description</th>
             <th>Price</th>
             <th>Category</th>
-          
             <th>Creation Time</th>
-              <th>seller</th>
+            <th>Seller</th>
             <th>Update</th>
             <th>Delete</th>
-           
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="8">Loading...</td>
+              <td colSpan="9">Loading...</td>
             </tr>
           ) : (
             products.map((product, index) => (
@@ -113,8 +112,6 @@ function Product() {
                 <td>{product.description}</td>
                 <td>RS.{product.price}</td>
                 <td>{product.category}</td>
-
-               
                 <td>{new Date(product.createdAt).toLocaleString()}</td>
                 <td>{product.sellerName}</td>
                 <td>

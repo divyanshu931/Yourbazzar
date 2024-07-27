@@ -14,7 +14,6 @@ function AddProductForm({ onSuccess }) {
     category: "",
     bestProduct: false,
     imageFile: null,
-    approved: false,
     sellerName: "",
     discount: 0,
     sellerId: "", // Initialize sellerId state
@@ -25,6 +24,7 @@ function AddProductForm({ onSuccess }) {
   const [categories, setCategories] = useState([]);
   const [fetchError, setFetchError] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -46,6 +46,10 @@ function AddProductForm({ onSuccess }) {
     if (userId) {
       setFormData({ ...formData, sellerId: userId });
     }
+
+    // Fetch userRole from cookies
+    const fetchedUserRole = cookies.get("userRole");
+    setUserRole(fetchedUserRole);
   }, []); // Empty dependency array to run only once after initial render
 
   const handleChange = (e) => {
@@ -80,6 +84,7 @@ function AddProductForm({ onSuccess }) {
       img.src = URL.createObjectURL(file);
     });
   };
+
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -105,11 +110,8 @@ function AddProductForm({ onSuccess }) {
       formDataForUpload.append("discount", Number(formData.discount));
       formDataForUpload.append("sellerId", formData.sellerId); // Ensure sellerId is included
   
-      // Read userRole from cookies
-      const userRole = cookies.get("userRole");
-  
-      // Set approved based on userRole (assuming "admin" grants approval)
-      const approved = userRole === "admin";
+      // Set approved based on userRole
+      const approved = userRole === "Admin";
       formDataForUpload.append("approved", approved);
   
       const response = await axiosInstance.post("/api/products/products", formDataForUpload, {
