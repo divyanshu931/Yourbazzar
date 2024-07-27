@@ -92,9 +92,12 @@ function Product() {
             <th>Description</th>
             <th>Price</th>
             <th>Category</th>
+          
+            <th>Creation Time</th>
+              <th>seller</th>
             <th>Update</th>
             <th>Delete</th>
-            <th>Creation Time</th>
+           
           </tr>
         </thead>
         <tbody>
@@ -108,8 +111,12 @@ function Product() {
                 <td>{index + 1}</td>
                 <td>{product.name}</td>
                 <td>{product.description}</td>
-                <td>${product.price.toFixed(2)}</td>
+                <td>RS.{product.price}</td>
                 <td>{product.category}</td>
+
+               
+                <td>{new Date(product.createdAt).toLocaleString()}</td>
+                <td>{product.sellerName}</td>
                 <td>
                   <button className="edit-btn" onClick={() => handleEdit(product._id)}>
                     Edit
@@ -120,7 +127,6 @@ function Product() {
                     Delete
                   </button>
                 </td>
-                <td>{new Date(product.createdAt).toLocaleString()}</td>
               </tr>
             ))
           )}

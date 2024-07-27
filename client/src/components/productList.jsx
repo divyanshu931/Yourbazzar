@@ -1,12 +1,17 @@
-// ProductListing.js
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../apis/axiosInstance';
-
 import ProductItem from './productmap'; // Import the ProductItem component
+
+const categoryDisplayNames = {
+  Milkandbread: 'Milk & bread',
+  'Cold drinks': 'Cold Drinks',
+  'Personal care': 'Personal Care',
+  homeandoffice: 'Home & Office', // Updated to match the actual internal name
+};
 
 const ProductListing = () => {
   const [activeCategory, setActiveCategory] = useState('Milkandbread');
-  const [categories] = useState(['Milkandbread', 'Cold drinks', 'Personal care', 'Home']);
+  const [categories] = useState(['Milkandbread', 'Cold drinks', 'Personal care', 'homeandoffice']); // Updated to match the internal names
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -66,7 +71,7 @@ const ProductListing = () => {
                 className={`nav-link ${activeCategory === category ? 'active' : ''}`}
                 onClick={() => handleCategoryClick(category)}
               >
-                {category}
+                {categoryDisplayNames[category] || category}
               </button>
             </li>
           ))}

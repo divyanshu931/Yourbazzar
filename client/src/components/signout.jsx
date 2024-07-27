@@ -25,13 +25,17 @@ function SignOut() {
   return (
     <div className="text-center">
       <br/>
-      <div className="text-center">
-        <img 
-          src="https://www.letsgowild.co.uk/wp-content/uploads/thankyouowl.png" 
-          alt="Thank you" 
-          className="signout-image"
-        />
-        <h2>Signing Out...</h2>
+      <div   style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey', textAlign: 'center' }}>
+        <br/><br/>
+      <h2>Signing Out...</h2>
+      <h3>Come back soon </h3>
+      <img
+              src="https://blinkit.com/57070263a359a92dc0fe.png" // Replace with the path to your fallback image
+              alt="No products found"
+              style={{ width: '400px', height: '500' }}
+            />
+            
+        
       </div>
     </div>
   );

@@ -107,9 +107,12 @@ const Search = () => {
             <img
               src="https://blinkit.com/57070263a359a92dc0fe.png" // Replace with the path to your fallback image
               alt="No products found"
-              style={{ width: '200px', height: 'auto' }}
+              style={{ width: '400px', height: '500' }}
             />
-            <p>No products found.</p>
+           <p style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey' }}>
+  No products found.
+</p>
+
           </div>
         )}
         {error && <div className="alert alert-danger">{error}</div>}
@@ -124,7 +127,12 @@ const Search = () => {
             ))
           ) : (
             // This fallback is only shown if the search query is empty or less than 1 character
-            searchQuery.trim().length < 1 && <p className="text-center"> Start typing to see results.</p>
+            searchQuery.trim().length < 1 && <p style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey', textAlign: 'center' }}> <img
+            src="https://blinkit.com/57070263a359a92dc0fe.png" 
+            style={{ width: '400px', height: '500' }}
+            alt="No results"
+            className="no-results-image"
+          /><br/>Start typing to see results.</p>
           )}
         </div>
       </div>
