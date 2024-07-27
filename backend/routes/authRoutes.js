@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
+// Change password route
+router.post('/change-password', authController.changePassword);
 
 // Only Admin and Seller can access this route
 router.get('/protected-route', protect, authorize('Admin', 'Seller'), (req, res) => {

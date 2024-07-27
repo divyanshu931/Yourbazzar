@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar'; // Import Sidebar
 import Cookies from 'universal-cookie'; // Import universal-cookie
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+
 
 import Landing_2 from './components/Landing_2.jsx';
 import Landing from './components/Landing';
@@ -18,11 +20,14 @@ import AllOffers from './Pages/all-offer.jsx';
 import FaqPage from './Pages/FQA.jsx';
 import SignOut from './components/signout.jsx'; // Import SignOut component
 import Search from './Pages/sreach.jsx';
+import ChangePassword from './Pages/changepasssword.jsx';
 
 const NotFound = () => (
-  <div style={{ textAlign: 'center', color: '#000' }}>
+  <div   style={{ fontSize: '50px', fontWeight: 'bold', color: 'grey', textAlign: 'center' }}>
+    <br/><br/>
     <h1>404 Not Found</h1>
-    <p>The page you are looking for does not exist.</p>
+    <p>Sorry, the page you're looking for doesn’t seem to exist or is currently under maintenance. Please check back later or return to the <a href="/home">home page</a>.</p>
+
   </div>
 );
 
@@ -60,6 +65,7 @@ function App() {
             <Route path="/category/:categoryName" element={<Productbycategory />} />
             <Route path="/product-detail/:productId" element={<ProductDetailPage />} />
             <Route path="/buy/:productId" element={<Buynow />} />
+            <Route path="/change-password" element={<ChangePassword/>}/>
             <Route path="/FAQ" element={<FaqPage />} />
             <Route path="/signout" element={<SignOut />} /> {/* Add the SignOut route */}
             <Route path="*" element={<NotFound />} /> {/* Route for 404 Not Found */}

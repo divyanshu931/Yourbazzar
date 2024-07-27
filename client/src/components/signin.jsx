@@ -43,7 +43,6 @@ function SignIn() {
     }
   };
 
-
   return (
     <>
       <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header">
@@ -101,10 +100,13 @@ function SignIn() {
             </button>
           )}
         </form>
+        <div className="text-center mt-3">
+          <Link to="/change-password" className="text-success">Forgot Password?</Link>
+        </div>
       </div>
 
       <div className="osahan-footer fixed-bottom p-3 text-center">
-        <div className="h6">by continue, you agree to our</div>
+        <div className="h6">by continuing, you agree to our</div>
         <p className="text-success mb-3">
           <Link to="terms.html" className="text-success">
             Terms & Conditions

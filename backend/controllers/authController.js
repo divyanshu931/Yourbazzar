@@ -125,3 +125,51 @@ exports.login = async (req, res) => {
     return res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
+
+
+// Change password
+exports.changePassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  if (!email || !otp || !newPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'Email, OTP, and new password are required',
+    });
+  }
+
+  try {
+    // Verify the OTP
+    const otpRecord = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    if (!otpRecord || otp !== otpRecord.otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid OTP',
+      });
+    }
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password changed successfully',
+    });
+  } catch (error) {
+    console.error('Error changing password:', error.message);
+    return res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};

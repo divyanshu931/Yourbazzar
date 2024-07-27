@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TopNavbar from "./topnavbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Footer from "./footer";
 import Cookies from "universal-cookie";
@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState("");
     const cookies = new Cookies();
-
+    const navigate = useNavigate(); 
     useEffect(() => {
         // Check if user is authenticated based on cookies
         const token = cookies.get('token');
@@ -25,13 +25,7 @@ const Layout = ({ children }) => {
     };
 
     const handleSignOut = () => {
-        cookies.remove('token');
-        cookies.remove('userId');
-        cookies.remove('role');
-        cookies.remove('name');
-        cookies.remove('email');
-        setIsAuthenticated(false);
-        setUserName("");
+        navigate('/signout');
     };
 
     return (

@@ -19,7 +19,9 @@ const ProductItem = ({ product, addToCart }) => {
     <div className="text-dark col-4 px-0 border-bottom border-end position-relative">
       <div className="list_item_gird m-0 bg-white listing-item">
         <Link to={`/product-detail/${product._id}`} className="text-decoration-none">
-        <span class="badge bg-warning text-dark m-3 position-absolute">{product.discount}% OFF</span>
+          <span className="badge bg-warning text-dark m-3 position-absolute">
+            {product.discount}% OFF
+          </span>
           <div className="list-item-img p-4">
             <img
               src={`${axiosInstance.defaults.baseURL}/${product.image}`}
@@ -33,7 +35,9 @@ const ProductItem = ({ product, addToCart }) => {
           <p className="mb-2 text-muted">{product.description}</p>
           <h6 className="card-title mt-2 mb-3 text-success fw-bold">
             ₹{product.price}.00{' '}
-            <small className="text-decoration-line-through text-muted small fw-light">{product.mrp}</small>
+            <small className="text-decoration-line-through text-muted small fw-light">
+              {product.mrp}
+            </small>
           </h6>
           <div className="d-flex align-items-center justify-content-between gap-1">
             <div className="quantity-btn">
@@ -48,8 +52,6 @@ const ProductItem = ({ product, addToCart }) => {
                   type="text"
                   className="form-control text-center box border-0"
                   value={quantity}
-                  placeholder=""
-                  aria-label="Example text with button addon"
                   readOnly
                 />
                 <div
