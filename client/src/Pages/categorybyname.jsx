@@ -15,7 +15,7 @@ const Productbycategory = () => {
       setError(null);
       try {
         // Fetch products based on category if categoryName exists
-        const endpoint = categoryName ? `/api/public/products?category=${categoryName}` : '/api/public/products';
+        const endpoint = categoryName ? `/api/public/products?category=${categoryName}` : '/api/public/all';
         const response = await axiosInstance.get(endpoint);
         console.log('Fetched products:', response.data);
         setProducts(response.data);

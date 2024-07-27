@@ -5,8 +5,8 @@ import axiosInstance from '../apis/axiosInstance';
 import ProductItem from './productmap'; // Import the ProductItem component
 
 const ProductListing = () => {
-  const [activeCategory, setActiveCategory] = useState('Milk&bread');
-  const [categories] = useState(['Milk&bread', 'Cold drinks', 'Personal care', 'Home']);
+  const [activeCategory, setActiveCategory] = useState('Milkandbread');
+  const [categories] = useState(['Milkandbread', 'Cold drinks', 'Personal care', 'Home']);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
