@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar'; // Import Sidebar
 import Cookies from 'universal-cookie'; // Import universal-cookie
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+
 
 
 import Landing_2 from './components/Landing_2.jsx';

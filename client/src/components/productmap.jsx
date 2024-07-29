@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axiosInstance from '../apis/axiosInstance'; // Ensure this import is correct
+import axiosInstance from '../apis/axiosInstance';
+import { getCartFromLocalStorage, updateCartInLocalStorage } from '../utils/cartUtils'; // Ensure the path is correct
 
-const ProductItem = ({ product, addToCart }) => {
-  const [quantity, setQuantity] = useState(1); // State for quantity, defaulting to 1
+const ProductItem = ({ product }) => {
+  const [quantity, setQuantity] = useState(1);
 
   const decrementQuantity = () => {
     if (quantity > 1) {
@@ -13,6 +14,32 @@ const ProductItem = ({ product, addToCart }) => {
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
+  };
+
+  const handleAddToCart = () => {
+    const cartItems = getCartFromLocalStorage();
+    const productIndex = cartItems.findIndex(item => item.product._id === product._id);
+
+    if (productIndex > -1) {
+      // Update quantity if product already exists in cart
+      cartItems[productIndex].quantity += quantity;
+    } else {
+      // Add new product to cart
+      cartItems.push({
+        product: {
+          _id: product._id,
+          name: product.name,
+          sellerName: product.sellerName,
+          price: product.price,
+          mrp: product.mrp,
+          discount: product.discount,
+          image: product.image
+        },
+        quantity
+      });
+    }
+
+    updateCartInLocalStorage(cartItems); // Update local storage
   };
 
   return (
@@ -65,7 +92,7 @@ const ProductItem = ({ product, addToCart }) => {
             <div>
               <button
                 className="btn btn-success btn-sm d-flex border-0"
-                onClick={() => addToCart('user123', product._id)}
+                onClick={handleAddToCart}
               >
                 <i className="bi bi-plus me-2"></i> ADD
               </button>

@@ -142,43 +142,10 @@ const Buynow = () => {
 
             {/* Fixed Button */}
             <div className="osahan-footer fixed-bottom p-3">
-                <a href="my-order.html" className="btn btn-success btn-lg w-100 shadow">Confirm & Place Order</a>
+                <Link className="btn btn-success btn-lg w-100 shadow">Confirm & Place Order</Link>
             </div>
 
-            {/* Modal */}
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered m-0">
-                    <div className="modal-content modal-content rounded-0 border-0 vh-100">
-                        <div className="modal-header">
-                            <h6 className="modal-title fw-bold" id="exampleModalLabel">Variants</h6>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="btn-group osahan-btn-group w-100 d-flex flex-column" role="group" aria-label="Basic radio toggle button group">
-                                <input type="radio" className="btn-check" name="btnradioq" id="btnradio1q" autoComplete="off" defaultChecked />
-                                <label className="btn btn-outline-light d-flex align-items-center gap-3 rounded px-3 py-2" htmlFor="btnradio1q">
-                                    <h6 className="mb-0 fw-bold">Small</h6>
-                                    <span className="ms-auto fw-bold fs-6">Rs.85 <i className="bi bi-check-circle-fill ms-3"></i></span>
-                                </label>
-                                <input type="radio" className="btn-check" name="btnradioq" id="btnradio2q" autoComplete="off" />
-                                <label className="btn btn-outline-light d-flex align-items-center gap-3 rounded mt-2 px-3 py-2" htmlFor="btnradio2q">
-                                    <h6 className="mb-0 fw-bold">Medium</h6>
-                                    <span className="ms-auto fw-bold fs-6">Rs.99 <i className="bi bi-check-circle-fill ms-3"></i></span>
-                                </label>
-                                <input type="radio" className="btn-check" name="btnradioq" id="btnradio2qq" autoComplete="off" />
-                                <label className="btn btn-outline-light d-flex align-items-center gap-3 rounded mt-2 px-3 py-2" htmlFor="btnradio2qq">
-                                    <h6 className="mb-0 fw-bold">Large</h6>
-                                    <span className="ms-auto fw-bold fs-6">Rs.109 <i className="bi bi-check-circle-fill ms-3"></i></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div className="modal-footer d-flex align-items-center justify-content-between fixed-bottom">
-                            <button type="button" className="col btn btn-outline-success" data-bs-dismiss="modal">Add to Bag</button>
-                            <button type="button" className="col btn btn-success" data-bs-dismiss="modal">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </>
     );
 };
