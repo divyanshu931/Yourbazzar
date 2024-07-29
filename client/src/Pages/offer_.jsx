@@ -76,8 +76,12 @@ function OfferDetails() {
             discountedProducts.map(product => (
               <ProductItem key={product._id} product={product} />
             ))
-          ) : (
-            <p>No products with discounts available.</p>
+          ) : (<center>
+            <p> <img
+            src="https://blinkit.com/57070263a359a92dc0fe.png" // Replace with the path to your fallback image
+            alt="No products found"
+            style={{ width: '400px', height: '500' }}
+          />No products with discounts available.</p></center>
           )}
         </div>
       </div>

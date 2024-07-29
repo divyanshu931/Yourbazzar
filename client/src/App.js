@@ -22,6 +22,7 @@ import SignOut from './components/signout.jsx'; // Import SignOut component
 import Search from './Pages/sreach.jsx';
 import ChangePassword from './Pages/changepasssword.jsx';
 import BagPage from './Pages/cart.jsx';
+import AllProducts from './Pages/allproducts.jsx';
 
 const NotFound = () => (
   <div   style={{ fontSize: '50px', fontWeight: 'bold', color: 'grey', textAlign: 'center' }}>
@@ -69,6 +70,7 @@ function App() {
             <Route path="/change-password" element={<ChangePassword/>}/>
             <Route path="/FAQ" element={<FaqPage />} />
             <Route exact path="/bag" element={<BagPage/>}/>
+            <Route path="/listing" element={<AllProducts />}/>
             <Route path="/signout" element={<SignOut />} /> {/* Add the SignOut route */}
             <Route path="*" element={<NotFound />} /> {/* Route for 404 Not Found */}
           </Routes>

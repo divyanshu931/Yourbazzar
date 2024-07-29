@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
 import TopNavbar from "../components/layout/topnavbar";
 import Sidebar from "../components/layout/Sidebar";
 import Footer from "../components/layout/footer";
 import ProductItem from "../components/productmap";
 import debounce from "lodash.debounce"; // Import debounce from lodash
+import Cookies from "universal-cookie";
 
 const Search = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,6 +14,19 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState("");
+  const cookies = new Cookies();
+  const navigate = useNavigate(); 
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const token = cookies.get('token');
+    const userId = cookies.get('userId');
+    const name = cookies.get('name');
+    setIsAuthenticated(!!token && !!userId);
+    setUserName(name || "");
+  }, [cookies]);
 
   // Function to fetch search results
   const fetchSearchResults = async (query) => {
@@ -60,6 +74,11 @@ const Search = () => {
     console.log(`Add product ${productId} to cart for user ${userId}`);
   };
 
+  const handleSignOut = () => {
+    
+    navigate('/signout');
+  };
+
   return (
     <div>
       <TopNavbar />
@@ -67,12 +86,21 @@ const Search = () => {
       <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top ${isSidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h4 className="m-0 fw-bold text-black">
-            Your<span className="text-success">Bajaar</span>
+            Your <span className="text-success">Bajaar</span>
           </h4>
           <div className="ms-auto d-flex align-items-center">
-            <Link to="/signin" className="me-3 text-dark fs-5">
-              <i className="bi bi-person-circle"></i>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <button className="btn btn-link text-dark fs-5" onClick={handleSignOut}>
+                  <i className="bi bi-box-arrow-right"></i>
+                </button>
+                <span className="text-dark fs-5 me-3"></span>
+              </>
+            ) : (
+              <Link to="/signin" className="me-3 text-dark fs-5">
+                <i className="bi bi-person-circle"></i>
+              </Link>
+            )}
             <Link to="/bag" className="me-3 text-dark fs-5">
               <i className="bi bi-basket"></i>
             </Link>
@@ -96,7 +124,6 @@ const Search = () => {
             value={searchQuery}
             onChange={handleSearchInputChange}
           />
-          
         </div>
       </div>
 
@@ -109,10 +136,9 @@ const Search = () => {
               alt="No products found"
               style={{ width: '400px', height: '500' }}
             />
-           <p style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey' }}>
-  No products found.
-</p>
-
+            <p style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey' }}>
+              No products found.
+            </p>
           </div>
         )}
         {error && <div className="alert alert-danger">{error}</div>}
@@ -127,12 +153,18 @@ const Search = () => {
             ))
           ) : (
             // This fallback is only shown if the search query is empty or less than 1 character
-            searchQuery.trim().length < 1 && <p style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey', textAlign: 'center' }}> <img
-            src="https://blinkit.com/57070263a359a92dc0fe.png" 
-            style={{ width: '400px', height: '500' }}
-            alt="No results"
-            className="no-results-image"
-          /><br/>Start typing to see results.</p>
+            searchQuery.trim().length < 1 && (
+              <p style={{ fontSize: '50px', fontWeight: 'bold', color: 'lightgrey', textAlign: 'center' }}>
+                <img
+                  src="https://blinkit.com/57070263a359a92dc0fe.png" 
+                  style={{ width: '400px', height: '500' }}
+                  alt="No results"
+                  className="no-results-image"
+                />
+                <br />
+                Start typing to see results.
+              </p>
+            )
           )}
         </div>
       </div>

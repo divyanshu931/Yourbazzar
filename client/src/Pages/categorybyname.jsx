@@ -47,7 +47,11 @@ const Productbycategory = () => {
         <div className="tab-pane fade active show" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
           {products.length === 0 ? (
             <div className="no-products-message d-flex justify-content-center align-items-center">
-              <p className="text-center text-dark font-weight-bold">No products available in this category. Check back soon!</p>
+              <p className="text-center text-dark font-weight-bold"> <img
+              src="https://blinkit.com/57070263a359a92dc0fe.png" // Replace with the path to your fallback image
+              alt="No products found"
+              style={{ width: '400px', height: '500' }}
+            />No products available in this category. Check back soon!</p>
             </div>
           ) : (
             products.map((product) => (
