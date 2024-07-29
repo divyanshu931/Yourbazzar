@@ -23,8 +23,20 @@ const NotFound = () => (
   </div>
 );
 
+
 function App() {
- 
+  useEffect(() => {
+    const handleRightClick = (event) => {
+      event.preventDefault(); // Prevents the default context menu from appearing
+    };
+
+    document.addEventListener('contextmenu', handleRightClick);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener('contextmenu', handleRightClick);
+    };
+  }, []);
   return (
     <Router>
       <div className="App">
