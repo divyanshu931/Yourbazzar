@@ -33,7 +33,8 @@ const ProductItem = ({ product }) => {
           price: product.price,
           mrp: product.mrp,
           discount: product.discount,
-          image: product.image
+          image: product.image,
+         description: product.description,
         },
         quantity
       });

@@ -144,6 +144,15 @@ body {
 .size-btn .btn span {
     margin-left: auto;
 }
+/* Add this CSS to your stylesheet */
+.fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 
 .quantity-btn .form-control {
     font-size: 12px;

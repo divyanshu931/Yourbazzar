@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar'; // Import Sidebar
 import Cookies from 'universal-cookie'; // Import universal-cookie
 
-
-
 import Landing_2 from './components/Landing_2.jsx';
 import Landing from './components/Landing';
 import GetStart from './components/getStarted';
@@ -25,24 +23,22 @@ import BagPage from './Pages/cart.jsx';
 import AllProducts from './Pages/allproducts.jsx';
 
 const NotFound = () => (
-  <div   style={{ fontSize: '50px', fontWeight: 'bold', color: 'grey', textAlign: 'center' }}>
+  <div style={{ fontSize: '50px', fontWeight: 'bold', color: 'grey', textAlign: 'center' }}>
     <br/><br/>
     <h1>404 Not Found</h1>
     <p>Sorry, the page you're looking for doesn’t seem to exist or is currently under maintenance. Please check back later or return to the <a href="/home">home page</a>.</p>
-
   </div>
 );
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const cookies = new Cookies(); // Instantiate Cookies
 
   useEffect(() => {
-    // Check if authentication token is present in cookies
+    const cookies = new Cookies(); // Move cookies initialization inside useEffect
     const token = cookies.get('token');
     setIsAuthenticated(!!token); // Set authentication state based on token presence
-  }, [cookies]);
+  }, []); // Empty dependency array means this effect runs only once on mount
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -67,10 +63,10 @@ function App() {
             <Route path="/category/:categoryName" element={<Productbycategory />} />
             <Route path="/product-detail/:productId" element={<ProductDetailPage />} />
             <Route path="/buy/:productId" element={<Buynow />} />
-            <Route path="/change-password" element={<ChangePassword/>}/>
+            <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/FAQ" element={<FaqPage />} />
-            <Route exact path="/bag" element={<BagPage/>}/>
-            <Route path="/listing" element={<AllProducts />}/>
+            <Route path="/bag" element={<BagPage />} />
+            <Route path="/listing" element={<AllProducts />} />
             <Route path="/signout" element={<SignOut />} /> {/* Add the SignOut route */}
             <Route path="*" element={<NotFound />} /> {/* Route for 404 Not Found */}
           </Routes>

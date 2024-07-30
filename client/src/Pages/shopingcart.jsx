@@ -1,8 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import axiosInstance from '../apis/axiosInstance';
 
 const Buynow = () => {
-    
+    const { productId } = useParams(); // Get productId from URL
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [quantity, setQuantity] = useState(1); // State for quantity
+
+    useEffect(() => {
+        const fetchProductDetails = async () => {
+            try {
+                const response = await axiosInstance.get(`/api/public/products/${productId}`);
+                setProduct(response.data);
+            } catch (err) {
+                console.error('Error fetching product details:', err);
+                setError('Failed to fetch product details.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProductDetails();
+    }, [productId]);
+
+    const handleIncreaseQuantity = () => {
+        setQuantity(prevQuantity => prevQuantity + 1);
+    };
+
+    const handleDecreaseQuantity = () => {
+        setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1)); // Ensure quantity doesn't go below 1
+    };
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
+
+    if (!product) {
+        return <p>Product not found.</p>;
+    }
+
     return (
         <>
             <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top">
@@ -17,34 +59,19 @@ const Buynow = () => {
                     </div>
                 </div>
             </div>
+
             <div className="bg-white shadow-sm my-3 p-3">
                 <div className="card od-card border-0">
                     <div className="d-flex bag-item">
                         <div className="bag-item-left">
-                            {/* Slider */}
-                            <div className="slider-for border rounded-3 mx-1 mb-1">
-                                <div className="product1"><img src="img/d1.png" className="img-fluid rounded-3" alt="" /></div>
-                                <div className="product1"><img src="img/d2.png" className="img-fluid rounded-3" alt="" /></div>
-                                <div className="product1"><img src="img/d3.png" className="img-fluid rounded-3" alt="" /></div>
-                                <div className="product1"><img src="img/d1.png" className="img-fluid rounded-3" alt="" /></div>
-                                <div className="product1"><img src="img/d2.png" className="img-fluid rounded-3" alt="" /></div>
-                                <div className="product1"><img src="img/d3.png" className="img-fluid rounded-3" alt="" /></div>
-                            </div>
-                            <div className="slider-nav">
-                                <div className="product2 p-1"><img src="img/d1.png" className="img-fluid rounded-3 border" alt="#" /></div>
-                                <div className="product2 p-1"><img src="img/d2.png" className="img-fluid rounded-3 border" alt="#" /></div>
-                                <div className="product2 p-1"><img src="img/d3.png" className="img-fluid rounded-3 border" alt="#" /></div>
-                                <div className="product2 p-1"><img src="img/d1.png" className="img-fluid rounded-3 border" alt="#" /></div>
-                                <div className="product2 p-1"><img src="img/d2.png" className="img-fluid rounded-3 border" alt="#" /></div>
-                                <div className="product2 p-1"><img src="img/d3.png" className="img-fluid rounded-3 border" alt="#" /></div>
-                            </div>
+                            <img src={`${axiosInstance.defaults.baseURL}/${product.image}`} alt={product.name} className="img-fluid" />
                         </div>
                         <div className="bag-item-right w-100">
                             <div className="card-body pe-0 py-0">
-                                <span className="badge bg-success">20% OFF</span>
-                                <p className="card-text mb-0 mt-1 text-black">Parle-G Original Gluco Biscuit</p>
-                                <small className="text-muted"><i className="bi bi-shop me-1"></i> Seller - Private limited</small>
-                                <h4 className="card-title mt-2 text-black fw-bold">₹80.00 <small className="text-decoration-line-through text-muted fs-6 fw-light">₹100.00</small></h4>
+                                <span className="badge bg-success">{product.discount}% OFF</span>
+                                <p className="card-text mb-0 mt-1 text-black">{product.name}</p>
+                                <small className="text-muted"><i className="bi bi-shop me-1"></i> Seller - {product.sellerName}</small>
+                                <h4 className="card-title mt-2 text-black fw-bold">₹{product.price} <small className="text-decoration-line-through text-muted fs-6 fw-light">₹{product.mrp}</small></h4>
                                 <div className="d-flex align-items-center justify-content-between gap-3">
                                     <div className="size-btn">
                                         <div className="text-muted small mb-1">Size</div>
@@ -55,9 +82,18 @@ const Buynow = () => {
                                     <div className="quantity-btn">
                                         <div className="text-muted small mb-1">Quantity</div>
                                         <div className="input-group input-group-sm border rounded overflow-hidden">
-                                            <div className="btn btn-light text-success minus border-0 bg-white"><i className="bi bi-dash"></i></div>
-                                            <input type="text" className="form-control text-center box border-0" value="1" placeholder="" aria-label="Example text with button addon" />
-                                            <div className="btn btn-light text-success plus border-0 bg-white"><i className="bi bi-plus"></i></div>
+                                            <button type="button" className="btn btn-light text-success minus border-0 bg-white" onClick={handleDecreaseQuantity}>
+                                                <i className="bi bi-dash"></i>
+                                            </button>
+                                            <input
+                                                type="text"
+                                                className="form-control text-center box border-0"
+                                                value={quantity}
+                                                readOnly
+                                            />
+                                            <button type="button" className="btn btn-light text-success plus border-0 bg-white" onClick={handleIncreaseQuantity}>
+                                                <i className="bi bi-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -66,16 +102,17 @@ const Buynow = () => {
                     </div>
                 </div>
             </div>
+
             {/* Price Summary */}
             <div className="bg-white shadow-sm mb-4 p-3">
                 <h6 className="mb-3 text-black fw-bold">Price Summary</h6>
                 <div className="d-flex justify-content-between align-items-center mb-2">
                     <div className="text-muted">Product Charges</div>
-                    <div className="price">Rs.75</div>
+                    <div className="price">₹{product.price}</div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="text-muted">Shipping charges</div>
-                    <div className="text-success free">10</div>
+                    <div className="text-success free">Free</div>
                 </div>
                 <hr className="my-3"/>
                 <div className="d-flex justify-content-between align-items-center">
@@ -83,7 +120,7 @@ const Buynow = () => {
                         <h6 className="mb-0 text-dark">Order Total</h6>
                         <small className="text-muted">inclusive of all taxes</small>
                     </div>
-                    <div className="text-success h5">Rs.85</div>
+                    <div className="text-success h5">₹{product.price}</div>
                 </div>
             </div>
 
@@ -144,8 +181,6 @@ const Buynow = () => {
             <div className="osahan-footer fixed-bottom p-3">
                 <Link className="btn btn-success btn-lg w-100 shadow">Confirm & Place Order</Link>
             </div>
-
-            
         </>
     );
 };
