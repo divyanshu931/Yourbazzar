@@ -178,7 +178,7 @@ const SignIn = () => {
       });
 
       if (otpVerificationResponse.data.success) {
-        navigate("/dashboard/admin");
+        navigate("/myproduct");
       } else {
         setError("Invalid OTP. Please try again.");
       }

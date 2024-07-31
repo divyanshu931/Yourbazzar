@@ -15,6 +15,8 @@ import AddProductForm from './components/addproduct';
 import AddCategoryForm from './components/add caterogy';
 import AddOffer from './components/addoffer';
 import ApproveProducts from './Adminpages/aprrove';
+import MyProduct from './components/myproduct';
+import SellerSupport from './components/sellersupport';
 
 const NotFound = () => (
   <div style={{ textAlign: 'center', color: '#000' }}>
@@ -54,7 +56,8 @@ function App() {
           <Route path="/offer/add" element={<AddOffer />} />
           <Route path="/approval-request" element={<ApproveProducts />} />
           <Route path="/" element={<SignIn />} />
-
+          <Route path="/myproduct" element={<MyProduct/>}/>
+          <Route path="/seller-support" element={<SellerSupport/>}/>
           {/* Route for 404 Not Found */}
           <Route path="*" element={<NotFound />} />
         </Routes>

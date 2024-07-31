@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
 import { Link } from "react-router-dom";
 import EditOffer from "./editoffer"; // Import EditOffer component
+import Cookies from 'universal-cookie'; // Import universal-cookie
 import "./style.css";
 
 function OfferControl() {
@@ -9,11 +10,17 @@ function OfferControl() {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addFormOpen, setAddFormOpen] = useState(false);
   const [offerToEdit, setOfferToEdit] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); // State to manage admin access
+
+  const cookies = new Cookies();
 
   useEffect(() => {
-    fetchOffers();
+    const userRole = cookies.get('userRole'); // Fetch user role from cookies
+    setIsAdmin(userRole === 'Admin'); // Check if the user is an Admin
+    if (userRole === 'Admin') {
+      fetchOffers(); // Fetch offers only if user is an Admin
+    }
   }, []);
 
   const fetchOffers = async () => {
@@ -49,18 +56,29 @@ function OfferControl() {
   };
 
   const handleEdit = (offerId) => {
-    // Set offerToEdit to trigger rendering of EditOffer component
     const selectedOffer = offers.find((offer) => offer._id === offerId);
     setOfferToEdit(selectedOffer);
-    setAddFormOpen(false); // Close add form if open
   };
 
   const handleCloseEdit = () => {
     setOfferToEdit(null); // Clear offerToEdit to hide EditOffer component
   };
 
+  // Inline style for "No Access" message
+  const noAccessStyle = {
+    color: '#000', // Black color
+    textAlign: 'center',
+    padding: '20px',
+    fontSize: '18px',
+    fontFamily: 'Arial, sans-serif'
+  };
+
+  if (!isAdmin) {
+    return <p style={noAccessStyle}>No Access for saller</p>; // Message for non-admin users
+  }
+
   return (
-   <>
+    <>
       <h2 className="main-title">Offer Control</h2>
 
       {/* Link to Add Offer Form */}

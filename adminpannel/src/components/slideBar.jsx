@@ -37,18 +37,24 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
       </div>
 
       <ul className="sidebar-list">
-        <li className="sidebar-list-item">
-          <Link to="/dashboard/admin">
-            <BsGrid1X2Fill className="icon" /> Dashboard
-          </Link>
-        </li>
+      
 
         {/* Additional sidebar items based on user role */}
         {userRole === "Admin" && (
           <>
             <li className="sidebar-list-item">
+          <Link to="/dashboard/admin">
+            <BsGrid1X2Fill className="icon" /> Dashboard
+          </Link>
+        </li>
+        <li className="sidebar-list-item">
+              <Link to="/myproduct">
+                <BsFillArchiveFill className="icon" /> My Products
+              </Link>
+            </li>
+            <li className="sidebar-list-item">
               <Link to="/product-dashboard">
-                <BsFillArchiveFill className="icon" /> Products
+                <BsFillArchiveFill className="icon" /> All Products
               </Link>
             </li>
             <li className="sidebar-list-item">
@@ -89,7 +95,7 @@ function Sidebar({ openSidebarToggle, openSidebar, userRole }) {
               </Link>
             </li>
             <li className="sidebar-list-item">
-              <Link to="/product-dashboard">
+              <Link to="/myproduct">
                 <BsFillArchiveFill className="icon" /> My Products
               </Link>
             </li>

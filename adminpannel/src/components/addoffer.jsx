@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axiosInstance from "../apis/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import "./style.css";
-import AdminLayout from "./layout/AdminLayout";
+import AdminLayout from './layout/AdminLayout';
+
 
 const AddOffer = ({ onAdd }) => {
   const initialFormData = {
@@ -80,9 +80,28 @@ const AddOffer = ({ onAdd }) => {
     }
   };
 
-  // Inline style for labels
+  // Inline style for labels and file input
   const labelStyle = {
     color: "black",
+  };
+
+  const fileLabelStyle = {
+    display: "inline-block",
+    padding: "8px 12px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    backgroundColor: "#f9f9f9",
+    color: "grey", // Make the file name text grey
+    cursor: "pointer",
+    width: "100%",
+    textAlign: "center",
+    width: "250px", 
+    marginTop: "8px",
+    
+  };
+
+  const fileInputStyle = {
+    display: "none", // Hide the default file input
   };
 
   return (
@@ -138,16 +157,19 @@ const AddOffer = ({ onAdd }) => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="imageFile" style={{ color: "black" }}>Image (PNG or AVIF format):</label>
+ 
               <input
                 id="imageFile"
                 type="file"
                 name="imageFile"
                 onChange={handleChange}
-                className="form-input"
+                style={fileInputStyle}
                 accept=".png,.avif"
                 required
               />
+              <label htmlFor="imageFile" style={fileLabelStyle}>
+                {formData.imageFile ? formData.imageFile.name : "Choose file"}
+              </label>
             </div>
 
             <div className="form-buttons">
