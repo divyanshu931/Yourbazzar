@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axiosInstance from '../apis/axiosInstance';
+import Sidebar from '../components/layout/Sidebar';
+
 
 const Buynow = () => {
     const { productId } = useParams(); // Get productId from URL
@@ -8,6 +10,7 @@ const Buynow = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quantity, setQuantity] = useState(1); // State for quantity
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -33,6 +36,17 @@ const Buynow = () => {
         setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1)); // Ensure quantity doesn't go below 1
     };
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    // Calculate total cost
+    const totalCost = product ? product.price * quantity : 0;
+    // Calculate shipping charge
+    const shippingCharge = totalCost < 200 ? 50 : 0;
+    // Total price including shipping
+    const totalPrice = totalCost + shippingCharge;
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -47,18 +61,21 @@ const Buynow = () => {
 
     return (
         <>
-            <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top">
+            <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top ${isSidebarOpen ? 'sidebar-open' : ''}`}>
                 <div className="font-weight-normal mb-0 d-flex align-items-center">
                     <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
                         <Link to="/home" className="text-dark me-3 fs-4"><i className="bi bi-chevron-left"></i></Link>
                         My Bag
                     </h6>
                     <div className="ms-auto d-flex align-items-center">
-                        <Link to="/empty" className="me-3 text-decoration-none text-dark text-uppercase">Clear Bag</Link>
-                        <a className="toggle osahan-toggle fs-4 text-dark ms-auto" href="#"><i className="bi bi-list"></i></a>
+                        <a className="toggle osahan-toggle fs-4 text-dark ms-auto" onClick={toggleSidebar}>
+                            <i className="bi bi-list"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} /> {/* Include Sidebar */}
 
             <div className="bg-white shadow-sm my-3 p-3">
                 <div className="card od-card border-0">
@@ -75,8 +92,8 @@ const Buynow = () => {
                                 <div className="d-flex align-items-center justify-content-between gap-3">
                                     <div className="size-btn">
                                         <div className="text-muted small mb-1">Size</div>
-                                        <div>
-                                            <button type="button" className="btn btn-light btn-sm border d-flex" data-bs-toggle="modal" data-bs-target="#exampleModal">Large <span><i className="bi bi-chevron-down small ms-2"></i></span></button>
+                                        <div className="btn-sm border d-flex">
+                                            {product.description}
                                         </div>
                                     </div>
                                     <div className="quantity-btn">
@@ -108,11 +125,11 @@ const Buynow = () => {
                 <h6 className="mb-3 text-black fw-bold">Price Summary</h6>
                 <div className="d-flex justify-content-between align-items-center mb-2">
                     <div className="text-muted">Product Charges</div>
-                    <div className="price">₹{product.price}</div>
+                    <div className="price">₹{totalCost}</div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="text-muted">Shipping charges</div>
-                    <div className="text-success free">Free</div>
+                    <div className="text-success free">{shippingCharge === 0 ? 'Free' : `₹${shippingCharge}`}</div>
                 </div>
                 <hr className="my-3"/>
                 <div className="d-flex justify-content-between align-items-center">
@@ -120,7 +137,7 @@ const Buynow = () => {
                         <h6 className="mb-0 text-dark">Order Total</h6>
                         <small className="text-muted">inclusive of all taxes</small>
                     </div>
-                    <div className="text-success h5">₹{product.price}</div>
+                    <div className="text-success h5">₹{totalPrice}</div>
                 </div>
             </div>
 

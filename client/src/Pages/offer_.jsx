@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 import ProductItem from '../components/productmap';
+import Sidebar from '../components/layout/Sidebar';
+import { Modal, Button, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap styles are imported
 
 function OfferDetails() {
   const { id } = useParams();
@@ -9,21 +12,21 @@ function OfferDetails() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('popularity'); // Default filter
 
   useEffect(() => {
     const fetchOfferAndProducts = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
-        // Fetch offer details
         const offerResponse = await axiosInstance.get(`/api/offers/${id}`);
         setOffer(offerResponse.data.offer);
 
-        // Fetch products related to the offer
         const productsResponse = await axiosInstance.get(`/api/public/all`);
         setProducts(productsResponse.data);
-
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Failed to fetch data. Please try again later.');
@@ -35,6 +38,18 @@ function OfferDetails() {
     fetchOfferAndProducts();
   }, [id]);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+  };
+
+  const applyFilter = () => {
+    setShowFilterModal(false);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -43,14 +58,20 @@ function OfferDetails() {
     return <div className="error-message">Error: {error}</div>;
   }
 
-  // Filter products based on offer discount and product discount
-  const discountedProducts = products.filter(product => 
-    offer.discount==product.discount 
-  );
+  // Filter products based on selected filter and offer discount
+  let filteredProducts = products.filter(product => product.discount === offer.discount);
+
+  if (selectedFilter === 'highToLow') {
+    filteredProducts.sort((a, b) => b.price - a.price);
+  } else if (selectedFilter === 'lowToHigh') {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (selectedFilter === 'discount') {
+    // Discount filter logic is already applied with discount match
+  }
 
   return (
     <>
-      <div className="p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top">
+      <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top ${isSidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
             <Link to="/home" className="text-dark me-3 fs-4"><i className="bi bi-chevron-left"></i></Link>
@@ -60,11 +81,16 @@ function OfferDetails() {
             </span>
           </h6>
           <div className="ms-auto d-flex align-items-center">
-            <a href="#" className="me-3 text-dark fs-5" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="bi bi-funnel"></i></a>
-            <a href="#" className="toggle osahan-toggle fs-4 text-dark ms-auto"><i className="bi bi-list"></i></a>
+            <Button variant="link" className="me-3 text-dark fs-5" onClick={() => setShowFilterModal(true)}><i className="bi bi-funnel"></i></Button>
+            <a className="toggle osahan-toggle fs-4 text-dark ms-auto" onClick={toggleSidebar}>
+              <i className="bi bi-list"></i>
+            </a>
           </div>
         </div>
       </div>
+
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
       <div className="osahan-listing">
         <div className="osahan-listing p-0 m-0 row border-top">
           <div className="p-3 border-bottom w-100">
@@ -72,19 +98,75 @@ function OfferDetails() {
           </div>
         </div>
         <div className="row">
-          {discountedProducts.length > 0 ? (
-            discountedProducts.map(product => (
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map(product => (
               <ProductItem key={product._id} product={product} />
             ))
-          ) : (<center>
-            <p> <img
-            src="https://blinkit.com/57070263a359a92dc0fe.png" // Replace with the path to your fallback image
-            alt="No products found"
-            style={{ width: '400px', height: '500' }}
-          />No products with discounts available.</p></center>
+          ) : (
+            <center>
+              <p>
+                <img
+                  src="https://blinkit.com/57070263a359a92dc0fe.png" // Replace with the path to your fallback image
+                  alt="No products found"
+                  style={{ width: '400px', height: '500px' }}
+                />
+                No products with discounts available.
+              </p>
+            </center>
           )}
         </div>
       </div>
+
+      {/* Filter Modal */}
+      <Modal show={showFilterModal} onHide={() => setShowFilterModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Sort by</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Check
+              type="radio"
+              id="filterPopularity"
+              label="Popularity"
+              name="filterOptions"
+              value="popularity"
+              checked={selectedFilter === 'popularity'}
+              onChange={() => handleFilterChange('popularity')}
+            />
+            <Form.Check
+              type="radio"
+              id="filterHighToLow"
+              label="High to Low"
+              name="filterOptions"
+              value="highToLow"
+              checked={selectedFilter === 'highToLow'}
+              onChange={() => handleFilterChange('highToLow')}
+            />
+            <Form.Check
+              type="radio"
+              id="filterLowToHigh"
+              label="Low to High"
+              name="filterOptions"
+              value="lowToHigh"
+              checked={selectedFilter === 'lowToHigh'}
+              onChange={() => handleFilterChange('lowToHigh')}
+            />
+            <Form.Check
+              type="radio"
+              id="filterDiscount"
+              label="Discount"
+              name="filterOptions"
+              value="discount"
+              checked={selectedFilter === 'discount'}
+              onChange={() => handleFilterChange('discount')}
+            />
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-success" onClick={() => setSelectedFilter('')}>CLEAR ALL</Button>
+          <Button variant="success" onClick={applyFilter}>APPLY FILTER</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

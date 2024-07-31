@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../apis/axiosInstance';
 import { getCartFromLocalStorage, updateCartInLocalStorage } from '../utils/cartUtils'; // Ensure the path is correct
+import { motion, useAnimation } from 'framer-motion';
 
 const ProductItem = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false); // State to manage button text
+  const [buttonText, setButtonText] = useState('ADD'); // State to manage button text display
+  const controls = useAnimation(); // Framer Motion animation controls
 
   const decrementQuantity = () => {
     if (quantity > 1) {
@@ -16,7 +20,7 @@ const ProductItem = ({ product }) => {
     setQuantity(quantity + 1);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const cartItems = getCartFromLocalStorage();
     const productIndex = cartItems.findIndex(item => item.product._id === product._id);
 
@@ -34,13 +38,27 @@ const ProductItem = ({ product }) => {
           mrp: product.mrp,
           discount: product.discount,
           image: product.image,
-         description: product.description,
+          description: product.description,
         },
         quantity
       });
     }
 
     updateCartInLocalStorage(cartItems); // Update local storage
+
+    // Trigger animation
+    await controls.start({
+      scale: [1, 1.2, 1],
+      transition: { type: 'spring', stiffness: 300 }
+    });
+
+    // Update button text to ADDED and reset after 0.5 seconds
+    setButtonText('ADDED');
+    setIsAdded(true);
+    setTimeout(() => {
+      setButtonText('ADD');
+      setIsAdded(false);
+    }, 500); // Change back to ADD after 0.5 seconds
   };
 
   return (
@@ -91,12 +109,21 @@ const ProductItem = ({ product }) => {
               </div>
             </div>
             <div>
-              <button
+              <motion.button
                 className="btn btn-success btn-sm d-flex border-0"
                 onClick={handleAddToCart}
+                animate={controls} // Apply animation
               >
-                <i className="bi bi-plus me-2"></i> ADD
-              </button>
+                {isAdded ? (
+                  <>
+                    <i className="bi bi-check me-2"></i> {buttonText}
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-plus me-2"></i> {buttonText}
+                  </>
+                )}
+              </motion.button>
             </div>
           </div>
         </div>

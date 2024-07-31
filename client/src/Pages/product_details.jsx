@@ -13,6 +13,7 @@ const ProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [quantity, setQuantity] = useState(1); // State for quantity
+  const [buttonText, setButtonText] = useState('ADD'); // State for button text
 
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.target.getBoundingClientRect();
@@ -25,13 +26,15 @@ const ProductDetailPage = () => {
     setMousePosition({ x: 0, y: 0 });
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const cartItems = getCartFromLocalStorage();
     const productIndex = cartItems.findIndex(item => item.product._id === product._id);
 
     if (productIndex > -1) {
+      // Update quantity if product already exists in cart
       cartItems[productIndex].quantity += quantity;
     } else {
+      // Add new product to cart
       cartItems.push({
         product: {
           _id: product._id,
@@ -48,6 +51,12 @@ const ProductDetailPage = () => {
     }
 
     updateCartInLocalStorage(cartItems);
+
+    // Show "ADDED" for 0.5 seconds
+    setButtonText('ADDED');
+    setTimeout(() => {
+      setButtonText('ADD');
+    }, 500); // Change back to ADD after 0.5 seconds
   };
 
   const fetchProductDetails = async () => {
@@ -110,7 +119,6 @@ const ProductDetailPage = () => {
                       style={{
                         width: '200px', // Ensure zoomed image fits within the magnifying glass
                         height: '450px',
-                       
                       }}
                     />
                     {mousePosition.x !== 0 && mousePosition.y !== 0 && (
@@ -126,17 +134,18 @@ const ProductDetailPage = () => {
                           pointerEvents: 'none',
                           display: 'inline-block',
                         }}
-                      > <img
-                      src={`${axiosInstance.defaults.baseURL}/${product.image}`}
-                      className="mw-100 mh-100"
-                      style={{
-                        width: '2000px', // Ensure zoomed image fits within the magnifying glass
-                        height: '2000px',
-                        transform: 'scale(2)',
-                        transformOrigin: `${mousePosition.x * 100}% ${mousePosition.y * 100}%`,
-                      }}
-                      alt="Zoomed"
-                    />
+                      >
+                        <img
+                          src={`${axiosInstance.defaults.baseURL}/${product.image}`}
+                          className="mw-100 mh-100"
+                          style={{
+                            width: '2000px', // Ensure zoomed image fits within the magnifying glass
+                            height: '2000px',
+                            transform: 'scale(2)',
+                            transformOrigin: `${mousePosition.x * 100}% ${mousePosition.y * 100}%`,
+                          }}
+                          alt="Zoomed"
+                        />
                       </div>
                     )}
                   </div>
@@ -155,7 +164,15 @@ const ProductDetailPage = () => {
                 Buy now
               </Link>
               <button className="btn btn-outline-secondary" onClick={handleAddToCart}>
-                Add to cart
+                {buttonText === 'ADDED' ? (
+                  <>
+                    <i className="bi bi-check me-2"></i> {buttonText}
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-plus me-2"></i> {buttonText}
+                  </>
+                )}
               </button>
             </div>
 
@@ -172,7 +189,6 @@ const ProductDetailPage = () => {
           </div>
         </div>
         </div>
-
         <div className="mt-5">
           <h3 className="fw-bold text-dark">Related Products</h3>
           <div className="row">

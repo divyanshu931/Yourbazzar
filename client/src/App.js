@@ -66,6 +66,7 @@ function App() {
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/FAQ" element={<FaqPage />} />
             <Route path="/bag" element={<BagPage />} />
+            <Route path="/whislist" element={<BagPage />} />
             <Route path="/listing" element={<AllProducts />} />
             <Route path="/signout" element={<SignOut />} /> {/* Add the SignOut route */}
             <Route path="*" element={<NotFound />} /> {/* Route for 404 Not Found */}

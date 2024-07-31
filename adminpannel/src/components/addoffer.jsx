@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axiosInstance from "../apis/axiosInstance";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 import AdminLayout from "./layout/AdminLayout";
 
-const AddOffer = ({ onClose, onAdd }) => {
+const AddOffer = ({ onAdd }) => {
   const initialFormData = {
     title: "",
     description: "",
@@ -16,6 +17,9 @@ const AddOffer = ({ onClose, onAdd }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   // Function to handle input changes including file input
   const handleChange = (e) => {
@@ -76,6 +80,11 @@ const AddOffer = ({ onClose, onAdd }) => {
     }
   };
 
+  // Inline style for labels
+  const labelStyle = {
+    color: "black",
+  };
+
   return (
     <AdminLayout>
       <div className="main-container">
@@ -83,7 +92,7 @@ const AddOffer = ({ onClose, onAdd }) => {
           <h3 className="main-title">Add Offer</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Title:</label>
+              <label style={labelStyle}>Title:</label>
               <input
                 type="text"
                 name="title"
@@ -95,7 +104,7 @@ const AddOffer = ({ onClose, onAdd }) => {
               />
             </div>
             <div className="form-group">
-              <label>Description:</label>
+              <label style={labelStyle}>Description:</label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -106,7 +115,7 @@ const AddOffer = ({ onClose, onAdd }) => {
               />
             </div>
             <div className="form-group">
-              <label>Discount (%):</label>
+              <label style={labelStyle}>Discount (%):</label>
               <input
                 type="number"
                 name="discount"
@@ -118,7 +127,7 @@ const AddOffer = ({ onClose, onAdd }) => {
               />
             </div>
             <div className="form-group">
-              <label>Expiry Date:</label>
+              <label style={labelStyle}>Expiry Date:</label>
               <input
                 type="date"
                 name="expiryDate"
@@ -129,22 +138,28 @@ const AddOffer = ({ onClose, onAdd }) => {
               />
             </div>
             <div className="form-group">
-              <label>Image (PNG or AVIF format):</label>
+              <label htmlFor="imageFile" style={{ color: "black" }}>Image (PNG or AVIF format):</label>
               <input
-                type="file" // Use type="file" for file input
+                id="imageFile"
+                type="file"
                 name="imageFile"
                 onChange={handleChange}
                 className="form-input"
-                accept=".png,.avif" // Accept PNG and AVIF files
+                accept=".png,.avif"
                 required
               />
             </div>
+
             <div className="form-buttons">
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? "Adding..." : "Add"}
               </button>
-              <button type="button" className="cancel-btn" onClick={onClose}>
-                Cancel
+              <button 
+                type="button" 
+                className="cancel-btn" 
+                onClick={() => navigate(-1)} // Navigate back
+              >
+                Back
               </button>
             </div>
             {errorMessage && (
