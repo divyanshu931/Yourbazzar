@@ -86,7 +86,7 @@ const ProductItem = ({ product }) => {
             </small>
           </h6>
           <div className="d-flex align-items-center justify-content-between gap-1">
-            <div className="quantity-btn">
+          <div className="d-flex align-items-center" style={{ maxWidth: '90px' }}>
               <div className="input-group input-group-sm border rounded overflow-hidden">
                 <div
                   className="btn btn-light text-success minus border-0 bg-white"
