@@ -43,7 +43,6 @@ const Productbycategory = () => {
   // Render products or no products message
   return (
     <FilterLayout>
-      <div className="container py-5">
         <div className="tab-pane fade active show" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
           {products.length === 0 ? (
             <div className="no-products-message d-flex justify-content-center align-items-center">
@@ -74,7 +73,7 @@ const Productbycategory = () => {
             ))
           )}
         </div>
-      </div>
+    
     </FilterLayout>
   );
 };

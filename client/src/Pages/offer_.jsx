@@ -71,7 +71,7 @@ function OfferDetails() {
 
   return (
     <>
-      <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header  ${isSidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h6 className="fw-normal mb-0 text-dark d-flex align-items-center">
             <Link to="/home" className="text-dark me-3 fs-4"><i className="bi bi-chevron-left"></i></Link>

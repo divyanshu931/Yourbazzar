@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faHome, faGift, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faGift, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
@@ -10,14 +10,32 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [profileSubMenuOpen, setProfileSubMenuOpen] = useState(false);
   const [extraSubMenuOpen, setExtraSubMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState('Guest');
+  const [userEmail, setUserEmail] = useState('Not logged in');
   const cookies = new Cookies();
 
   useEffect(() => {
-    // Check if user is authenticated based on cookies
     const token = cookies.get('token');
     const userId = cookies.get('userId');
-    setIsAuthenticated(!!token && !!userId); // Set authentication state based on token and userId presence
-  }, [cookies]);
+    const userName = cookies.get('role');
+    const userEmail = cookies.get('email');
+    setIsAuthenticated(!!token && !!userId);
+
+    if (isAuthenticated) {
+      setUserName(userName || 'User');
+      setUserEmail(userEmail || 'No email');
+    } else {
+      setUserName('Guest');
+      setUserEmail('Not logged in');
+    }
+  }, [cookies, isAuthenticated]);
+
+  const truncateEmail = (email) => {
+    if (email.length > 13) {
+      return email.substring(0, 13) + '...';
+    }
+    return email;
+  };
 
   const toggleAuthSubMenu = () => {
     setAuthSubMenuOpen(!authSubMenuOpen);
@@ -39,17 +57,27 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <nav className={`sidebar ${isOpen ? 'open' : ''}`}>
-      <div className="sidebar-header">
-      <h4 class="m-0 fw-bold text-black">Your<span class="text-success">Bajaar</span></h4>
-
-        <button className="close-btn" onClick={toggleSidebar}>
-          <FontAwesomeIcon icon={faTimes} />
-        </button>
+      <div className="sidebar-header bg-success d-flex align-items-center py-4 px-3">
+        <img
+          src="https://th.bing.com/th/id/R.356a238b8453a398084a519e9a4acd5b?rik=ix4nLCnJdDRfgg&riu=http%3a%2f%2fwww.avratours.gr%2fmedia%2fgeneral%2fuser-circle.png&ehk=hdddfqNtczvV5RyAgBraDv0TqCeuUcqL7TWFQulPGPU%3d&risl=&pid=ImgRaw&r=0"
+          alt="Profile"
+          style={{
+            width: '70px',
+            height: '70px',
+            objectFit: 'cover'
+          }}
+          className="img-fluid rounded-pill me-3"
+        />
+        <div className="text-white">
+          <h6 className="mb-0">{userName}</h6>
+          <small>{truncateEmail(userEmail)}</small><br />
+          <span className="f-10 text-white-50">Version 1.32</span>
+        </div>
       </div>
       <ul className="sidebar-menu fade show">
         <li>
           <Link to="/Landing_2" onClick={handleLinkClick}>
-            <i  className="bi bi-code-square me-2"></i> Splash
+            <i className="bi bi-code-square me-2"></i> Splash
           </Link>
         </li>
         <li>

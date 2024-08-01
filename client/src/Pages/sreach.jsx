@@ -83,7 +83,7 @@ const Search = () => {
     <div>
       <TopNavbar />
 
-      <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header sticky-top ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <div className={`p-3 shadow-sm bg-warning danger-nav osahan-home-header  ${isSidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="font-weight-normal mb-0 d-flex align-items-center">
           <h4 className="m-0 fw-bold text-black">
             Your <span className="text-success">Bajaar</span>
