@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import {
   BsArchiveFill,
   BsGrid3X3GapFill,
   BsPeopleFill,
-  BsFillPersonFill,
   BsTagFill,
   BsShopWindow,
 } from "react-icons/bs";
@@ -69,48 +69,65 @@ function AdminHome() {
       </div>
 
       <div className="main-cards">
+     
         <div className="cardd">
+        <Link to="/myproduct" className="cardd-link">
           <div className="cardd-inner">
+          
             <h3>PRODUCTS</h3>
             <BsArchiveFill className="cardd_icon" />
           </div>
           <h1>{stats.products}</h1>
+          </Link>
         </div>
+       
+      
         <div className="cardd">
+        <Link to="/category-dashboard" className="cardd-link">
           <div className="cardd-inner">
             <h3>CATEGORIES</h3>
             <BsGrid3X3GapFill className="cardd_icon" />
           </div>
           <h1>{stats.categories}</h1>
+          </Link>
         </div>
+    
+      
         <div className="cardd">
+        <Link to="/customer-dashboard" className="cardd-link">
           <div className="cardd-inner">
             <h3>CUSTOMERS</h3>
             <BsPeopleFill className="cardd_icon" />
           </div>
           <h1>{stats.customers}</h1>
+          </Link>
         </div>
+       
+       
+     
+        
+       
         <div className="cardd">
-          <div className="cardd-inner">
-            <h3>ADMINS</h3>
-            <BsFillPersonFill className="cardd_icon" />
-          </div>
-          <h1>{stats.admins}</h1>
-        </div>
-        <div className="cardd">
+        <Link to="/offer-dashboard" className="cardd-link">
           <div className="cardd-inner">
             <h3>OFFERS</h3>
             <BsTagFill className="cardd_icon" />
           </div>
           <h1>{stats.offers}</h1>
+          </Link>
         </div>
+       
+     
         <div className="cardd">
+        <Link to="/admin-control" className="cardd-link">
           <div className="cardd-inner">
             <h3>SELLERS</h3>
             <BsShopWindow className="cardd_icon" />
           </div>
           <h1>{stats.seller}</h1>
+          </Link>
         </div>
+       
       </div>
 
       <div className="charts">

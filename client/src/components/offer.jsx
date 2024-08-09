@@ -77,7 +77,7 @@ const TodayOffers = () => {
         {offers.map((offer, index) => (
           <div key={index} className="home-productc">
             <Link to={`/offer-details/${offer._id}`}>
-              <img src={`${offer.imageUrl} `}className="img-fluid" alt={offer.title} style={{ width: '400px', height: '400px', objectFit: 'zoomout' }} />
+              <img  src={`${axiosInstance.defaults.baseURL}/${offer.imageUrl} `}className="img-fluid" alt={offer.title} style={{ width: '400px', height: '400px', objectFit: 'zoomout' }} />
             </Link>
           </div>
         ))}

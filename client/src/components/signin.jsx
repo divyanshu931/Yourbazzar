@@ -67,7 +67,7 @@ function SignIn() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="yourbajaar@gmail.com"
+                placeholder=""
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />

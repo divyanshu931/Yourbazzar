@@ -735,3 +735,7 @@ body {
 .icon.sign-out-icon:hover {
   cursor: pointer;
 }
+.cardd-link {
+  text-decoration: none; /* Removes the underline */
+  color: inherit;       /* Inherits the text color from parent */
+}

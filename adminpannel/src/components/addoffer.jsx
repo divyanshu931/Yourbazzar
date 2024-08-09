@@ -1,66 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../apis/axiosInstance";
-import { useNavigate } from "react-router-dom";
-import AdminLayout from './layout/AdminLayout';
+import AdminLayout from "./layout/AdminLayout";
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies(); // Initialize universal cookies
 
 const AddOffer = ({ onAdd }) => {
   const initialFormData = {
     title: "",
     description: "",
-    discount: "",
+    discount: 0,
     expiryDate: "",
-    imageFile: null, // Store the image file
+    imageFile: null,
+    sellerId: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [userId, setUserId] = useState("");
 
-  // Initialize useNavigate hook
-  const navigate = useNavigate();
+  useEffect(() => {
+    const userIdFromCookies = cookies.get("userId");
+    if (userIdFromCookies) {
+      setUserId(userIdFromCookies);
+      setFormData((prevData) => ({ ...prevData, sellerId: userIdFromCookies }));
+    }
+  }, []);
 
-  // Function to handle input changes including file input
   const handleChange = (e) => {
-    if (e.target.name === "imageFile") {
+    if (e.target.type === "file") {
       const file = e.target.files[0];
-      // Check if a file is selected
-      if (file) {
-        const fileExtension = file.name.split(".").pop().toLowerCase();
-        // Check if the selected file is either PNG or AVIF
-        if (fileExtension === "png" || fileExtension === "avif") {
-          setFormData({ ...formData, [e.target.name]: file });
-          setErrorMessage(""); // Clear any previous error message
-        } else {
-          setFormData({ ...formData, imageFile: null });
-          setErrorMessage("Please upload a PNG or AVIF image."); // Display error message for unsupported format
-        }
-      }
+      setFormData({ ...formData, imageFile: file });
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
 
-  // Function to handle form submission
-  const handleSubmit = async (e) => {
+  const validateImageDimensions = (file) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        if (img.width === 826 && img.height === 826) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      };
+      img.onerror = () => {
+        reject("Failed to load image for dimension check.");
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("discount", formData.discount);
-      formDataToSend.append("expiryDate", formData.expiryDate);
-      formDataToSend.append("image", formData.imageFile); // Append image file
 
-      const response = await axiosInstance.post("/api/offers/create", formDataToSend);
+      // Validate image dimensions
+      const isValidDimensions = await validateImageDimensions(formData.imageFile);
+      if (!isValidDimensions) {
+        setLoading(false);
+        setErrorMessage("Please upload an image with dimensions 826x826 pixels.");
+        return;
+      }
+
+      const formDataForUpload = new FormData();
+      formDataForUpload.append("title", formData.title);
+      formDataForUpload.append("description", formData.description);
+      formDataForUpload.append("discount", Number(formData.discount));
+      formDataForUpload.append("expiryDate", formData.expiryDate);
+      formDataForUpload.append("image", formData.imageFile);
+      formDataForUpload.append("sellerId", formData.sellerId);
+
+      const response = await axiosInstance.post("/api/offers/create", formDataForUpload, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
       setLoading(false);
       if (response.status === 201) {
-        setErrorMessage(""); // Clear any previous error message
-        setSuccessMessage("Offer successfully added!"); // Set success message
+        setErrorMessage("");
+        setSuccessMessage("Offer successfully added!");
         if (typeof onAdd === "function") {
-          onAdd(); // Notify parent component of success
+          onAdd();
         }
       } else {
         setErrorMessage("Failed to add offer. Please try again.");
@@ -68,11 +102,8 @@ const AddOffer = ({ onAdd }) => {
     } catch (error) {
       console.error("Error adding offer:", error);
       if (error.response) {
-        console.error("Response data:", error.response.data); // Log detailed response data
-        setErrorMessage(
-          error.response.data.message ||
-            "Failed to add offer. Please try again."
-        );
+        console.error("Response data:", error.response.data);
+        setErrorMessage(error.response.data.message || "Failed to add offer. Please try again.");
       } else {
         setErrorMessage("Failed to add offer. Please try again.");
       }
@@ -80,116 +111,91 @@ const AddOffer = ({ onAdd }) => {
     }
   };
 
-  // Inline style for labels and file input
-  const labelStyle = {
-    color: "black",
-  };
-
-  const fileLabelStyle = {
-    display: "inline-block",
-    padding: "8px 12px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-    backgroundColor: "#f9f9f9",
-    color: "grey", // Make the file name text grey
-    cursor: "pointer",
-    width: "100%",
-    textAlign: "center",
-    width: "250px", 
-    marginTop: "8px",
-    
-  };
-
-  const fileInputStyle = {
-    display: "none", // Hide the default file input
-  };
-
   return (
     <AdminLayout>
       <div className="main-container">
-        <div className="add-offer-form">
-          <h3 className="main-title">Add Offer</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label style={labelStyle}>Title:</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                className="form-input"
-                required
-                placeholder="Enter title"
-              />
-            </div>
-            <div className="form-group">
-              <label style={labelStyle}>Description:</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                className="form-input"
-                required
-                placeholder="Enter description"
-              />
-            </div>
-            <div className="form-group">
-              <label style={labelStyle}>Discount (%):</label>
-              <input
-                type="number"
-                name="discount"
-                value={formData.discount}
-                onChange={handleChange}
-                className="form-input"
-                required
-                placeholder="Enter discount"
-              />
-            </div>
-            <div className="form-group">
-              <label style={labelStyle}>Expiry Date:</label>
-              <input
-                type="date"
-                name="expiryDate"
-                value={formData.expiryDate}
-                onChange={handleChange}
-                className="form-input"
-                required
-              />
-            </div>
-            <div className="form-group">
- 
-              <input
-                id="imageFile"
-                type="file"
-                name="imageFile"
-                onChange={handleChange}
-                style={fileInputStyle}
-                accept=".png,.avif"
-                required
-              />
-              <label htmlFor="imageFile" style={fileLabelStyle}>
-                {formData.imageFile ? formData.imageFile.name : "Choose file"}
-              </label>
-            </div>
+        <h2 className="main-title">Add Offer</h2>
+
+        <div className="add-offer-form-container">
+          <form className="add-offer-form" onSubmit={handleAddSubmit}>
+            {/* Input fields for adding an offer */}
+            <label style={{ color: "black" }}>Title</label>
+            <input
+              type="text"
+              name="title"
+              placeholder="Offer Title"
+              value={formData.title}
+              onChange={handleChange}
+              className="form-input"
+              required
+              maxLength={100}
+            />
+
+            <label style={{ color: "black" }}>Description</label>
+            <textarea
+              name="description"
+              placeholder="Offer Description"
+              value={formData.description}
+              onChange={handleChange}
+              className="form-input"
+              required
+              maxLength={1000}
+            />
+
+            <label style={{ color: "black" }}>Discount (%)</label>
+            <input
+              type="number"
+              name="discount"
+              placeholder="Discount Percentage"
+              value={formData.discount}
+              onChange={handleChange}
+              className="form-input"
+              required
+              min="0"
+            />
+
+            <label style={{ color: "black" }}>Expiry Date</label>
+            <input
+              type="date"
+              name="expiryDate"
+              value={formData.expiryDate}
+              onChange={handleChange}
+              className="form-input"
+              required
+            />
+
+            <label style={{ color: "black" }}>Choose Image</label>
+            <input
+              type="file"
+              name="imageFile"
+              onChange={handleChange}
+              className="form-input"
+              accept="image/png, image/avif" // Accept PNG and AVIF formats
+              required
+            />
+            {imagePreview && (
+              <div className="image-preview">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="preview-image"
+                  style={{ maxWidth: "500px", maxHeight: "500px", width: "auto", height: "auto" }}
+                />
+              </div>
+            )}
 
             <div className="form-buttons">
               <button type="submit" className="submit-btn" disabled={loading}>
-                {loading ? "Adding..." : "Add"}
-              </button>
-              <button 
-                type="button" 
-                className="cancel-btn" 
-                onClick={() => navigate(-1)} // Navigate back
-              >
-                Back
+                {loading ? "Adding..." : "Add Offer"}
               </button>
             </div>
-            {errorMessage && (
-              <p className="error-message">{errorMessage}</p>
-            )}
-            {successMessage && (
-              <p className="success-message">{successMessage}</p>
-            )}
+
+            {errorMessage && <p className="error-message" style={{ color: "red" }}>{errorMessage}</p>}
+            {successMessage && <p className="success-message" style={{ color: "green" }}>{successMessage}</p>}
+
+            <p className="note" style={{ color: "gray", fontSize: "12px" }}>
+              Note: Upload an image file 826 by 826 pixels (PNG or AVIF) for the offer. Maximum file size is 3MB.
+            </p>
           </form>
         </div>
       </div>
