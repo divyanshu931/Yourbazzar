@@ -15,7 +15,7 @@
     "react-transition-group": "^4.4.5",
     "recharts": "^2.12.7",
     "universal-cookie": "^8.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^5.1.0"
   },
   "scripts": {
     "start": "set PORT=4000 && react-scripts start",
