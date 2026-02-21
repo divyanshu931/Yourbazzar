@@ -7,18 +7,15 @@ import Cookies from "universal-cookie";
 const FilterLayout = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userName, setUserName] = useState("");
-    const cookies = new Cookies();
     const navigate = useNavigate(); 
 
     useEffect(() => {
         // Check if user is authenticated based on cookies
+        const cookies = new Cookies();
         const token = cookies.get('token');
         const userId = cookies.get('userId');
-        const name = cookies.get('name');
         setIsAuthenticated(!!token && !!userId);
-        setUserName(name || "");
-    }, [cookies]);
+    }, []);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -51,12 +48,13 @@ const FilterLayout = ({ children }) => {
                         <Link to="/bag" className="me-3 text-dark fs-5">
                             <i className="bi bi-basket"></i>
                         </Link>
-                        <Link
-                            className="toggle osahan-toggle fs-4 text-dark ms-auto"
+                        <button
+                            type="button"
+                            className="toggle osahan-toggle fs-4 text-dark ms-auto btn btn-link p-0"
                             onClick={toggleSidebar}
                         >
                             <i className="bi bi-list"></i>
-                        </Link>
+                        </button>
                     </div>
                 </div>
                

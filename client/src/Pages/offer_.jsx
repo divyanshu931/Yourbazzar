@@ -82,9 +82,9 @@ function OfferDetails() {
           </h6>
           <div className="ms-auto d-flex align-items-center">
             <Button variant="link" className="me-3 text-dark fs-5" onClick={() => setShowFilterModal(true)}><i className="bi bi-funnel"></i></Button>
-            <a className="toggle osahan-toggle fs-4 text-dark ms-auto" onClick={toggleSidebar}>
+            <button type="button" className="toggle osahan-toggle fs-4 text-dark ms-auto btn btn-link p-0" onClick={toggleSidebar}>
               <i className="bi bi-list"></i>
-            </a>
+            </button>
           </div>
         </div>
       </div>

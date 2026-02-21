@@ -1,21 +1,32 @@
 # Security Policy
 
-## Supported Versions
+## Supported Components
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Security fixes are currently applied to the active code in:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+- `backend`
+- `client`
+- `adminpannel`
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you discover a security issue, please open a private security report (GitHub Security Advisories) or contact the maintainers directly.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+When reporting, include:
+
+- affected package/component
+- impact and exploitability notes
+- reproduction steps (if possible)
+- suggested remediation
+
+## Dependency Security Process
+
+This repository uses lockfiles for dependency reproducibility and Dependabot for automated update PRs.
+
+- Dependabot is configured for all three npm projects (`backend`, `client`, `adminpannel`).
+- Alert triage is done by severity and exploitability first.
+- Critical/High alerts should be patched in the nearest possible release window.
+
+### Current remediation notes
+
+To reduce duplicate vulnerability surfaces from mixed package managers, the repository standardizes on npm lockfiles.
