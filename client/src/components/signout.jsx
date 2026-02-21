@@ -4,10 +4,10 @@ import Cookies from "universal-cookie";
 
 function SignOut() {
   const navigate = useNavigate();
-  const cookies = new Cookies();
 
   useEffect(() => {
     const handleSignOut = () => {
+      const cookies = new Cookies();
       const allCookies = cookies.getAll();
       Object.keys(allCookies).forEach((cookieName) => {
         cookies.remove(cookieName);
@@ -20,7 +20,7 @@ function SignOut() {
     };
 
     handleSignOut();
-  }, [navigate, cookies]);
+  }, [navigate]);
 
   return (
     <div className="text-center">
