@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar'; // Import Sidebar
 import Cookies from 'universal-cookie'; // Import universal-cookie
 
-import Landing_2 from './components/Landing_2.jsx';
+import LandingTwo from './components/Landing_2.jsx';
 import Landing from './components/Landing';
 import GetStart from './components/getStarted';
 import SignIn from './components/signin';
@@ -51,7 +51,7 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/Landing_2" element={<Landing_2 />} />
+            <Route path="/Landing_2" element={<LandingTwo />} />
             <Route path="/search" element={<Search />} />
             <Route path="/getStarted" element={<GetStart />} />
             <Route path="/signin" element={<SignIn />} />

@@ -12,23 +12,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('Guest');
   const [userEmail, setUserEmail] = useState('Not logged in');
-  const cookies = new Cookies();
 
   useEffect(() => {
+    const cookies = new Cookies();
     const token = cookies.get('token');
     const userId = cookies.get('userId');
-    const userName = cookies.get('role');
-    const userEmail = cookies.get('email');
-    setIsAuthenticated(!!token && !!userId);
+    const role = cookies.get('role');
+    const email = cookies.get('email');
+    const authenticated = !!token && !!userId;
 
-    if (isAuthenticated) {
-      setUserName(userName || 'User');
-      setUserEmail(userEmail || 'No email');
-    } else {
-      setUserName('Guest');
-      setUserEmail('Not logged in');
-    }
-  }, [cookies, isAuthenticated]);
+    setIsAuthenticated(authenticated);
+    setUserName(authenticated ? (role || 'User') : 'Guest');
+    setUserEmail(authenticated ? (email || 'No email') : 'Not logged in');
+  }, []);
 
   const truncateEmail = (email) => {
     if (email.length > 13) {
@@ -92,9 +88,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </li>
         {isAuthenticated ? (
           <li className={authSubMenuOpen ? 'active' : ''}>
-            <a href="#!" onClick={(e) => { e.preventDefault(); toggleAuthSubMenu(); }}>
+            <button type="button" className="btn btn-link p-0 text-start" onClick={toggleAuthSubMenu}>
               <i className="bi bi-lock me-2"></i> Authentication
-            </a>
+            </button>
             <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
               <li><Link to="/change-password" onClick={handleLinkClick}>Change Password</Link></li>
               <li><Link to="/signout" onClick={handleLinkClick}>Sign Out</Link></li>
@@ -102,9 +98,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </li>
         ) : (
           <li className={authSubMenuOpen ? 'active' : ''}>
-            <a href="#!" onClick={(e) => { e.preventDefault(); toggleAuthSubMenu(); }}>
+            <button type="button" className="btn btn-link p-0 text-start" onClick={toggleAuthSubMenu}>
               <i className="bi bi-lock me-2"></i> Authentication
-            </a>
+            </button>
             <ul className={`sub-menu ${authSubMenuOpen ? 'open' : ''}`}>
               <li><Link to="/signin" onClick={handleLinkClick}>Sign In</Link></li>
               <li><Link to="/signup" onClick={handleLinkClick}>Sign Up</Link></li>
@@ -127,9 +123,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </Link>
         </li>
         <li className={profileSubMenuOpen ? 'active' : ''}>
-          <a href="#!" onClick={(e) => { e.preventDefault(); toggleProfileSubMenu(); }}>
+          <button type="button" className="btn btn-link p-0 text-start" onClick={toggleProfileSubMenu}>
             <i className="bi bi-person me-2"></i> Profile Pages
-          </a>
+          </button>
           <ul className={`sub-menu ${profileSubMenuOpen ? 'open' : ''}`}>
             <li><Link to="/my-order" onClick={handleLinkClick}>My Order</Link></li>
             <li><Link to="/order-confirm" onClick={handleLinkClick}>Order Confirm</Link></li>
@@ -138,9 +134,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </ul>
         </li>
         <li className={extraSubMenuOpen ? 'active' : ''}>
-          <a href="#!" onClick={(e) => { e.preventDefault(); toggleExtraSubMenu(); }}>
+          <button type="button" className="btn btn-link p-0 text-start" onClick={toggleExtraSubMenu}>
             <i className="bi bi-clipboard me-2"></i> Extra Pages
-          </a>
+          </button>
           <ul className={`sub-menu ${extraSubMenuOpen ? 'open' : ''}`}>
             <li><Link to="/support" onClick={handleLinkClick}>Support</Link></li>
             <li><Link to="/notification" onClick={handleLinkClick}>Contact</Link></li>
