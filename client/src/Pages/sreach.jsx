@@ -5,7 +5,7 @@ import TopNavbar from "../components/layout/topnavbar";
 import Sidebar from "../components/layout/Sidebar";
 import Footer from "../components/layout/footer";
 import ProductItem from "../components/productmap";
-import debounce from "lodash.debounce"; // Import debounce from lodash
+import debounce from "debounce";
 import Cookies from "universal-cookie";
 
 const Search = () => {
@@ -59,7 +59,7 @@ const Search = () => {
   // Effect to handle search input change
   useEffect(() => {
     debouncedSearch(searchQuery);
-    return () => debouncedSearch.cancel();
+    return () => debouncedSearch.clear();
   }, [searchQuery, debouncedSearch]);
 
   const toggleSidebar = () => {
