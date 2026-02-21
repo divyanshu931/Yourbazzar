@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/axiosInstance";
 import TopNavbar from "../components/layout/topnavbar";
@@ -15,18 +15,15 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userName, setUserName] = useState("");
-  const cookies = new Cookies();
   const navigate = useNavigate(); 
 
   // Check if user is authenticated
   useEffect(() => {
+    const cookies = new Cookies();
     const token = cookies.get('token');
     const userId = cookies.get('userId');
-    const name = cookies.get('name');
     setIsAuthenticated(!!token && !!userId);
-    setUserName(name || "");
-  }, [cookies]);
+  }, []);
 
   // Function to fetch search results
   const fetchSearchResults = async (query) => {
@@ -52,14 +49,18 @@ const Search = () => {
   };
 
   // Debounced search function
-  const debouncedSearch = debounce((query) => {
-    fetchSearchResults(query);
-  }, 300); // Adjust delay as needed
+  const debouncedSearch = useMemo(
+    () => debounce((query) => {
+      fetchSearchResults(query);
+    }, 300),
+    []
+  );
 
   // Effect to handle search input change
   useEffect(() => {
     debouncedSearch(searchQuery);
-  }, [searchQuery]);
+    return () => debouncedSearch.cancel();
+  }, [searchQuery, debouncedSearch]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -104,12 +105,12 @@ const Search = () => {
             <Link to="/bag" className="me-3 text-dark fs-5">
               <i className="bi bi-basket"></i>
             </Link>
-            <Link
-              className="toggle osahan-toggle fs-4 text-dark ms-auto"
+            <button type="button"
+              className="toggle osahan-toggle fs-4 text-dark ms-auto btn btn-link p-0"
               onClick={toggleSidebar}
             >
               <i className="bi bi-list"></i>
-            </Link>
+            </button>
           </div>
         </div>
 
