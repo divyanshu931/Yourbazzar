@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axiosInstance from '../apis/axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/layout/layout_';
@@ -12,7 +12,7 @@ const ProductDetailPage = () => {
   const [error, setError] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [quantity, setQuantity] = useState(1); // State for quantity
+  const [quantity] = useState(1); // State for quantity
   const [buttonText, setButtonText] = useState('ADD'); // State for button text
 
   const handleMouseMove = (e) => {
@@ -59,7 +59,7 @@ const ProductDetailPage = () => {
     }, 500); // Change back to ADD after 0.5 seconds
   };
 
-  const fetchProductDetails = async () => {
+  const fetchProductDetails = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -81,11 +81,11 @@ const ProductDetailPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId]);
 
   useEffect(() => {
     fetchProductDetails();
-  }, [productId]);
+  }, [fetchProductDetails]);
 
   if (loading) {
     return <p>Loading...</p>;

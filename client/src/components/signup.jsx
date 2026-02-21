@@ -73,9 +73,9 @@ function SignUp({ toggleSidebar }) {
             Sign Up
           </h6>
           <div className="ms-auto d-flex align-items-center">
-            <a className="toggle osahan-toggle fs-4 text-dark ms-auto" href="#" onClick={toggleSidebar}>
+            <button type="button" className="toggle osahan-toggle fs-4 text-dark ms-auto btn btn-link p-0" onClick={toggleSidebar}>
               <i className="bi bi-list"></i>
-            </a>
+            </button>
           </div>
         </div>
       </div>
