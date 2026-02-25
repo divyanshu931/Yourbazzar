@@ -13,7 +13,7 @@
     "react-router-dom": "^7.13.0",
     "react-scripts": "5.0.1",
     "react-transition-group": "^4.4.5",
-    "recharts": "^2.12.7",
+    "recharts": "^3.7.0",
     "universal-cookie": "^8.0.1",
     "web-vitals": "^5.1.0"
   },
