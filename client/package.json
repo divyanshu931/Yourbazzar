@@ -20,7 +20,7 @@
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
     "react-slick": "^0.31.0",
-    "recharts": "^3.7.0",
+    "recharts": "^3.8.0",
     "slick-carousel": "^1.8.1",
     "universal-cookie": "^8.0.1"
   },
