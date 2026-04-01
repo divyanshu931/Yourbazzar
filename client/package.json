@@ -9,7 +9,7 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.13.5",
     "bootstrap": "^5.3.8",
-    "debounce": "^2.1.0",
+    "debounce": "^3.0.0",
     "eslint-config-react-app": "^7.0.1",
     "framer-motion": "^12.34.3",
     "jquery": "^3.7.1",
