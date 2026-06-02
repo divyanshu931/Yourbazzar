@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 // Import routes
@@ -18,26 +18,33 @@ const customerRoutes = require('./routes/customerRoutes');
 
 // Create an Express app
 const app = express();
-app.use('/uploads', express.static('uploads'));
+const uploadsDir = path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadsDir));
 
 // Allow requests from specific origins
-const allowedOrigins = [
+const allowedOrigins = new Set([
     'http://localhost:3000',
     'http://localhost:4000',
     process.env.FRONTEND_URL_LOCALHOST,
     process.env.FRONTEND_URL_OTHER
-];
+].filter(Boolean));
 
 // Configure CORS
 app.use(cors({
-    origin: allowedOrigins,
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.has(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'));
+    },
 }));
 
 // Middleware to parse JSON
-app.use(bodyParser.json());
+app.use(express.json({ limit: '1mb' }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB connected ✅"))
     .catch((err) => console.log("MongoDB connection error:", err));
 
@@ -55,8 +62,8 @@ app.use('/api', customerRoutes);
 
 // Serve individual upload files
 app.get('/uploads/:filename', (req, res) => {
-    const filename = req.params.filename;
-    res.sendFile(__dirname + '/uploads/' + filename);
+    const filename = path.basename(req.params.filename);
+    res.sendFile(filename, { root: uploadsDir });
 });
 
 const PORT = process.env.PORT || 5000;
