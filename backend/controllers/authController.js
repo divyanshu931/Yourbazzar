@@ -3,6 +3,16 @@ const User = require('../models/userModel');
 const OTP = require('../models/otpModel');
 const jwt = require('jsonwebtoken');
 
+const PUBLIC_SIGNUP_ROLES = new Set(['Customer']);
+
+function getJwtSecret() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is required');
+  }
+
+  return process.env.JWT_SECRET;
+}
+
 // Function to update last login time
 async function updateUserLastLogin(userId) {
   try {
@@ -52,14 +62,14 @@ exports.signup = async (req, res) => {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: `Hashing password error for ${password}: ` + error.message,
+        message: 'Hashing password error: ' + error.message,
       });
     }
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
-      role,
+      role: PUBLIC_SIGNUP_ROLES.has(role) ? role : 'Customer',
     });
     return res.status(201).json({
       success: true,
@@ -106,7 +116,7 @@ exports.login = async (req, res) => {
     await updateUserLastLogin(user._id);
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id, role: user.role }, getJwtSecret(), {
       expiresIn: '8h',
     });
 

@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+const crypto = require('crypto');
 
 // Multer configuration for file upload
 const storage = multer.diskStorage({
@@ -7,8 +8,10 @@ const storage = multer.diskStorage({
     cb(null, './uploads/'); // Specify the directory where files should be stored
   },
   filename: function (req, file, cb) {
-    // Define how files should be named
-    cb(null, Date.now() + '-' + file.originalname);
+    const extension = path.extname(file.originalname).toLowerCase();
+    const safeBaseName = path.basename(file.originalname, extension).replace(/[^a-z0-9_-]/gi, '-');
+
+    cb(null, `${Date.now()}-${crypto.randomUUID()}-${safeBaseName}${extension}`);
   }
 });
 
